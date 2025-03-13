@@ -1,0 +1,49 @@
+.sidebar {
+  width: 232px;
+  height: 100vh;
+  padding: 64px 0;
+  background-color: rgb(42, 54, 71);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-nav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  width: 100%;
+  margin-top: 64px;
+  gap: 25px;
+  color: rgba(205, 205, 205, 1);
+}
+
+.legal-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 60px;
+  width: 100%;
+  height: 46px;
+  gap: 10px;
+}
