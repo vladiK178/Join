@@ -55,6 +55,16 @@
                 <div class="no-tasks-info" id="no-todo-tasks">No tasks To do</div>
             </div>
         </div>
+        <div class="column">
+          <div class="column-header">
+              <h2>In progress</h2>
+              <button class="add-task-column-btn" onclick="openAddTaskModal('inprogress')">+</button>
+          </div>
+          <div class="tasks-container" id="inprogress-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+              <div class="no-tasks-info" id="no-inprogress-tasks">No tasks In progress</div>
+          </div>
+      </div>
+      
 
     </main>
   </body>
