@@ -64,7 +64,21 @@
               <div class="no-tasks-info" id="no-inprogress-tasks">No tasks In progress</div>
           </div>
       </div>
-      
+      <div class="column">
+        <div class="column-header">
+            <h2>Await feedback</h2>
+            <button class="add-task-column-btn" onclick="openAddTaskModal('awaitfeedback')">+</button>
+        </div>
+        <div class="tasks-container" id="awaitfeedback-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="no-tasks-info" id="no-awaitfeedback-tasks">No tasks Awaiting feedback</div>
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="column-header">
+            <h2>Done</h2>
+            <button class="add-task-column-btn" onclick="openAddTaskModal('done')">+</button>
+        </div>
 
     </main>
   </body>
