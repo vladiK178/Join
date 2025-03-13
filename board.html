@@ -5,28 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join</title>
     <link rel="stylesheet" href="./styles/board.css" />
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./style.css" />
     <script src="./scripts/board.js"></script>
   </head>
 
   <body onload="initBoard()">
     <aside class="sidebar">
-      <div class="logo">
-        <img src="./assets/img/JoinLogo.svg" alt="Join Logo" />
+      <div class="logo-nav">
+        <div class="logo">
+          <img src="./assets/img/sidebarJoinLogo.svg" alt="Join Logo" />
+        </div>
+        <nav class="nav-bar">
+          <a class="nav-link active" href="summary.html">
+            <img src="./assets/img/summaryIcon.svg" alt="" />
+            Summary
+          </a>
+          <a class="nav-link" href="add_task.html">
+            <img src="./assets/img/addTaskIcon.svg" alt="" />
+            Add Task
+          </a>
+          <a class="nav-link" href="board.html">
+            <img src="./assets/img/boardIcon.svg" alt="" />
+            Board
+          </a>
+          <a class="nav-link" href="contacts.html">
+            <img src="./assets/img/contactsIcon.svg" alt="" />
+            Contacts
+          </a>
+        </nav>
       </div>
-      <nav>
-        <ul>
-          <li><a href="summary.html">Summary</a></li>
-          <li><a href="add_task.html">Add Task</a></li>
-          <li><a href="board.html" class="active">Board</a></li>
-          <li><a href="contacts.html">Contacts</a></li>
-        </ul>
-      </nav>
       <div class="legal-links">
         <a href="privacy_policy.html">Privacy Policy</a>
         <a href="legal_notice.html">Legal Notice</a>
       </div>
     </aside>
-
     <main>
       <header>
         <h1>Board</h1>

@@ -2,11 +2,11 @@
   box-sizing: border-box;
   font-family: latin;
   src: url(./assets/fonts/inter-v18-latin-700.woff2);
-  font-size: 16px;
 }
 
 body {
   margin: 0;
+  display: flex;
 }
 
 .legal-links a {
