@@ -9,7 +9,6 @@
   </head>
 
   <body onload="initBoard()">
-    <!-- Seitenleiste -->
     <aside class="sidebar">
       <div class="logo">
         <img src="./assets/img/JoinLogo.svg" alt="Join Logo" />
@@ -28,6 +27,24 @@
       </div>
     </aside>
 
-    <!-- Hauptbereich -->
+    <main>
+      <header>
+        <h1>Board</h1>
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchTasks"
+            placeholder="Find Task"
+            onkeyup="searchTasks()"
+          />
+          <button
+            class="add-task-btn"
+            onclick="window.location.href='add_task.html'"
+          >
+            Add task +
+          </button>
+        </div>
+      </header>
+    </main>
   </body>
 </html>
