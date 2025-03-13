@@ -1,11 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join</title>
+    <link rel="stylesheet" href="./styles/board.css" />
+    <script src="./scripts/board.js"></script>
+  </head>
+
+  <body onload="initBoard()">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="./assets/img/JoinLogo.svg" alt="Join Logo" />
+      </div>
+      <nav>
+        <ul>
+          <li><a href="summary.html">Summary</a></li>
+          <li><a href="add_task.html">Add Task</a></li>
+          <li><a href="board.html" class="active">Board</a></li>
+          <li><a href="contacts.html">Contacts</a></li>
+        </ul>
+      </nav>
+      <div class="legal-links">
+        <a href="privacy_policy.html">Privacy Policy</a>
+        <a href="legal_notice.html">Legal Notice</a>
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <h1>Board</h1>
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchTasks"
+            placeholder="Find Task"
+            onkeyup="searchTasks()"
+          />
+          <button
+            class="add-task-btn"
+            onclick="window.location.href='add_task.html'"
+          >
+            Add task +
+          </button>
+        </div>
+      </header>
+      <div class="board-container">
+        <div class="column">
+          <div class="column-header">
+            <h2>To do</h2>
+            <button
+              class="add-task-column-btn"
+              onclick="openAddTaskModal('todo')"
+            >
+              +
+            </button>
+          </div>
+          <div
+            class="tasks-container"
+            id="todo-tasks"
+            ondrop="drop(event)"
+            ondragover="allowDrop(event)"
+          >
+            <div class="no-tasks-info" id="no-todo-tasks">No tasks To do</div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="column-header">
+            <h2>In progress</h2>
+            <button
+              class="add-task-column-btn"
+              onclick="openAddTaskModal('inprogress')"
+            >
+              +
+            </button>
+          </div>
+          <div
+            class="tasks-container"
+            id="inprogress-tasks"
+            ondrop="drop(event)"
+            ondragover="allowDrop(event)"
+          >
+            <div class="no-tasks-info" id="no-inprogress-tasks">
+              No tasks In progress
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="column-header">
+            <h2>Await feedback</h2>
+            <button
+              class="add-task-column-btn"
+              onclick="openAddTaskModal('awaitfeedback')"
+            >
+              +
+            </button>
+          </div>
+          <div
+            class="tasks-container"
+            id="awaitfeedback-tasks"
+            ondrop="drop(event)"
+            ondragover="allowDrop(event)"
+          >
+            <div class="no-tasks-info" id="no-awaitfeedback-tasks">
+              No tasks Awaiting feedback
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="column-header">
+            <h2>Done</h2>
+            <button
+              class="add-task-column-btn"
+              onclick="openAddTaskModal('done')"
+            >
+              +
+            </button>
+          </div>
+
+          <div
+            class="tasks-container"
+            id="done-tasks"
+            ondrop="drop(event)"
+            ondragover="allowDrop(event)"
+          >
+            <div class="no-tasks-info" id="no-done-tasks">No tasks Done</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="taskDetailModal" class="modal" style="display: none"></div>
+    <div id="addTaskModal" class="modal" style="display: none"></div>
+  </body>
 </html>
