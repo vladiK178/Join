@@ -45,6 +45,17 @@
           </button>
         </div>
       </header>
+      <div class="board-container">
+        <div class="column">
+            <div class="column-header">
+                <h2>To do</h2>
+                <button class="add-task-column-btn" onclick="openAddTaskModal('todo')">+</button>
+            </div>
+            <div class="tasks-container" id="todo-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="no-tasks-info" id="no-todo-tasks">No tasks To do</div>
+            </div>
+        </div>
+
     </main>
   </body>
 </html>
