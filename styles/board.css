@@ -1,3 +1,10 @@
+/* body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+} */
+
 main {
   margin-left: 250px;
   padding: 20px;
@@ -20,4 +27,17 @@ header {
   border: 1px solid #ddd;
   border-radius: 8px;
   flex-grow: 1;
+}
+
+.add-task-btn {
+  background-color: #2a3647;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.add-task-btn:hover {
+  background-color: #29abe2;
 }
