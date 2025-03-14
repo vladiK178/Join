@@ -41,3 +41,51 @@ header {
 .add-task-btn:hover {
   background-color: #29abe2;
 }
+
+.board-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.column {
+  flex: 1;
+  min-width: 250px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-task-column-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #2a3647;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.add-task-column-btn:hover {
+  background-color: #29abe2;
+}
+
+.tasks-container {
+  min-height: 200px;
+  border: 2px dashed #ddd;
+  padding: 10px;
+}
+
+.no-tasks-info {
+  color: #666;
+  text-align: center;
+  padding: 20px;
+}
