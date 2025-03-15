@@ -9,6 +9,10 @@ body {
   display: flex;
 }
 
+main {
+  flex-grow: 1;
+}
+
 .legal-links a {
   text-decoration: none;
   color: rgb(168, 168, 168);
