@@ -6,11 +6,15 @@
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
+  background-color: #f4f4f4;
 }
 
 main {
   flex-grow: 1;
+  padding: 0;
+  margin: 0;
 }
 
 .legal-links a {

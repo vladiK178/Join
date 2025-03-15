@@ -1,0 +1,29 @@
+.add_task_text {
+  margin-top: 110px;
+  margin-left: 96px;
+  margin-bottom: 0;
+  font-size: 61px;
+}
+
+.vertical_line {
+  background-color: black;
+  height: 400px;
+  width: 1px;
+}
+
+.content_add_task {
+  margin-top: 20px;
+  padding-left: 96px;
+  display: flex;
+  gap: 15px;
+}
+
+.content_title {
+  width: 440px;
+  height: 400px;
+}
+
+.content_priority {
+  width: 440px;
+  height: 400px;
+}
