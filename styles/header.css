@@ -1,19 +1,26 @@
+/* Header-Stile */
 .page_header {
-  max-width: 1920px;
+  width: 100%; /* Header erstreckt sich über die gesamte Breite */
   height: 96px;
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
-  padding-left: 96px;
-  padding-right: 32px;
+  padding-left: 96px; /* Abstand links beibehalten */
+  padding-right: 0; /* Abstand rechts entfernen */
+  box-sizing: border-box; /* Verhindert, dass das Padding die Breite beeinflusst */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #ffffff; /* Hintergrundfarbe für den Header */
 }
 
 .logged_in_user {
   display: flex;
   align-items: center;
   gap: 16px;
+  padding-right: 32px; /* Abstand rechts für den Benutzerbereich */
 }
 
 .letters_in_circle {
