@@ -20,14 +20,25 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   padding: 0 20px;
   width: 100%;
+}
+
+header h1 {
+  font-size: 60px;
+  font-weight: 700;
+  margin: 0;
+  padding-top: 40px;
+  padding-left: 40px;
 }
 
 .search-container {
   display: flex;
   gap: 10px;
+  align-items: center;
+  padding-top: 40px;
+  padding-right: 20px;
 }
 
 #searchTasks {
@@ -53,7 +64,8 @@ header {
 .board-container {
   display: flex;
   gap: 20px;
-  padding: 20px;
+  padding: 0 40px 20px 40px;
+  margin-top: 20px;
   overflow-x: auto;
 }
 
