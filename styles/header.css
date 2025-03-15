@@ -1,5 +1,6 @@
 .page_header {
   width: 100%;
+  width: 100%;
   height: 96px;
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -13,12 +14,14 @@
   top: 0;
   z-index: 1000;
   background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .logged_in_user {
   display: flex;
   align-items: center;
   gap: 16px;
+  padding-right: 32px;
   padding-right: 32px;
 }
 
