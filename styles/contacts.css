@@ -7,7 +7,7 @@
 .contacts-header {
   padding: 20px 60px;
   background-color: #f6f7f9;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: none !important;
 }
 
 .add-contact-btn {
@@ -24,6 +24,8 @@
   gap: 10px;
   transition: background-color 0.3s ease;
   width: fit-content;
+  position: relative;
+  z-index: 2;
 }
 
 .add-contact-btn:hover {
@@ -39,21 +41,38 @@
   display: flex;
   flex: 1;
   overflow: hidden;
+  border-right: none;
+  position: relative;
+  z-index: 0;
+}
+
+.contacts-content::before {
+  content: "";
+  position: absolute;
+  top: -90px; /* Increased this value to reach above the header */
+  left: 30%; /* Aligns with the width of contacts-list */
+  width: 1px;
+  height: 200vh; /* Made taller to ensure complete coverage */
+  background-color: #e0e0e0;
+  z-index: 1;
 }
 
 .contacts-list {
   width: 30%;
   min-width: 300px;
   background-color: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: none !important;
   overflow-y: auto;
   padding: 20px 0;
+  border-right: none !important;
+  height: 100%;
 }
 
 .contacts-details {
   flex: 1;
   padding: 40px 60px;
   background-color: #f6f7f9;
+  overflow-y: hidden;
 }
 
 .contacts-title {
