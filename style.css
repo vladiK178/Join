@@ -44,3 +44,7 @@ main {
   color: rgb(41, 171, 226);
   transform: scale(1.1);
 }
+
+.red_font {
+  color: red;
+}
