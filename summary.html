@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary</title>
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./styles/header.css" />
+    <link rel="stylesheet" href="./styles/summary_page_styles/summary.css">
+    <link rel="stylesheet" href="./styles/summary_page_styles/summary_mobile.css">
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" type="image/vnd.icon" href="./assets/img/flaviconJoin.svg">
+    <script src="./scripts/summary_page/summary.js"></script>
+    <script src="./scripts/summary_page/summary_template.js"></script>
+    <script src="./scripts/desktop_template.js"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-nav">
+          <div class="logo">
+            <img src="./assets/img/sidebarJoinLogo.svg" alt="Join Logo" />
+          </div>
+          <nav class="nav-bar">
+            <a class="nav-link active" href="summary.html">
+              <img src="./assets/img/summaryIcon.svg" alt="" />
+              Summary
+            </a>
+            <a class="nav-link" href="add_task.html">
+              <img src="./assets/img/addTaskIcon.svg" alt="" />
+              Add Task
+            </a>
+            <a class="nav-link" href="board.html">
+              <img src="./assets/img/boardIcon.svg" alt="" />
+              Board
+            </a>
+            <a class="nav-link" href="contacts.html">
+              <img src="./assets/img/contactsIcon.svg" alt="" />
+              Contacts
+            </a>
+          </nav>
+        </div>
+        <div class="legal-links">
+          <a href="privacy_policy.html">Privacy Policy</a>
+          <a href="legal_notice.html">Legal Notice</a>
+        </div>
+      </aside>
+      <main>
+        <div class="page_header">
+            <p>Kanban Project Management Tool</p>
+            <div class="logged_in_user">
+              <img class="help_button" src="./assets/img/help.svg" alt="" />
+              <div class="letters_in_circle">
+                <span>PW</span>
+                <img src="./assets/img/circleUser.svg" alt="" />
+              </div>
+            </div>
+          </div>
+          <div id="newContentSection" class="new-content-section">
+
+            <div class="join-title">
+                <span class="join-title-span">JOIN 360</span>
+                <div class="seperator"></div>
+                <span class="subheadline-span">Key Metrics at a Glance</span>
+            </div>
+            <div class="main-summary-section">
+                <div class="complete-quarter-section">
+                    <div onclick="summaryToBoard()" class="to-do-and-done-section">
+                        <div onclick="changeWindowToBoardSection()" class="to-do-quarter">
+                            <div class="circle-dark-blue"><img src="./assets/img/pencil.svg" alt=""></div>
+                            <div class="to-do-quarter-details">
+                                <span class="number">1</span>
+                                <span class="quarter-description">To-do</span>
+                            </div>
+                        </div>
+                        <div onclick="changeWindowToBoardSection()" class="to-do-quarter">
+                            <div class="circle-dark-blue"><img src="./assets/img/Vector (1).svg" alt=""></div>
+                            <div class="to-do-quarter-details">
+                                <span class="number">1</span>
+                                <span class="quarter-description">Done</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="changeWindowToBoardSection()" class="urgent-deadline-section-container">
+                        <div class="urgent-deadline-secction">
+                            <div class="urgent-deadline-quarter">
+                                <div class="circle-red"><img src="./assets/img/arrowUp.svg" alt=""></div>
+                                <div class="to-do-quarter-details">
+                                    <span class="number">1</span>
+                                    <span class="quarter-description">Urgent</span>
+                                </div>
+                            </div>
+                            <div class="seperator-grey"></div>
+                            <div class="date-section">
+                                <span class="date-span">October 16, 2022</span>
+                                <span class="date-message-span">Upcoming Deadline</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-feedback-section">
+                        <div onclick="changeWindowToBoardSection()" class="tasks-board-container-section">
+                            <div class="tasks-board-container">
+                                <div class="number-and-description">
+                                    <span class="number">1</span>
+                                    <span class="task-section-span">Tasks in Board</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="changeWindowToBoardSection()" class="tasks-progress-container-section">
+                            <div class="task-progress-container">
+                                <span class="number">1</span>
+                                <span class="task-section-span">Tasks in Progress</span>
+                            </div>
+                        </div> 
+                        <div onclick="changeWindowToBoardSection()" class="feedback-section-container">
+                            <div class="feedback-section">
+                                <span class="number">1</span>
+                                <span class="task-section-span">Awaiting Feedback</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="greetingMessageSection" class="greeting-meesage-section">
+                    <div id="greetingSpot" class="greeting-spot">
+                        <span class="greeting-time">Good morning,</span>
+                        <span class="greeting-name">Test User</span>
+                    </div>
+                </div>
+            </div>
+          </div>
+      </main>
+</body>
+</html>
