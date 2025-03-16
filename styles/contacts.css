@@ -6,6 +6,8 @@
 
 .contacts-header {
   padding: 20px 60px;
+  background-color: #f6f7f9;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .add-contact-btn {
@@ -13,14 +15,15 @@
   color: white;
   border: none;
   border-radius: 10px;
-  padding: 15px 25px;
-  font-size: 18px;
+  padding: 13px 18px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
   transition: background-color 0.3s ease;
+  width: fit-content;
 }
 
 .add-contact-btn:hover {
@@ -55,7 +58,7 @@
 
 .contacts-title {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 60px;
 }
 
@@ -68,7 +71,7 @@
 }
 
 .contacts-divider {
-  width: 4px;
+  width: 3px;
   height: 60px;
   background-color: #29abe2;
   margin: 0 30px;
@@ -78,4 +81,5 @@
   font-size: 24px;
   margin: 0;
   color: #2a3647;
+  font-weight: 400;
 }
