@@ -81,11 +81,26 @@
   margin-top: 10px;
 }
 
+.due_date_container {
+  position: relative;
+}
+
+.date_icon {
+  position: absolute;
+  right: 21px;
+  bottom: 15px;
+  cursor: pointer;
+}
+
 .priority_options {
   width: 100%;
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+}
+
+.priority_level:hover {
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .priority_level {
@@ -97,6 +112,8 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  margin-bottom: 30px;
+  cursor: pointer;
 }
 
 .urgent_color {
@@ -109,4 +126,65 @@
 
 .low_color {
   color: #7ae229;
+}
+
+.style_priority_section_button {
+  height: 48px;
+  width: 100%;
+  padding: 12px 21px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  background-color: white;
+  border: 1px solid rgb(209, 209, 209);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.style_priority_section_button:hover {
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.subtask_input {
+  height: 48px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.arrow_down {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.arrow_down:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.subtask_input_container {
+  position: relative;
+}
+
+.plus_icon_container {
+  position: absolute;
+  right: 21px;
+  bottom: 14px;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plus_icon_container:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }

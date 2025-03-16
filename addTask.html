@@ -77,12 +77,15 @@
             <span>Due date</span>
             <span class="red_font">*</span>
           </div>
-          <input
-            class="due_date_input"
-            type="text"
-            placeholder="dd/mm/yyyy"
-            id=""
-          />
+          <div class="due_date_container">
+            <input
+              class="due_date_input"
+              type="text"
+              placeholder="dd/mm/yyyy"
+              id=""
+            />
+            <img class="date_icon" src="./assets/img/dateIcon.svg" alt="" />
+          </div>
         </div>
         <div class="vertical_line"></div>
         <div class="content_priority">
@@ -149,6 +152,43 @@
                   fill="currentColor"
                 />
               </svg>
+            </div>
+          </div>
+          <div>
+            <span>Assigned to</span>
+          </div>
+          <button class="style_priority_section_button" id="">
+            Select contacts to assign
+            <div class="arrow_down">
+              <img src="./assets/img/arrow_drop_down.svg" alt="" />
+            </div>
+          </button>
+          <div>
+            <span>Category</span>
+            <span class="red_font">*</span>
+          </div>
+          <button class="style_priority_section_button" id="">
+            Select task category
+            <div class="arrow_down">
+              <img src="./assets/img/arrow_drop_down.svg" alt="" />
+            </div>
+          </button>
+          <div>
+            <span>Subtasks</span>
+          </div>
+          <div class="subtask_input_container">
+            <input
+              class="subtask_input"
+              type="text"
+              placeholder="Enter a title"
+              id=""
+            />
+            <div class="plus_icon_container">
+              <img
+                class="plus_icon"
+                src="./assets/img/plusWithoutBorder.svg"
+                alt=""
+              />
             </div>
           </div>
         </div>

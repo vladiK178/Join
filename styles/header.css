@@ -31,7 +31,7 @@
 
 .letters_in_circle:hover {
   background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 50px;
+  border-radius: 30px;
 }
 
 .letters_in_circle span {
