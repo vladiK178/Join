@@ -35,7 +35,8 @@
   flex-direction: column;
   justify-content: end;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
+  width: 100%;
 }
 
 .nav-link {
@@ -46,4 +47,12 @@
   width: 100%;
   height: 46px;
   gap: 10px;
+}
+
+.legal-section-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
 }
