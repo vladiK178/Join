@@ -80,3 +80,33 @@
   height: 48px;
   margin-top: 10px;
 }
+
+.priority_options {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.priority_level {
+  width: 136px;
+  height: 56px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.urgent_color {
+  color: #ff3d00;
+}
+
+.medium_color {
+  color: rgb(255, 168, 0);
+}
+
+.low_color {
+  color: #7ae229;
+}
