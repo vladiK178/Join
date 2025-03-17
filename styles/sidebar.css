@@ -1,6 +1,6 @@
 .sidebar {
   min-width: 232px;
-  height: 100vh;
+  min-height: 100vh;
   padding: 64px 0;
   background-color: rgb(42, 54, 71);
   position: relative;
@@ -25,7 +25,7 @@
   flex-direction: column;
   justify-content: end;
   width: 100%;
-  margin-top: 64px;
+  margin-top: 100px;
   gap: 25px;
   color: rgba(205, 205, 205, 1);
 }

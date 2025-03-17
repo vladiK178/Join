@@ -1,7 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: latin, sans-serif;
-  src: url(./assets/fonts/inter-v18-latin-700.woff2);
+  font-family: Arial, sans-serif;
 }
 
 body {

@@ -81,6 +81,7 @@
 
 .due_date_container {
   position: relative;
+  margin-bottom: 238px;
 }
 
 .date_icon {
@@ -168,6 +169,7 @@
 
 .subtask_input_container {
   position: relative;
+  margin-bottom: 162px;
 }
 
 .plus_icon_container {
@@ -185,4 +187,43 @@
 
 .plus_icon_container:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.create_task_container {
+  display: flex;
+  justify-content: end;
+  gap: 16px;
+}
+
+.create_task_container button {
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.create_task_container button img {
+  margin-left: 4px;
+}
+
+.create_task {
+  width: 183px;
+  height: 56px;
+  color: white;
+  background-color: rgb(42, 54, 71);
+  border: none;
+}
+
+.create_task:hover {
+  background-color: rgb(41, 171, 226);
+}
+
+.clear_task {
+  width: 110px;
+  height: 56px;
+  background-color: white;
+}
+
+.clear_task:hover {
+  border-color: rgb(41, 171, 226);
+  color: rgb(41, 171, 226);
 }
