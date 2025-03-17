@@ -17,34 +17,6 @@ main {
   margin: 0;
 }
 
-.legal-links a {
-  text-decoration: none;
-  color: rgb(168, 168, 168);
-}
-
-.nav-bar a {
-  text-decoration: none;
-  color: rgba(205, 205, 205, 1);
-}
-
-.nav-link:hover {
-  background-color: rgba(87, 126, 255, 0.1);
-}
-
-.active {
-  background-color: rgb(9, 25, 49) !important;
-  color: white !important;
-}
-
-.active img {
-  filter: brightness(1.5) contrast(1.2);
-}
-
-.legal-links a:hover {
-  color: rgb(41, 171, 226);
-  transform: scale(1.1);
-}
-
 .red_font {
   color: red;
 }
