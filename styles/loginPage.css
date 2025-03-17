@@ -81,6 +81,7 @@ body {
 
 .sign_up_container button:hover {
   background-color: rgb(41, 171, 226);
+  box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .sign_up_container span {
@@ -100,6 +101,10 @@ body {
   gap: 35px;
 }
 
+.button_container_login button {
+  cursor: pointer;
+}
+
 .login_button {
   width: 110px;
   height: 48px;
@@ -109,6 +114,11 @@ body {
   font-size: 21px;
   font-weight: 700;
   color: white;
+}
+
+.login_button:hover {
+  background-color: rgb(41, 171, 226);
+  box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .guest_button {
@@ -122,7 +132,32 @@ body {
   color: rgba(42, 54, 71, 1);
 }
 
-/* .overlay {
+.guest_button:hover {
+  border: 2px solid rgb(41, 171, 226);
+  color: rgb(41, 171, 226);
+  box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.policy_container {
+  margin-top: 279.5px;
+  padding-bottom: 67px;
+  display: flex;
+  gap: 35px;
+}
+
+.policy_container a {
+  text-decoration: none;
+  color: rgba(168, 168, 168, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.policy_container a:hover {
+  color: rgb(41, 171, 226);
+  transform: scale(1.1);
+}
+
+.overlay {
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -131,25 +166,25 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 999;
-} */
-
-/* .logo {
+}
+.logo {
   width: 300px;
+  height: auto;
   animation: moveLogo 2s ease-in-out forwards;
 }
 
 .animation_content {
   opacity: 0;
   animation: fadeIn 2s ease-in-out forwards 1.5s;
-} */
+}
 
-/* @keyframes moveLogo {
+@keyframes moveLogo {
   0% {
     width: 300px;
     transform: translate(0, 0);
   }
   100% {
-    width: 50px;
+    width: 101px;
     transform: translate(-45vw, -45vh);
   }
 }
@@ -161,4 +196,4 @@ body {
   to {
     opacity: 1;
   }
-} */
+}
