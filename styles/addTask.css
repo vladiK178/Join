@@ -1,5 +1,5 @@
 .add_task_text {
-  margin-top: 110px;
+  margin-top: 64px;
   margin-left: 96px;
   margin-bottom: 0;
   font-size: 61px;
@@ -11,7 +11,7 @@
 }
 
 .content_add_task {
-  margin-top: 20px;
+  margin-top: 40px;
   padding: 0 96px;
   display: flex;
   width: 100%;
@@ -88,7 +88,7 @@
 
 .due_date_container {
   position: relative;
-  margin-bottom: 238px;
+  margin-bottom: 157px;
 }
 
 .date_icon {
@@ -177,7 +177,7 @@
 
 .subtask_input_container {
   position: relative;
-  margin-bottom: 162px;
+  margin-bottom: 81px;
 }
 
 .plus_icon_container {
@@ -230,6 +230,7 @@
   width: 110px;
   height: 56px;
   background-color: white;
+  border: 1px solid rgba(42, 54, 71, 1);
 }
 
 .clear_task:hover {
