@@ -223,6 +223,7 @@
 
 .create_task:hover {
   background-color: rgb(41, 171, 226);
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .clear_task {
@@ -234,4 +235,5 @@
 .clear_task:hover {
   border: 2px solid rgb(41, 171, 226);
   color: rgb(41, 171, 226);
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
 }
