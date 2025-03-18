@@ -1,5 +1,10 @@
-document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(() => {
-    document.querySelector(".overlay").style.display = "none"; // Entfernt das Overlay nach der Animation
-  }, 2000); // Wartezeit entsprechend der CSS-Animation
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.querySelector(".overlay");
+  const animatedLogo = document.querySelector(".logo");
+  const content = document.querySelector(".animation_content");
+
+  animatedLogo.addEventListener("animationend", () => {
+    overlay.style.display = "none"; // Verstecke das Overlay nach der Animation
+    content.style.opacity = "1"; // Zeige den Content
+  });
 });

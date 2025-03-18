@@ -167,15 +167,17 @@ body {
   justify-content: center;
   z-index: 999;
 }
+
 .logo {
+  position: absolute;
   width: 300px;
   height: auto;
-  animation: moveLogo 2s ease-in-out forwards;
+  animation: moveLogo 2s ease-in-out forwards 1s, hideLogo 0s forwards 3s;
 }
 
 .animation_content {
   opacity: 0;
-  animation: fadeIn 2s ease-in-out forwards 1.5s;
+  transition: opacity 1s ease-in-out;
 }
 
 @keyframes moveLogo {
@@ -183,9 +185,13 @@ body {
     width: 300px;
     transform: translate(0, 0);
   }
+  50% {
+    opacity: 1;
+  }
   100% {
     width: 101px;
-    transform: translate(-45vw, -45vh);
+    transform: translate(-40.1vw, -32.5vh);
+    opacity: 0; /* Verstecke das Logo am Ende */
   }
 }
 
@@ -195,5 +201,11 @@ body {
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes hideLogo {
+  to {
+    display: none;
   }
 }
