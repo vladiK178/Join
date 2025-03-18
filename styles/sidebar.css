@@ -1,9 +1,14 @@
 .sidebar {
+  position: relative;
   min-width: 232px;
-  min-height: 100vh;
+}
+
+.sidebar_container {
+  min-width: 232px;
+  height: 100vh;
   padding: 64px 0;
   background-color: rgb(42, 54, 71);
-  position: relative;
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,7 +30,7 @@
   flex-direction: column;
   justify-content: end;
   width: 100%;
-  margin-top: 100px;
+  margin-top: 85px;
   gap: 25px;
   color: rgba(205, 205, 205, 1);
 }
