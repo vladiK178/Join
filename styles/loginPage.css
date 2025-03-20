@@ -16,6 +16,10 @@ body {
   max-width: 1920px;
 }
 
+.d_none {
+  display: none !important;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -195,4 +199,7 @@ body {
 .policy_container a:hover {
   color: rgb(41, 171, 226);
   transform: scale(1.1);
+}
+
+.sign_up_field {
 }
