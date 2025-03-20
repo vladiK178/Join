@@ -34,7 +34,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  flex: 3;
 }
 
 .logo_signUp {
@@ -55,9 +54,13 @@ body {
   align-items: center;
   padding: 48px 115px;
   gap: 32px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.login_text {
+.text_blue_line {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,13 +112,19 @@ body {
   position: relative;
 }
 
-.mail {
+.mail_img {
   position: absolute;
-  right: 21px;
+  right: 20px;
   top: 16px;
 }
 
-.lock {
+.person_img {
+  position: absolute;
+  right: 23px;
+  top: 16px;
+}
+
+.lock_img {
   position: absolute;
   right: 21px;
   top: 12px;
@@ -202,4 +211,26 @@ body {
 }
 
 .sign_up_field {
+  width: 550px;
+  height: 550px;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 115px;
+  gap: 32px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logo_and_signup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
