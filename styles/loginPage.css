@@ -24,6 +24,15 @@ body {
   height: 100vh;
 }
 
+.sign_and_login {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 3;
+}
+
 .logo_signUp {
   display: flex;
   justify-content: space-between;
@@ -170,8 +179,10 @@ body {
 
 .policy_container {
   display: flex;
+  align-items: end;
   padding-bottom: 39px;
   gap: 20px;
+  flex: 1;
 }
 
 .policy_container a {
