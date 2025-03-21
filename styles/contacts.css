@@ -26,7 +26,7 @@
   width: 380px;
   position: absolute;
   top: 40px;
-  right: 870px;
+  left: 40px;
   z-index: 10;
 }
 
@@ -91,4 +91,232 @@
   margin: 0;
   color: #2a3647;
   font-weight: 400;
+}
+
+@media screen and (max-width: 2560px) {
+  .add-contact-btn {
+    left: 40px;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .add-contact-btn {
+    left: 40px;
+    width: 320px;
+  }
+
+  .contacts-title h1 {
+    font-size: 52px;
+  }
+
+  .contacts-slogan {
+    font-size: 22px;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .add-contact-btn {
+    left: 30px;
+    width: 280px;
+    font-size: 18px;
+    padding: 14px 12px;
+  }
+
+  .contacts-title h1 {
+    font-size: 48px;
+  }
+
+  .contacts-divider {
+    height: 50px;
+    margin: 0 20px;
+  }
+
+  .contacts-slogan {
+    font-size: 20px;
+  }
+
+  .contacts-details {
+    padding: 30px 40px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .contacts-list {
+    width: 40%;
+    min-width: 250px;
+  }
+
+  .add-contact-btn {
+    left: 20px;
+    width: 240px;
+    font-size: 16px;
+    padding: 12px 10px;
+  }
+
+  .contacts-title {
+    margin-top: 70px;
+    margin-bottom: 40px;
+  }
+
+  .contacts-title h1 {
+    font-size: 42px;
+  }
+
+  .contacts-divider {
+    height: 45px;
+    margin: 0 18px;
+  }
+
+  .contacts-slogan {
+    font-size: 18px;
+  }
+
+  .contacts-details {
+    padding: 25px 30px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contacts-content {
+    flex-direction: column;
+  }
+
+  .contacts-list {
+    width: 100%;
+    min-width: auto;
+    height: auto;
+    max-height: 40vh;
+    box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  }
+
+  .contacts-details {
+    padding: 20px;
+  }
+
+  .add-contact-btn {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 220px;
+    margin: 0 0 20px 0;
+  }
+
+  .contacts-title {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .contacts-title h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+
+  .contacts-divider {
+    width: 100px;
+    height: 3px;
+    margin: 10px 0;
+  }
+
+  .contacts-slogan {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .contacts-container {
+    height: calc(100vh - 60px);
+  }
+
+  .contacts-list {
+    max-height: 35vh;
+    padding: 15px 0;
+  }
+
+  .add-contact-btn {
+    width: 200px;
+    font-size: 14px;
+    padding: 10px 8px;
+  }
+
+  .add-contact-btn img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .contacts-title h1 {
+    font-size: 30px;
+  }
+
+  .contacts-slogan {
+    font-size: 14px;
+  }
+
+  .contacts-details {
+    padding: 15px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .contacts-container {
+    height: calc(100vh - 50px);
+  }
+
+  .contacts-list {
+    max-height: 30vh;
+    padding: 10px 0;
+  }
+
+  .add-contact-btn {
+    width: 180px;
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+
+  .add-contact-btn img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .contacts-title h1 {
+    font-size: 26px;
+  }
+
+  .contacts-divider {
+    width: 80px;
+    height: 2px;
+  }
+
+  .contacts-slogan {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .add-contact-btn {
+    width: 160px;
+    font-size: 12px;
+    padding: 6px 5px;
+  }
+
+  .add-contact-btn img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .contacts-title h1 {
+    font-size: 22px;
+  }
+
+  .contacts-divider {
+    width: 70px;
+  }
+
+  .contacts-slogan {
+    font-size: 12px;
+  }
 }
