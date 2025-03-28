@@ -1,5 +1,5 @@
 function getAddTaskContent() {
-    return `<div class="new-section">
+  return `<div class="new-section">
     <div class="add-task-section">
         <span class="add-task-headline">Add Task</span>
         <div class="task-detail-section">
@@ -35,15 +35,15 @@ function getAddTaskContent() {
                 <div class="prio-section">
                     <span>Prio</span>
                     <div class="prio-levels">
-                        <div onclick="pressUrgentButton()" id="prioUrgent" class="prio-urgent">
+                        <div onclick="setPriority('Urgent');" id="prioUrgent" class="prio-urgent">
                             <span>Urgent</span>
                             <img id="urgent-button-icon" src="./assets/img/urgentArrowRed.svg" alt="">
                         </div>
-                        <div onclick="pressMediumButton()" id="prioMedium" class="prio-medium-chosen">
+                        <div onclick="setPriority('Medium');" id="prioMedium" class="prio-medium-chosen">
                             <span>Medium</span>
                             <img id="medium-button-icon" src="./assets/img/mediumLinesWhite.svg" alt="">
                         </div>
-                        <div onclick="pressLowButton()" id="prioLow" class="prio-low">
+                        <div onclick="setPriority('Low');" id="prioLow" class="prio-low">
                             <span>Low</span>
                             <img id="low-button-icon" src="./assets/img/lowArrowGreeen.svg" alt="">
                         </div>
@@ -108,5 +108,5 @@ function getAddTaskContent() {
   <p>Um unsere Seite optimal zu nutzen, verwende bitte das Hochformat.</p>
 </div>
 </div>
-`
+`;
 }
