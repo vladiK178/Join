@@ -1,0 +1,262 @@
+body {
+    background-color: #F6F7F8;
+}
+
+.join-logo {
+    position: fixed;
+    top: 80px;
+    left: 77px;
+}
+
+.Log-In-Section {
+    height:calc(100vh - 100px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Log-In-Field {
+    background-color: white;
+    width: 630px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.Log-In-Headline {
+    width: 315px;
+    font-size: 61px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 40px;
+    color: #2A3647;
+}
+
+.underline-headline {
+    height: 2px;
+    width: 130px;
+    background-color: #29ABE2;
+}
+
+.Log-In-Form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 422px;
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+
+.email-password-fields {
+    width: 422px;
+    height: 48px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.email-password-fields:focus-within {
+    border-color: #29ABE2;
+}
+
+.email-password-fields img {
+    height: 24px;
+    width: 24px;
+    margin-right: 21px;
+    cursor: pointer;
+}
+
+.input-email-password {
+    height: 45px;
+    padding: 12px 21px 12px 21px;
+    outline: none;
+    border: none;
+    width: 350px;
+    border-radius: 10px;
+}
+
+.remember-me-section {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 450px;
+}
+
+.remember-me-section-parent {
+    height: 20px;
+    width: 100%;
+}
+
+.Log-In-and-Guest-Log-In {
+    display: flex;
+    justify-content: center;
+}
+
+.Log-In-Button {
+    width: 110px;
+    height: 48px;
+    color: white;
+    background-color: #2A3647;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+}
+
+.Log-In-Button:hover {
+    background-color: #29ABE2;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.Guest-Log-In-Button {
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #2A3647;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+    font-weight: 700;
+    padding: 15px 24px 15px 24px;
+    color: #2A3647;
+    cursor: pointer;
+}
+
+.Guest-Log-In-Button:hover {
+    color: #29ABE2;
+    border-color: #29ABE2;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.light-grey {
+    color: lightgray;
+}
+
+.accept-privacy-policy-span {
+    width: 110px;
+    color: #29ABE2;
+}
+
+.accept-privacy-policy-span:hover {
+    border-bottom: 1px solid #29ABE2;
+    color: #29ABE2;
+}
+
+.link-to-log-in {
+    position: absolute;
+    top: 65px;
+    left: 45px;
+    object-fit: cover;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link-to-log-in:hover {
+    background-color: #F6F7F8;
+    border-radius: 20px;
+}
+
+footer {
+    color: #A8A8A8;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    cursor: pointer;
+}
+
+footer span:hover {
+    color: #29ABE2;
+    font-weight: bold;
+}
+
+.success-sign-up-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.success-icon {
+    width: 312px;
+    height: 74px;
+    background-color: #2A3647;
+    border-radius: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 50%; 
+    font-weight: 700;
+    transform: translateY(100vh); 
+    animation: slideIn 1.25s ease-out forwards; 
+}
+
+.alert-message {
+    color: #FF8190;
+    font-size: 12px;
+    margin-left: 15px;
+}
+
+.hide-alert-message {
+    color: white;
+}
+
+.email-alert-messages {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100vh); 
+    }
+    to {
+        transform: translateY(0); 
+    }
+}
+
+.privacy-span {
+    width: 115px;
+}
+
+.privacy-span a {
+    color: #A8A8A8;
+}
+
+.legal-span {
+    width: 115px;
+}
+
+.legal-span a {
+    color: #A8A8A8;
+}
+
+.accept-checkbox-img {
+    cursor: pointer;
+}
+
+.back-arrow {
+    width: 32px;
+    height: 32px;
+}

@@ -1,157 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board</title>
-    <link rel="stylesheet" href="./styles/board.css" />
-    <link rel="stylesheet" href="./styles/sidebar.css" />
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./styles/header.css" />
-    <script src="./scripts/board.js"></script>
-  </head>
+    <link rel="stylesheet" href="./styles/standard.css">
+    <link rel="stylesheet" href="./styles/fonts.css">
+    <link rel="stylesheet" href="./styles/desktop_template.css">
+    <link rel="stylesheet" href="./styles/board_page_styles/board.css">
+    <link rel="stylesheet" href="./styles/board_page_styles/board_mobile.css">
+    <link rel="stylesheet" href="./styles/landscape_overlay.css">
+    <script src="./scripts/usersData.js" ></script>
+    <script src="./scripts/desktop_template.js" ></script>
+    <script src="./scripts/board_page/board.js"></script>
+    <script src="./scripts/board_page/board_column_render_section.js"></script>
+    <script src="./scripts/board_page/board_drag_and_drop.js"></script>
+    <script src="./scripts/board_page/board_task_zoom.js"></script>
+    <script src="./scripts/board_page/board_template.js"></script>
+    <script src="./scripts/board_page/board_add_task_section/board_add_task.js"></script>
+    <script src="./scripts/board_page/board_add_task_section/board_add_task_events.js"></script>
+    <script src="./scripts/board_page/board_add_task_section/board_add_task_helpers.js"></script>
+    <script src="./scripts/board_page/board_add_task_section/board_add_task_ui.js"></script>
+    <script src="./scripts/board_page/boad_edit_zoom_section/board_edit_task_zoom.js"></script>
+    <script src="./scripts/board_page/boad_edit_zoom_section/board_edit_task_helpers.js"></script>
+    <link rel="icon" type="image/vnd.icon" href="./assets/img/flaviconJoin.svg">
+</head>
+<body id="body" onload="initBoardPage()">
+    <div id="addTaskBoardSection" class="add-task-board-section d-none"></div>
 
-  <body onload="initBoard()">
-    <aside class="sidebar">
-      <div class="sidebar_container">
-        <div class="logo-nav">
-          <div class="logo">
-            <img src="./assets/img/sidebarJoinLogo.svg" alt="Join Logo" />
-          </div>
-          <nav class="nav-bar">
-            <a class="nav-link" href="summary.html">
-              <img src="./assets/img/summaryIcon.svg" alt="" />
-              Summary
-            </a>
-            <a class="nav-link" href="add_task.html">
-              <img src="./assets/img/addTaskIcon.svg" alt="" />
-              Add Task
-            </a>
-            <a class="nav-link active" href="board.html">
-              <img src="./assets/img/boardIcon.svg" alt="" />
-              Board
-            </a>
-            <a class="nav-link" href="contacts.html">
-              <img src="./assets/img/contactsIcon.svg" alt="" />
-              Contacts
-            </a>
-          </nav>
-        </div>
-        <div class="legal-links">
-          <a href="privacy_policy.html">Privacy Policy</a>
-          <a href="legal_notice.html">Legal Notice</a>
-        </div>
-      </div>
-    </aside>
-    <main>
-      <div class="page_header">
-        <p>Kanban Project Management Tool</p>
-        <div class="logged_in_user">
-          <img class="help_button" src="./assets/img/help.svg" alt="" />
-          <div class="letters_in_circle">
-            <span>PW</span>
-            <img src="./assets/img/circleUser.svg" alt="" />
-          </div>
-        </div>
-      </div>
-      <header>
-        <h1>Board</h1>
-        <div class="search-container">
-          <input
-            type="text"
-            id="searchTasks"
-            placeholder="Find Task"
-            onkeyup="searchTasks()"
-          />
-          <button
-            class="add-task-btn"
-            onclick="window.location.href='add_task.html'"
-          >
-            Add task +
-          </button>
-        </div>
-      </header>
-      <div class="board-container">
-        <div class="column">
-          <div class="column-header">
-            <h2>To do</h2>
-            <button
-              class="add-task-column-btn"
-              onclick="openAddTaskModal('todo')"
-            >
-              <img src="./assets/img/plus-button.svg" alt="+" />
-            </button>
-          </div>
-          <div
-            class="tasks-container"
-            id="todo-tasks"
-            ondrop="drop(event)"
-            ondragover="allowDrop(event)"
-          >
-            <div class="no-tasks-info" id="no-todo-tasks">No tasks To do</div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="column-header">
-            <h2>In progress</h2>
-            <button
-              class="add-task-column-btn"
-              onclick="openAddTaskModal('inprogress')"
-            >
-              <img src="./assets/img/plus-button.svg" alt="+" />
-            </button>
-          </div>
-          <div
-            class="tasks-container"
-            id="inprogress-tasks"
-            ondrop="drop(event)"
-            ondragover="allowDrop(event)"
-          >
-            <div class="no-tasks-info" id="no-inprogress-tasks">
-              No tasks In progress
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="column-header">
-            <h2>Await feedback</h2>
-            <button
-              class="add-task-column-btn"
-              onclick="openAddTaskModal('awaitfeedback')"
-            >
-              <img src="./assets/img/plus-button.svg" alt="+" />
-            </button>
-          </div>
-          <div
-            class="tasks-container"
-            id="awaitfeedback-tasks"
-            ondrop="drop(event)"
-            ondragover="allowDrop(event)"
-          >
-            <div class="no-tasks-info" id="no-awaitfeedback-tasks">
-              No tasks Awaiting feedback
-            </div>
-          </div>
-        </div>
+    <div id="taskZoomSectionEdit" class="task-zoom-section-edit d-none"></div>
 
-        <div class="column">
-          <div class="column-header">
-            <h2>Done</h2>
-          </div>
-
-          <div
-            class="tasks-container"
-            id="done-tasks"
-            ondrop="drop(event)"
-            ondragover="allowDrop(event)"
-          >
-            <div class="no-tasks-info" id="no-done-tasks">No tasks Done</div>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <div id="taskDetailModal" class="modal" style="display: none"></div>
-    <div id="addTaskModal" class="modal" style="display: none"></div>
-  </body>
+    <div id="taskZoomSection" class="task-zoom-section d-none">
+    </div>
+    <div id="templateSection"></div>
+    <script src="./scripts/landscape_overlay.js"></script>
+</body>
 </html>

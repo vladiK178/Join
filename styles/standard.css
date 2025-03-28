@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    font-family: 'Inter';
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.d-none {
+    display: none !important;
+}

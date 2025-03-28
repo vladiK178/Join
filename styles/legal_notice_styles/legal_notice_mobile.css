@@ -1,6 +1,10 @@
 @media (min-width: 320px) {
     .legal-section {
+        width: 95%;
+        max-width: 320px;
         padding: 20px;
+        min-height: 100vh;
+        max-height: calc(100vh - 50px);
         overflow-y: auto;
     }
 
@@ -25,6 +29,8 @@
 
 @media (min-width: 600px) {
     .legal-section {
+        width: 90%;
+        max-width: 600px;
         padding: 30px;
     }
 
@@ -49,8 +55,9 @@
 
 @media (min-width: 1200px) {
     .legal-section {
+        width: 75%;
+        max-width: 900px;
         padding: 40px;
-        max-height: calc(100vh - 96px);
     }
 
     .section-heading h1 {
@@ -74,6 +81,8 @@
 
 @media (min-width: 1600px) {
     .legal-section {
+        width: 70%;
+        max-width: 1100px;
         padding: 50px;
     }
 
@@ -98,6 +107,8 @@
 
 @media (min-width: 1900px) {
     .legal-section {
+        width: 60%;
+        max-width: 1300px;
         padding: 60px;
     }
 

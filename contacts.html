@@ -1,82 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacts</title>
-    <link rel="stylesheet" href="./styles/contacts.css" />
-    <link rel="stylesheet" href="./styles/sidebar.css" />
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./styles/header.css" />
-    <script src="./scripts/contacts.js"></script>
-  </head>
-
-  <body>
-    <aside class="sidebar">
-      <div class="sidebar_container">
-        <div class="logo-nav">
-          <div class="logo">
-            <img src="./assets/img/sidebarJoinLogo.svg" alt="Join Logo" />
-          </div>
-          <nav class="nav-bar">
-            <a class="nav-link" href="summary.html">
-              <img src="./assets/img/summaryIcon.svg" alt="" />
-              Summary
-            </a>
-            <a class="nav-link" href="add_task.html">
-              <img src="./assets/img/addTaskIcon.svg" alt="" />
-              Add Task
-            </a>
-            <a class="nav-link" href="board.html">
-              <img src="./assets/img/boardIcon.svg" alt="" />
-              Board
-            </a>
-            <a class="nav-link active" href="contacts.html">
-              <img src="./assets/img/contactsIcon.svg" alt="" />
-              Contacts
-            </a>
-          </nav>
-        </div>
-        <div class="legal-links">
-          <a href="privacy_policy.html">Privacy Policy</a>
-          <a href="legal_notice.html">Legal Notice</a>
-        </div>
-      </div>
-    </aside>
-    <main>
-      <div class="page_header">
-        <p>Kanban Project Management Tool</p>
-        <div class="logged_in_user">
-          <img class="help_button" src="./assets/img/help.svg" alt="" />
-          <div class="letters_in_circle">
-            <span>PW</span>
-            <img src="./assets/img/circleUser.svg" alt="" />
-          </div>
-        </div>
-      </div>
-
-      <div class="contacts-container">
-        <div class="contacts-content">
-          <div class="contacts-list">
-            <!-- Contact list items go here -->
-          </div>
-
-          <div class="contacts-details">
-            <!-- Move button here, above the title -->
-            <button class="add-contact-btn">
-              Add new contact
-              <img src="./assets/img/person_add.svg" alt="Add person icon" />
-            </button>
-
-            <div class="contacts-title">
-              <h1>Contacts</h1>
-              <div class="contacts-divider"></div>
-              <p class="contacts-slogan">Organize your network</p>
-            </div>
-            <!-- Contact details go here -->
-          </div>
-        </div>
-      </div>
-    </main>
-  </body>
+    <link rel="stylesheet" href="./styles/standard.css">
+    <link rel="stylesheet" href="./styles/fonts.css">
+    <link rel="stylesheet" href="./styles/desktop_template.css">
+    <link rel="stylesheet" href="./styles/contact_page_styles/contacts.css">
+    <link rel="stylesheet" href="./styles/contact_page_styles/contact_mobile.css">
+    <link rel="stylesheet" href="./styles/landscape_overlay.css">
+    <script src="./scripts/usersData.js"></script>
+    <script src="./scripts/desktop_template.js"></script>
+    <script src="./scripts/contact_page/contacts.js"></script>
+    <script src="./scripts/contact_page/contacts_template.js"></script>
+    <script src="./scripts/contact_page/contacts_ui.js"></script>
+    <script src="./scripts/contact_page/contacts_database.js"></script>
+    <script src="./scripts/contact_page/contacts_helpers.js"></script>
+    <link rel="icon" type="image/vnd.icon" href="./assets/img/flaviconJoin.svg">
+</head>
+<body onload="initContactPage()">
+    <div id="templateSection"></div>
+<div id="addContactContainerOverlay" class="add-contact-container-overlay d-none">
+</div>
+<div class="edit-contact-container-overlay d-none"></div>
+<script src="./scripts/landscape_overlay.js"></script>
+</body>
 </html>

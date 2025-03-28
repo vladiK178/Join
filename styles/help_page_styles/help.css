@@ -1,12 +1,12 @@
 .help-section {
-    width: 100%;
+    max-width: 1200px;
+    width: 80%;
     padding: 50px;
     font-family: Arial, sans-serif;
     line-height: 1.6; 
     color: #333;
     text-align: left;
     margin-left: 0; 
-	max-height: calc(100vh - 96px);
 }
 
 .section-heading {
@@ -73,6 +73,7 @@ h3 {
 
 p {
     margin-bottom: 15px;
+    max-width: 1000px;
     width: 100%;
     text-align: left;
 }

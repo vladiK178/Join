@@ -1,4 +1,6 @@
 .legal-section {
+    max-width: 1200px;
+    width: 80%;
     padding: 50px;
     font-family: Arial, sans-serif;
     line-height: 1.6;

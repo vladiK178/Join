@@ -1,6 +1,9 @@
 @media (min-width: 320px) {
     .help-section {
+        width: 95%;
+        max-width: 320px;
         padding: 20px;
+        min-height: 100vh; 
         max-height: calc(100vh - 50px);
         overflow-y: auto;
     }
@@ -14,6 +17,7 @@
         font-size: 18px;
     }
     p {
+        max-width: 280px;
         font-size: 14px;
         line-height: 1.4;
     }
@@ -21,6 +25,8 @@
 
 @media (min-width: 600px) {
     .help-section {
+        width: 90%;
+        max-width: 600px;
         padding: 30px;
     }
     .section-heading h1 {
@@ -33,6 +39,7 @@
         font-size: 20px;
     }
     p {
+        max-width: 550px;
         font-size: 16px;
         line-height: 1.5;
     }
@@ -40,8 +47,9 @@
 
 @media (min-width: 1200px) {
     .help-section {
+        width: 75%;
+        max-width: 900px;
         padding: 40px;
-        max-height: calc(100vh - 96px);
     }
     .section-heading h1 {
         font-size: 42px;
@@ -53,6 +61,7 @@
         font-size: 22px;
     }
     p {
+        max-width: 800px;
         font-size: 18px;
         line-height: 1.6;
     }
@@ -60,6 +69,8 @@
 
 @media (min-width: 1600px) {
     .help-section {
+        width: 70%;
+        max-width: 1100px;
         padding: 50px;
     }
     .section-heading h1 {
@@ -72,6 +83,7 @@
         font-size: 24px;
     }
     p {
+        max-width: 1000px;
         font-size: 18px;
         line-height: 1.7;
     }
@@ -79,6 +91,8 @@
 
 @media (min-width: 1900px) {
     .help-section {
+        width: 60%;
+        max-width: 1300px;
         padding: 60px;
     }
     .section-heading h1 {
@@ -91,6 +105,7 @@
         font-size: 26px;
     }
     p {
+        max-width: 1200px;
         font-size: 20px;
         line-height: 1.8;
         letter-spacing: 0.5px;

@@ -1,0 +1,550 @@
+.complete-template-section {
+    min-height: 100vh;
+    display: flex;
+}
+
+.left-template-section {
+    width: 200px;
+    background-color: #2A3647;
+}
+
+.join-logo {
+    padding-top: 64px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.link-to-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 100px;
+}
+
+.div-link-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    cursor: pointer;
+}
+
+.div-link-section:hover {
+    background-color: #33445b;
+}
+
+.div-link {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 105px;
+    gap: 8px;
+    color: #A8A8A8;
+}
+
+.add-task-img {
+    background-image: url(../assets/img/addTask.svg);
+    width: 25px;
+    height: 25px;
+}
+
+.add-task-img-chosen {
+    background-image: url(../assets/img/addTaskWhite.svg);
+    width: 25px;
+    height: 25px;
+}
+
+.summary-img-chosen {
+    background-image: url(../assets/img/summaryWhite.svg);
+    width: 26px;
+    height: 25px;
+}
+
+.summary-img {
+    background-image: url(../assets/img/summary.svg);
+    width: 26px;
+    height: 25px;
+}
+
+.log-in-img {
+    background-image: url(../assets/img/login.svg);
+    width: 19.5px;
+    height: 19.5px;
+}
+
+.chosen-section {
+    background-color: #091931;
+    color: white !important;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    cursor: pointer;
+}
+
+
+.board-img {
+    background-image: url(../assets/img/board.svg);
+    width: 30px;
+    height: 29.55px;
+}
+
+.board-img-chosen {
+    background-image: url(../assets/img/boardWhite.svg);
+    width: 30px;
+    height: 25.55px;
+}
+
+.contacts-img {
+    background-image: url(../assets/img/contacts.svg);
+    width: 26.5px;
+    height: 34px;
+}
+
+.contacts-img-chosen {
+    background-image: url(../assets/img/contactsWhite.svg);
+    width: 24.5px;
+    height: 26px;
+}
+
+.privacy-legal-section {
+    color: #A8A8A8;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 195px;
+}
+
+.privacy-legal-section a {
+    display: flex;
+    align-items: flex-start;
+    width: 115px;
+    cursor: pointer;
+    margin-left: 15px;
+    color: #A8A8A8;
+}
+
+.privacy-legal-section a:hover {
+    color: #29ABE2;
+}
+
+.privacy-legal-section .chosen-section a:hover {
+    color: #A8A8A8; 
+}
+
+.privacy-section a:hover {
+    color: #29ABE2;
+}
+
+.privacy-section-template {
+    height: 47px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.legal-section-template {
+    height: 47px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.legal-section a:hover {
+    color: #29ABE2;
+}
+
+.span-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+}
+
+header {
+    color: black;
+    width: 100%;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 4px 4px 0px #0000001A;
+    z-index: 10;
+    position: relative;
+}
+
+header span {
+    margin-left: 150px;
+    font-size: 20px;
+}
+
+.right-template-section {
+    width: calc(100% - 200px);
+}
+
+.help-profile-section {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.help-profile-section img:hover {
+    transform: scale(1.07); 
+}
+
+.profile-circle {
+    width: 56px;
+    height: 56px;
+    border: 3px solid #2A3647;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #29ABE2;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.profile-circle:hover {
+    background-color: #0C2E621F;
+}
+
+.white {
+    color: white !important;
+}
+
+.menu-section {
+    position: relative;
+    z-index: 2;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    background-color: #2A3647;
+    width: 160px;
+    height: 175px;
+    border-radius: 20px 0 20px 20px;
+    right: 20px;
+}
+
+.menu a {
+    width: 138px;
+    height: 46px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 8px 16px;
+    color: #CDCDCD !important;
+
+}
+
+.menu a {
+    cursor: pointer;
+}
+
+.menu a:hover {
+    background-color: #33445b;
+}
+
+.join-img-mobile {
+    background-image: url(../assets/img/joinLogoMobile.svg);
+    width: auto;
+    height: auto;
+    display: none;
+    object-fit: cover;
+}
+
+@media (min-width: 320px) {
+    .left-template-section {
+        position: absolute;
+        bottom: 0;
+        z-index: 1000;
+        width: 100%;
+
+    }
+
+    .privacy-legal-section {
+        display: none;
+    }
+
+    .link-to-section {
+        display: flex;
+        gap: 10px;
+        height: 65px;
+        padding-top: 0;
+        flex-direction: row;
+    }
+
+    .join-img-mobile {
+        background-image: url(../assets/img/joinLogoMobile.svg);
+        width: 33px;
+        height: 40px;
+        left: 0;
+        display: flex;
+        position: absolute;
+        margin-left: 20px;
+    }
+
+    .div-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: auto;
+        gap: 3px;
+        color: #A8A8A8;
+    }
+
+    .div-link-section:hover {
+        background-color: inherit !important; /* Setzt den Hintergrund auf Standard zurück */
+    }
+
+    .div-link-span{
+        font-size: 12px;
+    }
+
+    .chosen-section {
+        width: 57px;
+        height: 57px;
+        border-radius: 10px;
+    }
+
+    .add-task-img {
+        background-image: url(../assets/img/addTaskMobile.svg);
+        width: 25px;
+        height: 25px;
+    }
+    
+    .add-task-img-chosen {
+        background-image: url(../assets/img/addTaskWhiteMobile.svg);
+        width: 25px;
+        height: 25px;
+    }
+    
+    .summary-img-chosen {
+        background-image: url(../assets/img/summaryWhiteMobile.svg);
+        width: 20px;
+        height: 20px;
+    }
+    
+    .summary-img {
+        background-image: url(../assets/img/summaryMobile.svg);
+        width: 20px;
+        height: 20px;
+    }
+    
+    .board-img {
+        background-image: url(../assets/img/boardMobile.svg);
+        width: 25px;
+        height: 20.55px;
+    }
+    
+    .board-img-chosen {
+        background-image: url(../assets/img/boardWhiteMobile.svg);
+        width: 25px;
+        height: 20.55px;
+    }
+    
+    .contacts-img {
+        background-image: url(../assets/img/contactsMobile.svg);
+        width: 21.5px;
+        height: 25px;
+    }
+    
+    .contacts-img-chosen {
+        background-image: url(../assets/img/contactsWhiteMobile.svg);
+        width: 21.5px;
+        height: 25px;
+    }
+
+    .join-logo {
+       display: none;
+    }
+
+    .right-template-section {
+        width: 100%;
+    }
+
+    header {
+        height: 65px;
+        justify-content: flex-end;
+    }
+
+    header span {
+display: none;
+    }
+
+    .profile-circle {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #2A3647;
+    }
+
+    .help-profile-section {
+        margin-right: 20px;
+    }
+
+    .help-profile-section a {
+display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+    .left-template-section {
+        width: 200px;
+        background-color: #2A3647;
+        height: auto;
+        position: unset;
+
+    }
+
+    .privacy-legal-section {
+        display: block;
+    }
+
+    .link-to-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding-top: 100px;
+        height: auto;
+    }
+
+    .div-link-section {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 46px;
+        cursor: pointer;
+    }
+
+    .div-link {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 105px;
+        gap: 8px;
+        color: #A8A8A8;
+        flex-direction: row;
+    }
+
+    .div-link-section:hover {
+        background-color: #33445b !important;
+    }
+
+    .div-link-span{
+        font-size: 16px;
+    }
+
+    .chosen-section {
+        width: 100%;
+        height: 46px;
+        border-radius: 0;
+    }
+
+    .add-task-img {
+        background-image: url(../assets/img/addTask.svg);
+        width: 25px;
+        height: 25px;
+    }
+    
+    .add-task-img-chosen {
+        background-image: url(../assets/img/addTaskWhite.svg);
+        width: 25px;
+        height: 25px;
+    }
+    
+    .summary-img-chosen {
+        background-image: url(../assets/img/summaryWhite.svg);
+        width: 26px;
+        height: 25px;
+    }
+    
+    .summary-img {
+        background-image: url(../assets/img/summary.svg);
+        width: 26px;
+        height: 25px;
+    }
+    
+    .board-img {
+        background-image: url(../assets/img/board.svg);
+        width: 30px;
+        height: 29.55px;
+    }
+    
+    .board-img-chosen {
+        background-image: url(../assets/img/boardWhite.svg);
+        width: 30px;
+        height: 25.55px;
+    }
+    
+    .contacts-img {
+        background-image: url(../assets/img/contacts.svg);
+        width: 26.5px;
+        height: 34px;
+    }
+    
+    .contacts-img-chosen {
+        background-image: url(../assets/img/contactsWhite.svg);
+        width: 24.5px;
+        height: 26px;
+    }
+
+    .join-logo {
+        display: flex;
+     }
+
+     .chosen-section {
+        justify-content: center;
+    }
+
+    .join-img-mobile {
+        display: none;
+    }
+
+    .right-template-section {
+        width: calc(100% - 200px);
+    }
+
+    header {
+        height: 96px;
+        justify-content: space-between;
+    }
+
+    header span {
+display: flex;
+    }
+
+    .profile-circle {
+        width: 56px;
+        height: 56px;
+        border: 3px solid #2A3647;
+    }
+
+    .help-profile-section {
+        margin-right: 30px;
+    }
+
+    .help-profile-section a {
+display: flex;
+    }
+}
