@@ -1,42 +1,43 @@
-/** Shared App State and Configuration */
+/** ---------------------- App Variables ---------------------- */
 let currentUser;
 let nextTaskId = 0;
-const userColorCache = {};
-let taskSpecificColors = {};
+const assignedColors = {};
+let colorMap = {};
+let taskColorMap = {};
 
-/** Color Utility Helpers */
-/**
- * Get a consistent color for a contact or generate a new one if not exists
- * @param {string} contactIdentifier - Unique key for contact
- * @returns {string} Assigned color hex code
- */
-function assignContactColor(contactIdentifier) {
-  if (!userColorCache[contactIdentifier]) {
-    userColorCache[contactIdentifier] = pickRandomColor();
-  }
-  return userColorCache[contactIdentifier];
-}
 
-/**
- * Generate a unique color for a specific task-contact combination
- * @param {string} taskId - Unique task identifier
+/** ---------------------- Color Functions ---------------------- */
+/** 
+ * Gets or creates a color for a contact
  * @param {string} contactKey - Contact identifier
- * @returns {string} Color hex code
  */
-function generateTaskContactColor(taskId, contactKey) {
-  const uniqueTaskContactKey = `${taskId}_${contactKey}`;
-  if (!taskSpecificColors[uniqueTaskContactKey]) {
-    taskSpecificColors[uniqueTaskContactKey] = pickRandomColor();
+function getOrAssignColor(contactKey) {
+  if (!assignedColors[contactKey]) {
+    assignedColors[contactKey] = getRandomColorFromPalette();
   }
-  return taskSpecificColors[uniqueTaskContactKey];
+  return assignedColors[contactKey];
 }
 
-/**
- * Select a random color from a predefined palette
- * @returns {string} Random color hex code
+
+/** 
+ * Manages colors for task-contact combinations
+ * @param {string} taskId - Task identifier
+ * @param {string} contactKey - Contact identifier
  */
-function pickRandomColor() {
-  const colorPalette = [
+function getOrAssignColorForTask(taskId, contactKey) {
+  const uniqueKey = `${taskId}_${contactKey}`;
+  if (!taskColorMap[uniqueKey]) {
+    taskColorMap[uniqueKey] = getRandomColorFromPalette();
+  }
+  return taskColorMap[uniqueKey];
+}
+
+
+/** 
+ * Picks a random color from predefined options
+ */
+function getRandomColorFromPalette() {
+  const palette = [
     "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", 
     "#33FFF5", "#FF8C33", "#FFD433", "#A8FF33", "#8C33FF",
     "#FFB6C1", "#FF69B4", "#FF1493", "#C71585", "#DB7093", 
@@ -52,172 +53,249 @@ function pickRandomColor() {
     "#FFDAB9", "#FFE4B5", "#F5DEB3", "#FFDEAD", "#F0E68C", 
     "#EEE8AA", "#BDB76B", "#FFEFD5", "#FFDAB9", "#FAFAD2"
   ];
-  return colorPalette[Math.floor(Math.random() * colorPalette.length)];
+  return palette[Math.floor(Math.random() * palette.length)];
 }
 
-/** Board Initialization Flow */
-/**
- * Primary setup method for board page
- * Handles user authentication and UI rendering
- */
-async function initializeBoardPage() {
-  await loadCurrentUserData();
-  if (!validateCurrentUser()) return;
 
-  renderPageComponents();
-  setupBoardInteractions();
+/** ---------------------- Board Setup ---------------------- */
+/** 
+ * Main function to initialize the board page
+ */
+async function initBoardPage() {
+  await loadUserAndSetCurrent();
+  if (!checkCurrentUser()) return;
+  renderAddTaskContent();
+  renderBoardUI();
+  setUpBoardColumns();
+  addSubtaskEnterListener();
+  initOutsideClickListener();
+  attachMobileMenuEventListeners();
 }
 
-/**
- * Fetch and set current user data from local storage
+
+/** 
+ * Loads user data from storage
  */
-async function loadCurrentUserData() {
+async function loadUserAndSetCurrent() {
   await getUsersData();
   const currentUserId = localStorage.getItem("currentUserId");
   currentUser = users.users[currentUserId];
 }
 
-/**
- * Validate that a valid user is logged in
- * @returns {boolean} User validation status
+
+/** 
+ * Validates if user data exists
  */
-function validateCurrentUser() {
+function checkCurrentUser() {
   if (!currentUser) {
-    console.error("Authentication failed: No user found");
+    console.error("User not found - please log in again");
     return false;
   }
   return true;
 }
 
-/** UI Rendering and Setup */
-function renderPageComponents() {
-  renderDesktopLayout();
+
+/** 
+ * Sets up main UI components
+ */
+function renderBoardUI() {
+  renderDesktopTemplate();
   renderBoardContent();
-  highlightActiveBoardSection();
-  renderUserProfileVisuals();
-  setupAssignmentSection();
+  changeToChosenBoardSection();
+  renderNameCircles();
+  renderAssignedToSection();
 }
 
-/**
- * Configure board column rendering
- */
-function setupBoardInteractions() {
-  renderBoardColumns();
-  attachSubtaskInputHandler();
-  initializeOutsideClickTracking();
-  setupMobileMenuEvents();
-}
 
-/**
- * Render all task columns with their respective content
+/** 
+ * Creates the task columns structure
  */
-function renderBoardColumns() {
+function setUpBoardColumns() {
   renderColumn("done", "doneNotes");
   renderColumn("awaitFeedback", "awaitFeedbackNotes");
   renderColumn("toDo", "toDoNotes");
   renderColumn("inProgress", "inProgressNotes");
 }
 
-/** Filtering and Search Functionality */
-/**
- * Handle task filtering based on user input
- * @param {Event} event - Search input event
+
+/** 
+ * Adds keyboard event handler for subtasks
  */
-function filterTasksBySearchTerm(event) {
-  const searchTerm = event.target.value.toLowerCase().trim();
-  if (!searchTerm) return renderAllColumns();
-
-  const matchingTasks = Object.values(currentUser.tasks || {}).filter(task =>
-    (task.title && task.title.toLowerCase().includes(searchTerm)) ||
-    (task.taskDescription && task.taskDescription.toLowerCase().includes(searchTerm))
-  );
-
-  resetColumnDisplay();
-  renderFilteredTaskColumns(matchingTasks);
-}
-
-/**
- * Clear all column contents before rendering filtered tasks
- */
-function resetColumnDisplay() {
-  ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"]
-    .forEach(columnId => document.getElementById(columnId).innerHTML = "");
-}
-
-/**
- * Distribute filtered tasks across columns
- * @param {Array} filteredTasks - Tasks matching search criteria
- */
-function renderFilteredTaskColumns(filteredTasks) {
-  const columnMapping = {
-    "toDo": filteredTasks.filter(t => t.currentStatus === "toDo"),
-    "inProgress": filteredTasks.filter(t => t.currentStatus === "inProgress"),
-    "awaitFeedback": filteredTasks.filter(t => t.currentStatus === "awaitFeedback"),
-    "done": filteredTasks.filter(t => t.currentStatus === "done")
-  };
-
-  Object.entries(columnMapping).forEach(([status, tasks]) => 
-    renderFilteredColumn(tasks, status, `${status}Notes`)
-  );
-}
-
-/** Mobile Task Movement Handlers */
-/**
- * Setup click events for mobile task movement menu
- */
-function setupMobileMenuEvents() {
-  document.querySelectorAll('.menu-mobile .menu-option').forEach(option => {
-    option.addEventListener('click', handleMobileTaskMove);
+function addSubtaskEnterListener() {
+  document.getElementById('subtask').addEventListener('keydown', (evt) => {
+    if (evt.key === 'Enter') {
+      addSubtask();
+      evt.preventDefault();
+    }
   });
 }
 
-/**
- * Process task column change from mobile menu
- * @param {Event} event - Click event
- */
-function handleMobileTaskMove(event) {
-  event.preventDefault();
-  event.stopPropagation();
 
-  const taskId = event.target.getAttribute('data-task-id');
-  const newColumn = event.target.getAttribute('data-column');
-  moveTaskBetweenColumns(taskId, newColumn);
+/** ---------------------- HTML Generation ---------------------- */
+/** 
+ * Loads desktop UI template
+ */
+function renderDesktopTemplate() {
+  let content = document.getElementById("templateSection");
+  content.innerHTML = getDesktopTemplate(currentUser);
 }
 
-/**
- * Update task status and re-render columns
- * @param {string} taskId - Task unique identifier
- * @param {string} targetColumn - Destination column name
+
+/** 
+ * Generates board main content
  */
-function moveTaskBetweenColumns(taskId, targetColumn) {
+function renderBoardContent() {
+  let content = document.getElementById("newContentSection");
+  content.innerHTML += getBoardContent();
+}
+
+
+/** 
+ * Highlights current section in sidebar
+ */
+function changeToChosenBoardSection() {
+  // Remove highlight from summary section
+  document.getElementById("summary-section").classList.remove("chosen-section");
+  document.getElementById("summary-img").classList.remove("summary-img-chosen");
+  document.getElementById("summary-img").classList.add("summary-img");
+
+  // Add highlight to board section
+  document.getElementById("board-section").classList.add("chosen-section");
+  document.getElementById("board-img").classList.remove("board-img");
+  document.getElementById("board-img").classList.add("board-img-chosen");
+}
+
+
+/** ---------------------- Search Functions ---------------------- */
+/** 
+ * Filters tasks based on search input
+ * @param {Event} event - Input event
+ */
+function filterTasks(event) {
+  const term = event.target.value.toLowerCase().trim();
+  if (!term) return renderAllColumns();
+
+  // Find tasks matching search term
+  const filteredTasks = Object.values(currentUser.tasks || {}).filter(task =>
+    (task.title && task.title.toLowerCase().includes(term)) ||
+    (task.taskDescription && task.taskDescription.toLowerCase().includes(term))
+  );
+
+  clearAllColumns();
+  renderFilteredTasks(filteredTasks);
+}
+
+
+/** 
+ * Clears all task columns
+ */
+function clearAllColumns() {
+  document.getElementById("toDoNotes").innerHTML = "";
+  document.getElementById("inProgressNotes").innerHTML = "";
+  document.getElementById("awaitFeedbackNotes").innerHTML = "";
+  document.getElementById("doneNotes").innerHTML = "";
+}
+
+
+/** 
+ * Displays filtered tasks in correct columns
+ */
+function renderFilteredTasks(tasks) {
+  const toDo = tasks.filter(t => t.currentStatus === "toDo");
+  const inProgress = tasks.filter(t => t.currentStatus === "inProgress");
+  const awaitFb = tasks.filter(t => t.currentStatus === "awaitFeedback");
+  const done = tasks.filter(t => t.currentStatus === "done");
+
+  renderFilteredColumn(toDo, "toDo", "toDoNotes");
+  renderFilteredColumn(inProgress, "inProgress", "inProgressNotes");
+  renderFilteredColumn(awaitFb, "awaitFeedback", "awaitFeedbackNotes");
+  renderFilteredColumn(done, "done", "doneNotes");
+}
+
+
+/** 
+ * Renders all columns with full task list
+ */
+function renderAllColumns() {
+  renderColumn("toDo", "toDoNotes");
+  renderColumn("inProgress", "inProgressNotes");
+  renderColumn("awaitFeedback", "awaitFeedbackNotes");
+  renderColumn("done", "doneNotes");
+}
+
+
+/** ---------------------- Mobile Menu Handlers ---------------------- */
+/** 
+ * Sets up mobile menu click handlers
+ */
+function attachMobileMenuEventListeners() {
+  const menuOptions = document.querySelectorAll('.menu-mobile .menu-option');
+  menuOptions.forEach(option => {
+    option.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+      const taskId = option.getAttribute('data-task-id');
+      const newCol = option.getAttribute('data-column');
+      moveTaskToNewColumn(taskId, newCol);
+    });
+  });
+}
+
+
+/** 
+ * Handles task movement between columns
+ * @param {string} taskId - Task identifier
+ * @param {string} newColumn - Target column
+ */
+function moveTaskToNewColumn(taskId, newColumn) {
+  let menu = document.getElementById(`menuSectionMobile${taskId}`);
+  if (!menu) return console.error(`Menu not found for task ${taskId}`);
+
   const taskKey = Object.keys(currentUser.tasks).find(
     key => currentUser.tasks[key].id === taskId
   );
-  
-  if (!taskKey) {
-    console.error(`Task ${taskId} not found`);
+  if (!taskKey) return console.error(`Could not find task ${taskId}`);
+
+  // Update task status and save
+  currentUser.tasks[taskKey].currentStatus = newColumn;
+  updateTaskColumnInDatabase(taskKey, newColumn);
+
+  // Remove task card and refresh columns
+  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+  if (taskElement) taskElement.remove();
+
+  renderAllColumns();
+  menu.classList.add("d-none");
+}
+
+
+/** ---------------------- Column Helpers ---------------------- */
+/** 
+ * Renders filtered tasks in a column
+ * @param {Array} tasks - Tasks to render
+ * @param {string} status - Column status
+ * @param {string} columnId - DOM element ID
+ */
+function renderFilteredColumn(tasks, status, columnId) {
+  const column = document.getElementById(columnId);
+  if (!column) return console.error(`Column ${columnId} not found`);
+
+  if (tasks.length === 0) {
+    column.innerHTML = `<div class="empty-notification"><span>No tasks in this section</span></div>`;
     return;
   }
-
-  currentUser.tasks[taskKey].currentStatus = targetColumn;
-  updateTaskColumnInDatabase(taskKey, targetColumn);
-
-  document.querySelector(`[data-task-id="${taskId}"]`)?.remove();
-  renderAllColumns();
+  tasks.forEach(task => column.innerHTML += getColumnTaskHtml(task, status));
 }
 
-/**
- * Handle "Add Task" button logic across device sizes
+
+/** ---------------------- Button Actions ---------------------- */
+/** 
+ * Handles add task button click
  */
 function handleAddTaskButtonClick() {
-  const isMobileView = window.matchMedia("(max-width: 1200px)").matches;
-  isMobileView 
-    ? window.location.href = "add_task.html"
-    : openAddTaskBoard();
+  if (window.matchMedia("(max-width: 1200px)").matches) {
+    window.location.href = "add_task.html";
+  } else {
+    openAddTaskBoard();
+  }
 }
-
-export { 
-  initializeBoardPage, 
-  filterTasksBySearchTerm, 
-  handleAddTaskButtonClick 
-};
