@@ -79,7 +79,10 @@ async function initBoardPage() {
 async function loadUserAndSetCurrent() {
   await getUsersData();
   const currentUserId = localStorage.getItem("currentUserId");
+  console.log("currentUserId:", currentUserId);
+  console.log("users:", users);
   currentUser = users.users[currentUserId];
+  console.log("currentUser:", currentUser);
 }
 
 
