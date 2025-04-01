@@ -1,18 +1,21 @@
+/**
+ * Generates the HTML for the main board content.
+ * @returns {string} HTML string for the board content.
+ */
 function getBoardContent() {
-    return `                
+  return `                
     <div class="new-section">
         <div class="complete-board-section">
             <div class="board-headline-search-add-task-section">
-            <div class="hl-and-add-button-section">
-   
-                <span class="board-hl">Board</span>
-                <div onclick="handleAddTaskButtonClick()" class="add-button-mobile">
-                <img src="./assets/img/addCrossWhite.svg" alt="">
-                </div>
+                <div class="hl-and-add-button-section">
+                    <span class="board-hl">Board</span>
+                    <div onclick="handleAddTaskButtonClick()" class="add-button-mobile">
+                        <img src="./assets/img/addCrossWhite.svg" alt="">
+                    </div>
                 </div>
                 <div class="search-add-task-section">
                     <div class="search-bar">
-                    <input type="text" placeholder="Find Task" oninput="filterTasks(event)">
+                        <input type="text" placeholder="Find Task" oninput="filterTasks(event)">
                         <div class="seperator-img-section">
                             <div class="search-seperator"></div>
                             <div class="search-img-container">
@@ -27,6 +30,7 @@ function getBoardContent() {
                 </div>
             </div>
             <div class="column-section">
+                <!-- To Do Column -->
                 <div class="to-do-section">
                     <div class="to-do-hl-and-add-section">
                         <span>To do</span>
@@ -35,6 +39,7 @@ function getBoardContent() {
                     <div ondrop="moveTo('toDo')" ondragover="allowDrop(event)" id="toDoNotes" class="to-do-notes"></div>
                 </div>
                 
+                <!-- In Progress Column -->
                 <div class="in-progress-section">
                     <div class="to-do-hl-and-add-section">
                         <span>In progress</span>
@@ -43,6 +48,7 @@ function getBoardContent() {
                     <div ondrop="moveTo('inProgress')" ondragover="allowDrop(event)" id="inProgressNotes" class="to-do-notes"></div>
                 </div>
                 
+                <!-- Await Feedback Column -->
                 <div class="await-feedback-section">
                     <div class="to-do-hl-and-add-section">
                         <span>Await feedback</span>
@@ -51,6 +57,7 @@ function getBoardContent() {
                     <div ondrop="moveTo('awaitFeedback')" ondragover="allowDrop(event)" id="awaitFeedbackNotes" class="to-do-notes"></div>
                 </div>
                 
+                <!-- Done Column -->
                 <div class="done-section">
                     <div class="to-do-hl-and-add-section">
                         <span>Done</span>
@@ -61,16 +68,22 @@ function getBoardContent() {
         </div>
     </div>
     <div id="rotateWarning" class="rotate-overlay hide">
-<div class="rotate-message">
-  <h2>Bitte drehe dein Gerät</h2>
-  <p>Um unsere Seite optimal zu nutzen, verwende bitte das Hochformat.</p>
-</div>
-</div>
+        <div class="rotate-message">
+            <h2>Bitte drehe dein Gerät</h2>
+            <p>Um unsere Seite optimal zu nutzen, verwende bitte das Hochformat.</p>
+        </div>
+    </div>
     `;
-  }
+}
 
-  function getColumnContent(task, status) {
-    return `
+/**
+ * Generates HTML for a task card with draggable functionality.
+ * @param {Object} task - The task object containing task details.
+ * @param {string} status - The column status (toDo, inProgress, etc).
+ * @returns {string} HTML string for the task card.
+ */
+function getColumnContent(task, status) {
+  return `
         <div draggable="true"
              ondragstart="startDragging('${task.id}')"
              ondragend="endDragging('${task.id}')"
@@ -85,7 +98,9 @@ function getBoardContent() {
             </div>
   
             <div class="note-description">
-                <span>${task.taskDescription || "No description provided."}</span>
+                <span>${
+                  task.taskDescription || "No description provided."
+                }</span>
             </div>
   
             <div id="subtaskBarAndSubtaskSpan${status}${task.id}" 
@@ -101,7 +116,7 @@ function getBoardContent() {
                      alt="">
             </div>
   
-            <!-- Mobiles Menü-Icon -->
+            <!-- Mobile Menu Icon -->
             <div class="change-column-menu-mobile">
                 <img id="noteMenuMobile${task.id}"
                      data-task-id="${task.id}"
@@ -111,44 +126,58 @@ function getBoardContent() {
                      alt="More">
             </div>
   
-            <!-- Mobiles Dropdown-Menü -->
+            <!-- Mobile Dropdown Menu -->
             <div id="menuSectionMobile${task.id}" 
                  class="menu-section-mobile d-none">
                 <div class="menu-mobile">
                     <a href="#"
                        class="menu-option"
-                       onclick="event.stopPropagation(); moveTaskToNewColumn('${task.id}', 'toDo'); return false;">
+                       onclick="event.stopPropagation(); moveTaskToNewColumn('${
+                         task.id
+                       }', 'toDo'); return false;">
                        To Do
                     </a>
                     <a href="#"
                        class="menu-option"
-                       onclick="event.stopPropagation(); moveTaskToNewColumn('${task.id}', 'inProgress'); return false;">
+                       onclick="event.stopPropagation(); moveTaskToNewColumn('${
+                         task.id
+                       }', 'inProgress'); return false;">
                        In Progress
                     </a>
                     <a href="#"
                        class="menu-option"
-                       onclick="event.stopPropagation(); moveTaskToNewColumn('${task.id}', 'awaitFeedback'); return false;">
+                       onclick="event.stopPropagation(); moveTaskToNewColumn('${
+                         task.id
+                       }', 'awaitFeedback'); return false;">
                        Await Feedback
                     </a>
                     <a href="#"
                        class="menu-option"
-                       onclick="event.stopPropagation(); moveTaskToNewColumn('${task.id}', 'done'); return false;">
+                       onclick="event.stopPropagation(); moveTaskToNewColumn('${
+                         task.id
+                       }', 'done'); return false;">
                        Done
                     </a>
                 </div>
             </div>
         </div>
     `;
-  }
+}
 
-  // getEditZoomSection empfängt jetzt task und taskKey
+/**
+ * Generates the HTML for the task edit form in zoom view.
+ * @param {Object} task - The task object containing task details.
+ * @param {string} taskKey - The key identifier for the task.
+ * @returns {string} HTML string for the edit task form.
+ */
 function getEditZoomSection(task, taskKey) {
-    return `
+  return `
     <div class="task-card-edit">
         <div onclick="closeTaskZoomEditSectionZoom()" class="close-section">
             <span><img src="assets/img/close.svg" alt=""></span>
         </div>
         <div class="edit-card-content-up">
+            <!-- Title Field -->
             <form class="input-order title-section-edit" action="">
                 <label for="title">Title</label>
                 <input value="${task.title}" 
@@ -162,13 +191,17 @@ function getEditZoomSection(task, taskKey) {
                 </span>
             </form>
 
+            <!-- Description Field -->
             <form class="input-order description-section-edit" action="">
                 <label for="description">Description</label>
                 <textarea class="description-input" 
                           id="descriptionEdit" 
-                          placeholder="Enter a Description">${task.taskDescription}</textarea>
+                          placeholder="Enter a Description">${
+                            task.taskDescription
+                          }</textarea>
             </form>
 
+            <!-- Due Date Field -->
             <form class="input-order date-section-edit" action="">
                 <label for="date">Due Date</label>
                 <input value="${task.dueDate}" 
@@ -182,45 +215,59 @@ function getEditZoomSection(task, taskKey) {
                 </span>
             </form>
 
+            <!-- Priority Selector -->
             <div class="prio-section">
                 <span>Prio</span>
                 <div class="prio-levels">
                     <div onclick="pressUrgentButtonEditZoom()" 
                          id="prioUrgentEdit" 
-                         class="${task.priority === "Urgent" ? "prio-urgent-chosen" : "prio-urgent"}">
+                         class="${
+                           task.priority === "Urgent"
+                             ? "prio-urgent-chosen"
+                             : "prio-urgent"
+                         }">
                         <span>Urgent</span>
                         <img id="urgent-button-icon-edit" 
                              src="${
-                                 task.priority === "Urgent"
-                                     ? "./assets/img/urgentArrowWhite.svg"
-                                     : "./assets/img/urgentArrowRed.svg"
+                               task.priority === "Urgent"
+                                 ? "./assets/img/urgentArrowWhite.svg"
+                                 : "./assets/img/urgentArrowRed.svg"
                              }">
                     </div>
                     <div onclick="pressMediumButtonEditZoom()" 
                          id="prioMediumEdit" 
-                         class="${task.priority === "Medium" ? "prio-medium-chosen" : "prio-medium"}">
+                         class="${
+                           task.priority === "Medium"
+                             ? "prio-medium-chosen"
+                             : "prio-medium"
+                         }">
                         <span>Medium</span>
                         <img id="medium-button-icon-edit" 
                              src="${
-                                 task.priority === "Medium"
-                                     ? "./assets/img/mediumLinesWhite.svg"
-                                     : "./assets/img/mediumLinesOrange.svg"
+                               task.priority === "Medium"
+                                 ? "./assets/img/mediumLinesWhite.svg"
+                                 : "./assets/img/mediumLinesOrange.svg"
                              }" alt="">
                     </div>
                     <div onclick="pressLowButtonEditZoom()" 
                          id="prioLowEdit" 
-                         class="${task.priority === "Low" ? "prio-low-chosen" : "prio-low"}">
+                         class="${
+                           task.priority === "Low"
+                             ? "prio-low-chosen"
+                             : "prio-low"
+                         }">
                         <span>Low</span>
                         <img id="low-button-icon-edit" 
                              src="${
-                                 task.priority === "Low"
-                                     ? "./assets/img/lowArrowGreenWhite.svg"
-                                     : "./assets/img/lowArrowGreeen.svg"
+                               task.priority === "Low"
+                                 ? "./assets/img/lowArrowGreenWhite.svg"
+                                 : "./assets/img/lowArrowGreeen.svg"
                              }" alt="">
                     </div>
                 </div>
             </div>
 
+            <!-- Assigned To Field -->
             <form class="input-order assigned-to-section-edit" action="">
                 <label for="assigned-to">Assigned to</label>
                 <div onclick="openAndCloseAssignedToSectionEditZoom()" 
@@ -241,6 +288,7 @@ function getEditZoomSection(task, taskKey) {
                      class="choosen-names"></div>
             </form>
 
+            <!-- Subtasks Field -->
             <form class="input-order subtask-section-edit" action="">
                 <label for="subtask">Subtasks</label>
                 <div class="subtask-section">
@@ -259,6 +307,7 @@ function getEditZoomSection(task, taskKey) {
             </form>
         </div>
 
+        <!-- Save Button -->
         <div class="edit-card-content-down">
             <div class="Log-In-and-Guest-Log-In">
                 <button class="Log-In-Button" 
@@ -272,29 +321,35 @@ function getEditZoomSection(task, taskKey) {
     `;
 }
 
+/**
+ * Generates the HTML for the task details view in zoom mode.
+ * @param {Object} task - The task object containing task details.
+ * @param {string} taskId - The unique identifier for the task.
+ * @returns {string} HTML string for the task details view.
+ */
 function getZoomTaskSection(task, taskId) {
-    return `
+  return `
     <div class="task-card">
-        <!-- Diese Section wird dynamisch in renderTaskCategoryAndCloseSection befüllt -->
+        <!-- Dynamic Category Section -->
         <div id="taskCategoryAndCloseSection" class="task-category-and-close-section"></div>
 
-        <!-- Titel -->
+        <!-- Title Section -->
         <div class="subtask-zoom-title">
             <span>${task.title}</span>
         </div>
 
-        <!-- Beschreibung -->
+        <!-- Description Section -->
         <div class="task-description-zoom-section">
             <span>${task.taskDescription}</span>
         </div>
 
-        <!-- Fälligkeitsdatum -->
+        <!-- Due Date Section -->
         <div class="due-date-section">
             <span class="due-date-title">Due date:</span>
             <span class="due-date-date">${task.dueDate}</span>
         </div>
 
-        <!-- Priorität -->
+        <!-- Priority Section -->
         <div class="priority-section">
             <span class="priority-title">Priority:</span>
             <div class="priority-name-and-icon">
@@ -303,19 +358,19 @@ function getZoomTaskSection(task, taskId) {
             </div>
         </div>
 
-        <!-- Zugewiesene Personen -->
+        <!-- Assigned Contacts Section -->
         <div class="assigned-to-section-zoom">
             <span class="assigned-to-section-title">Assigned to:</span>
             <div id="circleAndNameSection" class="circle-and-name-section"></div>
         </div>
 
-        <!-- Subtasks -->
+        <!-- Subtasks Section -->
         <div class="subtasks-section">
             <span class="subtask-title">Subtasks</span>
             <div id="subtaskZoomSection" class="subtask-zoom-section"></div>
         </div>
 
-        <!-- Löschen und Bearbeiten -->
+        <!-- Action Buttons Section -->
         <div class="delete-and-edit-section">
             <div onclick="deleteTask('${taskId}')" class="delete-section">
                 <img src="./assets/img/trashImg.svg" alt="">
@@ -331,9 +386,14 @@ function getZoomTaskSection(task, taskId) {
     `;
 }
 
-/** Generates HTML for a single task within a column. */
+/**
+ * Generates simplified HTML for a task card in column view.
+ * @param {Object} task - The task object containing task details.
+ * @param {string} status - The column status (toDo, inProgress, etc).
+ * @returns {string} HTML string for the task card.
+ */
 function getColumnTaskHtml(task, status) {
-    return `
+  return `
       <div draggable="true" 
            ondragstart="startDragging('${task.id}')" 
            class="note" 
@@ -355,11 +415,14 @@ function getColumnTaskHtml(task, status) {
                  src="./assets/img/Prio media (1).svg" alt="">
         </div>
       </div>`;
-  }
+}
 
-
+/**
+ * Generates the HTML for the add task overlay.
+ * @returns {string} HTML string for the add task form overlay.
+ */
 function getAddTaskSectionContent() {
-    return `<div class="add-task-card">
+  return `<div class="add-task-card">
     <div class="headline-and-close-section">
        <span class="add-task-headline">Add Task</span>
        <div onclick="closeAddTaskBoard()" class="close-add-task-section">
@@ -368,15 +431,20 @@ function getAddTaskSectionContent() {
     </div>
     <div class="task-detail-section">
         <div class="task-details-left">
+            <!-- Title Input -->
             <form class="input-order" action="">
                 <label for="title">Title<span class="red-star">*</span></label>
                 <input type="text" id="title" required placeholder="Enter a title">
                 <span id="alertMessageTitle" class="alert-message hide-alert-message">This field is required</span>
             </form>
+            
+            <!-- Description Input -->
             <form class="input-order" action="">
                 <label for="description">Description</label>
                 <textarea class="description-input" id="description" placeholder="Enter a Description"></textarea>
             </form>
+            
+            <!-- Assigned To -->
             <form class="input-order" action="">
                 <label for="assigned-to">Assigned to<span class="red-star">*</span></label>
                 <div onclick="openAndCloseAssignedToSection()" id="assignedToSection" class="assigned-to-section">
@@ -389,13 +457,18 @@ function getAddTaskSectionContent() {
                 <div id="choosenNamesSection" class="choosen-names"></div>
             </form>
         </div>
+        
         <div class="task-seperator"></div>
+        
         <div class="task-details-right">
+            <!-- Due Date -->
             <form class="input-order" action="">
                 <label for="date">Due Date<span class="red-star">*</span></label>
                 <input type="date" id="date" required placeholder="Enter a title">
                 <span id="alertMessageDate" class="alert-message hide-alert-message">This field is required</span>
             </form>
+            
+            <!-- Priority Selector -->
             <div class="prio-section">
                 <span>Prio</span>
                 <div class="prio-levels">
@@ -413,6 +486,8 @@ function getAddTaskSectionContent() {
                     </div>
                 </div>
             </div>
+            
+            <!-- Category Selector -->
             <div class="input-order">
                 <div class="hl-and-red-star">
                     <span>Category</span><span class="red-star">*</span>
@@ -432,6 +507,8 @@ function getAddTaskSectionContent() {
                     </div>
                 </div>
             </div>
+            
+            <!-- Subtasks -->
             <form class="input-order" action="">
                 <label for="subtask">Subtasks</label>
                 <div id="subtaskSectionInput" class="subtask-section">
@@ -444,6 +521,8 @@ function getAddTaskSectionContent() {
             </form>
         </div>
     </div>
+    
+    <!-- Form Buttons -->
     <div class="field-required-clear-create-button-section">
         <span id="fieldRequiredSection"><span class="red-star">*</span>This field is required</span>
         <div class="add-task-button">
@@ -458,5 +537,5 @@ function getAddTaskSectionContent() {
         </div>
     </div>
 </div>
-</div>`
-  }
+</div>`;
+}
