@@ -1,192 +1,281 @@
-/** ------------------ Opens and Closes Task Zoom ------------------ */
-/** Opens the Task Zoom section by removing .d-none and hiding body overflow. */
+/**
+ * Opens the task zoom section by making it visible and preventing body scrolling
+ */
 function openTaskZoomSection() {
-    const zoomSec = document.getElementById("taskZoomSection");
-    document.getElementById("body").classList.add("overflow-hidden");
-    zoomSec.classList.remove("d-none");
+  const zoomSection = document.getElementById("taskZoomSection");
+  document.getElementById("body").classList.add("overflow-hidden");
+  zoomSection.classList.remove("d-none");
+}
+
+/**
+ * Closes the task zoom section by hiding it and enabling body scrolling again
+ */
+function closeTaskZoomSection() {
+  document.getElementById("body").classList.remove("overflow-hidden");
+  document.getElementById("taskZoomSection").classList.add("d-none");
+}
+
+/**
+ * Finds a task in the user's tasks array by its ID
+ * @param {string} taskId - The ID of the task to find
+ * @returns {Object|undefined} The found task object or undefined if not found
+ */
+function findTaskById(taskId) {
+  let tasks = Object.values(currentUser.tasks || {});
+  return tasks.find((task) => task.id === taskId);
+}
+
+/**
+ * Renders the category and close button in the task zoom view
+ * @param {Object} task - The task object to display
+ */
+function renderTaskCategoryAndCloseSection(task) {
+  let element = document.getElementById("taskCategoryAndCloseSection");
+
+  // Handle case when category is missing
+  if (!task.category) {
+    element.innerHTML = `<div class="error-message"><span>No category found</span></div>`;
+    return;
   }
-  
-  /** Closes the Task Zoom section by adding .d-none and restoring body overflow. */
-  function closeTaskZoomSection() {
-    document.getElementById("body").classList.remove("overflow-hidden");
-    document.getElementById("taskZoomSection").classList.add("d-none");
+
+  // Determine the correct CSS class based on category
+  let categoryClassName = task.category.includes("User Story")
+    ? "user-story-container-zoom"
+    : "technical-task-container-zoom";
+
+  // Render the category badge and close button
+  element.innerHTML = `
+    <div class="${categoryClassName}">
+      <span>${task.category}</span>
+    </div>
+    <div onclick="closeTaskZoomSection()" class="close-subtask-container">
+      <img src="./assets/img/closeSubtask.svg" alt="">
+    </div>`;
+}
+
+/**
+ * Renders the subtasks section in the task zoom view
+ * @param {Object} task - The task object containing subtasks
+ */
+function renderSubtaskZoomSection(task) {
+  let subtaskSection = document.getElementById("subtaskZoomSection");
+  subtaskSection.innerHTML = "";
+
+  // Check if subtasks exist and are in the correct format
+  if (!task.subtasks || typeof task.subtasks !== "object") {
+    subtaskSection.innerHTML = `<span>No subtasks</span>`;
+    return;
   }
-  
-  
-  /** ------------------ Task Retrieval ------------------ */
-  /** Finds a task by its ID in currentUser.tasks. */
-  function findTaskById(taskId) {
-    return Object.values(currentUser.tasks || {}).find(t => t.id === taskId);
-  }
-  
-  
-  /** ------------------ Rendering Category & Close ------------------ */
-  /** Renders the task's category and close button in the zoom section. */
-  function renderTaskCategoryAndCloseSection(task) {
-    let el = document.getElementById("taskCategoryAndCloseSection");
-    if (!task.category) return renderCategoryError(el);
-  
-    let categoryClass = getTaskCategoryClass(task);
-    el.innerHTML = `
-      <div class="${categoryClass}">
-        <span>${task.category}</span>
-      </div>
-      <div onclick="closeTaskZoomSection()" class="close-subtask-container">
-        <img src="./assets/img/closeSubtask.svg" alt="">
+
+  // Render each subtask with its checkbox
+  Object.entries(task.subtasks).forEach(([subtaskId, subtask]) => {
+    let checkboxImage = subtask.checked ? "checkboxChecked" : "checkboxEmpty";
+    subtaskSection.innerHTML += `
+      <div class="subtask-zoom">
+        <img onclick="checkOrUncheckSubtask('${task.id}','${subtaskId}')"
+             src="./assets/img/${checkboxImage}.svg" alt="checkbox">
+        <span>${subtask.subTaskDescription}</span>
       </div>`;
-  }
-  
-  /** Returns a CSS class for the task category. */
-  function getTaskCategoryClass(task) {
-    return task.category.includes("User Story")
-      ? "user-story-container-zoom"
-      : "technical-task-container-zoom";
-  }
-  
-  /** Renders a fallback if category is missing. */
-  function renderCategoryError(container) {
-    container.innerHTML = `<div class="error-message"><span>No category found</span></div>`;
-  }
-  
-  
-  /** ------------------ Rendering Subtasks ------------------ */
-  /** Renders the subtasks in the zoom section. */
-  function renderSubtaskZoomSection(task) {
-    let subSec = document.getElementById("subtaskZoomSection");
-    subSec.innerHTML = "";
-    if (!task.subtasks || typeof task.subtasks !== "object") {
-      return subSec.innerHTML = `<span>No subtasks</span>`;
-    }
-    Object.entries(task.subtasks).forEach(([id, st]) => {
-      let checkImg = st.checked ? "checkboxChecked" : "checkboxEmpty";
-      subSec.innerHTML += `
-        <div class="subtask-zoom">
-          <img onclick="checkOrUncheckSubtask('${task.id}','${id}')"
-               src="./assets/img/${checkImg}.svg" alt="checkbox">
-          <span>${st.subTaskDescription}</span>
-        </div>`;
-    });
-  }
-  
-  
-  /** ------------------ Toggling Subtasks ------------------ */
-  /** Toggles the checked state of a subtask and updates Firebase/UI. */
-  async function checkOrUncheckSubtask(taskId, subtaskId) {
-    try {
-      const key = getTaskKeyById(taskId);
-      let st = getSubtaskByKey(key, subtaskId);
-      st.checked = !st.checked;
-      await updateSpecificSubtask(currentUser.id, key, subtaskId, st);
-      let task = currentUser.tasks[key];
-      renderSubtaskProgress(taskId, task, task.currentStatus);
-      refreshTaskColumnAndZoom(taskId, task);
-    } catch (err) {
-    }
-  }
-  
-  /** Retrieves the task's Firebase key by its ID. */
-  function getTaskKeyById(taskId) {
-    let k = Object.keys(currentUser.tasks).find(i => currentUser.tasks[i].id === taskId);
-    if (!k) throw new Error(`Task not found: ${taskId}`);
-    return k;
-  }
-  
-  /** Retrieves a specific subtask from a task. */
-  function getSubtaskByKey(taskKey, subtaskId) {
-    let st = currentUser.tasks[taskKey].subtasks[subtaskId];
-    if (!st) throw new Error(`Subtask not found: ${subtaskId}`);
-    return st;
-  }
-  
-  /** Re-renders column and zoom section for a given task. */
-  function refreshTaskColumnAndZoom(taskId, task) {
+  });
+}
+
+/**
+ * Toggles a subtask's checked state and updates in Firebase and UI
+ * @param {string} taskId - The ID of the task
+ * @param {string} subtaskId - The ID of the subtask to toggle
+ */
+async function checkOrUncheckSubtask(taskId, subtaskId) {
+  try {
+    // Get the task and subtask
+    const taskKey = getTaskKeyById(taskId);
+    let subtask = getSubtaskByKey(taskKey, subtaskId);
+
+    // Toggle the checked state
+    subtask.checked = !subtask.checked;
+
+    // Update in Firebase
+    await updateSpecificSubtask(currentUser.id, taskKey, subtaskId, subtask);
+
+    // Update UI
+    let task = currentUser.tasks[taskKey];
+    renderSubtaskProgress(taskId, task, task.currentStatus);
+
+    // Re-render affected sections
     renderColumn(task.currentStatus, `${task.currentStatus}Notes`);
     renderTaskZoomSection(taskId);
+  } catch (err) {
+    console.error("Error toggling subtask:", err);
   }
-  
-  
-  /** ------------------ Assigned To & Priority ------------------ */
-  /** Renders assigned contacts' circles and names. */
-  function renderAssignedToAndCircleNames(task) {
-    let sec = document.getElementById("circleAndNameSection");
-    sec.innerHTML = "";
-    Object.entries(task.assignedTo || {}).forEach(([k, contact]) => {
-      let init = `${contact.firstName.charAt(0)}${contact.lastName.charAt(0)}`;
-      let color = getOrAssignColorForTask(task.id, k);
-      sec.innerHTML += `
-        <div class="name-section">
-          <div class="name-circle-add-section" style="background-color: ${color}">
-            <span>${init}</span>
-          </div>
-          <span>${contact.firstName} ${contact.lastName}</span>
-        </div>`;
-    });
+}
+
+/**
+ * Gets a task's Firebase key by its ID
+ * @param {string} taskId - The ID of the task
+ * @returns {string} - The Firebase key
+ * @throws {Error} If task not found
+ */
+function getTaskKeyById(taskId) {
+  let key = Object.keys(currentUser.tasks).find(
+    (k) => currentUser.tasks[k].id === taskId
+  );
+  if (!key) {
+    throw new Error(`Could not find task with ID: ${taskId}`);
   }
-  
-  /** Renders the priority icon based on the task's priority. */
-  function renderPrioIconImg(priority) {
-    let el = document.getElementById("prioIconZoomImg");
-    if (priority === "Urgent") el.src = "assets/img/urgentArrowRed.svg";
-    else if (priority === "Medium") el.src = "assets/img/Prio media (1).svg";
-    else el.src = "assets/img/lowArrowGreeen.svg";
+  return key;
+}
+
+/**
+ * Gets a specific subtask from a task
+ * @param {string} taskKey - The task's Firebase key
+ * @param {string} subtaskId - The subtask ID
+ * @returns {Object} - The subtask object
+ * @throws {Error} If subtask not found
+ */
+function getSubtaskByKey(taskKey, subtaskId) {
+  let subtask = currentUser.tasks[taskKey].subtasks[subtaskId];
+  if (!subtask) {
+    throw new Error(`Could not find subtask: ${subtaskId}`);
   }
-  
-  
-  /** ------------------ Firebase Updates ------------------ */
-  /** Updates a specific subtask in Firebase using PUT. */
-  async function updateSpecificSubtask(userId, tKey, sKey, subtask) {
-    let url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/tasks/${tKey}/subtasks/${sKey}.json`;
-    let resp = await fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(subtask)
-    });
-    if (!resp.ok) throw new Error(`Failed subtask update, status: ${resp.status}`);
+  return subtask;
+}
+
+/**
+ * Renders people assigned to the task with their initials and name
+ * @param {Object} task - The task object
+ */
+function renderAssignedToAndCircleNames(task) {
+  let section = document.getElementById("circleAndNameSection");
+  section.innerHTML = "";
+
+  // Iterate through all assigned contacts
+  Object.entries(task.assignedTo || {}).forEach(([key, contact]) => {
+    // Get initials from first and last name
+    let initials = `${contact.firstName.charAt(0)}${contact.lastName.charAt(
+      0
+    )}`;
+
+    // Get or assign a color for this contact in this task
+    let color = getOrAssignColorForTask(task.id, key);
+
+    // Create HTML for the contact
+    section.innerHTML += `
+      <div class="name-section">
+        <div class="name-circle-add-section" style="background-color: ${color}">
+          <span>${initials}</span>
+        </div>
+        <span>${contact.firstName} ${contact.lastName}</span>
+      </div>`;
+  });
+}
+
+/**
+ * Renders the correct priority icon based on task priority
+ * @param {string} priority - The priority level (Urgent, Medium, Low)
+ */
+function renderPrioIconImg(priority) {
+  let imgElement = document.getElementById("prioIconZoomImg");
+
+  if (priority === "Urgent") {
+    imgElement.src = "assets/img/urgentArrowRed.svg";
+  } else if (priority === "Medium") {
+    imgElement.src = "assets/img/Prio media (1).svg";
+  } else {
+    imgElement.src = "assets/img/lowArrowGreeen.svg";
   }
-  
-  
-  /** ------------------ Deleting a Task ------------------ */
-  /** Deletes a task from Firebase and updates the UI. */
-  async function deleteTask(taskId) {
-    try {
-      let key = getTaskKeyById(taskId);
-      await fetchDeleteTaskFromFirebase(key);
-      delete currentUser.tasks[key];
-      refreshBoardAfterDeletion();
-    } catch (err) {
-    }
+}
+
+/**
+ * Updates a specific subtask in Firebase
+ * @param {string} userId - The current user ID
+ * @param {string} taskKey - The task's Firebase key
+ * @param {string} subtaskKey - The subtask's key
+ * @param {Object} subtask - The updated subtask object
+ * @returns {Promise<void>}
+ */
+async function updateSpecificSubtask(userId, taskKey, subtaskKey, subtask) {
+  let url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/tasks/${taskKey}/subtasks/${subtaskKey}.json`;
+
+  let response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(subtask),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Firebase update failed with status: ${response.status}`);
   }
-  
-  /** Sends a DELETE request to remove a task from Firebase. */
-  async function fetchDeleteTaskFromFirebase(taskKey) {
-    let url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${currentUser.id}/tasks/${taskKey}.json`;
-    let resp = await fetch(url, { method: "DELETE" });
-    if (!resp.ok) throw new Error(`Failed to delete task, status: ${resp.status}`);
+}
+
+/**
+ * Deletes a task from Firebase and updates the UI
+ * @param {string} taskId - The ID of the task to delete
+ */
+async function deleteTask(taskId) {
+  try {
+    // Find the task's Firebase key
+    let key = getTaskKeyById(taskId);
+
+    // Delete from Firebase
+    await fetchDeleteTaskFromFirebase(key);
+
+    // Remove from local data
+    delete currentUser.tasks[key];
+
+    // Update UI
+    refreshBoardAfterDeletion();
+  } catch (err) {
+    console.error("Error deleting task:", err);
   }
-  
-  /** Re-renders columns and closes the zoom section. */
-  function refreshBoardAfterDeletion() {
-    renderColumn("done", "doneNotes");
-    renderColumn("awaitFeedback", "awaitFeedbackNotes");
-    renderColumn("toDo", "toDoNotes");
-    renderColumn("inProgress", "inProgressNotes");
-    closeTaskZoomSection();
+}
+
+/**
+ * Sends a DELETE request to Firebase to remove a task
+ * @param {string} taskKey - The task's Firebase key
+ * @returns {Promise<void>}
+ */
+async function fetchDeleteTaskFromFirebase(taskKey) {
+  let url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${currentUser.id}/tasks/${taskKey}.json`;
+
+  let response = await fetch(url, { method: "DELETE" });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to delete task from Firebase. Status: ${response.status}`
+    );
   }
-  
-  
-  /** ------------------ Main Zoom Rendering ------------------ */
-  /** Renders the Task Zoom section for a given task ID. */
-  function renderTaskZoomSection(taskId) {
-    let task = findTaskById(taskId);
-    setZoomSectionInnerHTML(task, taskId);
-    renderTaskCategoryAndCloseSection(task);
-    renderPrioIconImg(task.priority);
-    renderAssignedToAndCircleNames(task);
-    renderSubtaskZoomSection(task);
-  }
-  
-  /** Sets the innerHTML of #taskZoomSection using the given task and ID. */
-  function setZoomSectionInnerHTML(task, taskId) {
-    document.getElementById("taskZoomSection").innerHTML = getZoomTaskSection(task, taskId);
-  }
-  
+}
+
+/**
+ * Updates the board columns and closes the task zoom after deletion
+ */
+function refreshBoardAfterDeletion() {
+  // Re-render all columns
+  renderColumn("done", "doneNotes");
+  renderColumn("awaitFeedback", "awaitFeedbackNotes");
+  renderColumn("toDo", "toDoNotes");
+  renderColumn("inProgress", "inProgressNotes");
+
+  // Close the task detail view
+  closeTaskZoomSection();
+}
+
+/**
+ * Main function to render the task zoom view
+ * @param {string} taskId - The ID of the task to display
+ */
+function renderTaskZoomSection(taskId) {
+  // Find the task
+  let task = findTaskById(taskId);
+
+  // Update the HTML with task details
+  document.getElementById("taskZoomSection").innerHTML = getZoomTaskSection(
+    task,
+    taskId
+  );
+
+  // Render sections with task data
+  renderTaskCategoryAndCloseSection(task);
+  renderPrioIconImg(task.priority);
+  renderAssignedToAndCircleNames(task);
+  renderSubtaskZoomSection(task);
+}
