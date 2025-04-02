@@ -1,5 +1,5 @@
 function getSignUpContent() {
-    return `
+  return `
         <img class="join-logo" src="./assets/img/JoinLogo.svg" alt="Join Logo">
         
         <section class="Log-In-Section">
@@ -62,7 +62,7 @@ function getSignUpContent() {
                     <!-- Terms and Conditions -->
                     <div class="remember-me-section-parent">
                         <div id="rememberMeSection" class="remember-me-section">
-                            <img class="accept-checkbox-img" onclick="toggleCheckbox()" id="logInCheckbox" src="./assets/img/checkboxEmpty.svg" alt="">
+                            <img class="accept-checkbox-img" onclick="toggleCheckbox(), checkUncheckPolicy()" id="logInCheckbox" src="./assets/img/checkboxEmpty.svg" alt="">
                             <span class="light-grey">I accept the <span class="accept-privacy-policy-span">Privacy policy</span></span>
                         </div>
                     </div>
