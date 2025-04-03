@@ -1,280 +1,354 @@
 /**
- * Holds the currently open menu for mobile toggling.
+ * Variable to keep track of which menu is currently open in mobile view.
  * @type {HTMLElement|null}
  */
 let currentlyOpenMenu = null;
 
-
 /**
- * Renders the category label (e.g., "User Story" or "Technical Task") for a task.
- * 
- * @param {string} taskId - The unique identifier for the task.
- * @param {Object} task - The task object containing category information.
- * @param {string} column - The name or status of the column where the task is displayed.
+ * Renders the category label (User Story or Technical Task) for a task
+ *
+ * @param {string} taskId - The ID of the task
+ * @param {Object} task - The task object with all data
+ * @param {string} column - The column status where the task is located
  */
 function renderTaskCategory(taskId, task, column) {
-  const content = document.getElementById(`taskCategory${column}${taskId}`);
-  if (!content) {
+  // Get the container element for this task's category
+  const categoryContainer = document.getElementById(
+    `taskCategory${column}${taskId}`
+  );
+
+  // Don't proceed if container not found
+  if (!categoryContainer) {
     return;
   }
 
+  // Choose which category to display based on task data
   if (task.category && task.category.includes("User Story")) {
-    content.innerHTML = `<div class="user-story-container"><span>User Story</span></div>`;
+    // User Story category
+    categoryContainer.innerHTML = `<div class="user-story-container"><span>User Story</span></div>`;
   } else if (task.category && task.category.includes("Technical Task")) {
-    content.innerHTML = `<div class="technical-task-container"><span>Technical Task</span></div>`;
+    // Technical Task category
+    categoryContainer.innerHTML = `<div class="technical-task-container"><span>Technical Task</span></div>`;
   } else {
-    content.innerHTML = `<div class="default-task-container"><span>Uncategorized</span></div>`;
+    // Default fallback if no valid category
+    categoryContainer.innerHTML = `<div class="default-task-container"><span>Uncategorized</span></div>`;
   }
 }
 
-
- /**
-  * Renders the subtask progress bar and subtask count for a task.
-  * 
-  * @param {string} taskId - The unique identifier for the task.
-  * @param {Object} task - The task object containing subtask information.
-  * @param {string} column - The name or status of the column where the task is displayed.
-  */
+/**
+ * Creates and updates the subtask progress bar and count
+ *
+ * @param {string} taskId - The ID of the task
+ * @param {Object} task - The task object containing subtasks
+ * @param {string} column - The column status where the task is shown
+ */
 function renderSubtaskProgress(taskId, task, column) {
-  const subtaskSectionComplete = document.getElementById(`subtaskBarAndSubtaskSpan${column}${taskId}`);
-  const totalSubtasks = Object.values(task.subtasks || {});
-  const checkedSubtasks = totalSubtasks.filter(subtask => subtask.checked);
+  // Find the container for the subtask progress
+  const subtaskContainer = document.getElementById(
+    `subtaskBarAndSubtaskSpan${column}${taskId}`
+  );
 
-  const progressPercent = totalSubtasks.length
-    ? (checkedSubtasks.length / totalSubtasks.length) * 100
-    : 0;
+  // Get all subtasks and count completed ones
+  const allSubtasks = Object.values(task.subtasks || {});
+  const completedSubtasks = allSubtasks.filter((subtask) => subtask.checked);
 
-  subtaskSectionComplete.innerHTML = `
+  // Calculate percentage for progress bar
+  let progressPercentage = 0;
+  if (allSubtasks.length > 0) {
+    progressPercentage = (completedSubtasks.length / allSubtasks.length) * 100;
+  }
+
+  // Update the HTML with progress bar and count
+  subtaskContainer.innerHTML = `
     <div class="subtask-bar">
-      <div class="progress" style="width: ${progressPercent}%"></div>
+      <div class="progress" style="width: ${progressPercentage}%"></div>
     </div>
-    <div class="subtask-span">${checkedSubtasks.length}/${totalSubtasks.length} Subtask</div>`;
+    <div class="subtask-span">${completedSubtasks.length}/${allSubtasks.length} Subtask</div>`;
 }
 
-
- /**
-  * Handles a click on a task to open its "zoom" view.
-  * 
-  * @param {string} taskId - The unique identifier for the task.
-  */
+/**
+ * Opens the detailed view when clicking on a task
+ *
+ * @param {string} taskId - The ID of the clicked task
+ */
 function handleTaskClick(taskId) {
+  // Skip if no valid taskId provided
   if (!taskId) {
     return;
   }
+
+  // Open the zoom section and render task details
   openTaskZoomSection();
   renderTaskZoomSection(taskId);
 }
 
-
- /**
-  * Renders the circle of initials for each contact assigned to a task.
-  * 
-  * @param {string} taskId - The unique identifier for the task.
-  * @param {Object} task - The task object containing assigned contacts.
-  * @param {string} column - The name or status of the column where the task is displayed.
-  */
+/**
+ * Renders the profile circles for each assigned contact
+ *
+ * @param {string} taskId - The ID of the task
+ * @param {Object} task - The task object with assigned contacts
+ * @param {string} column - The column status where the task is shown
+ */
 function renderNameCircleSection(taskId, task, column) {
-  const nameCircleSection = document.getElementById(`nameCircleSection${column}${taskId}`);
-  if (!nameCircleSection) {
+  // Find the container for contact circles
+  const circleContainer = document.getElementById(
+    `nameCircleSection${column}${taskId}`
+  );
+
+  // Don't proceed if container not found
+  if (!circleContainer) {
     return;
   }
 
-  const assignedTo = task.assignedTo || {};
-  const contactsArray = Object.entries(assignedTo);
-  nameCircleSection.innerHTML = "";
+  // Get assigned contacts data
+  const contacts = task.assignedTo || {};
+  const contactsList = Object.entries(contacts);
 
-  // Display up to 3 contacts
-  contactsArray.slice(0, 3).forEach(([key, contact]) => {
-    const initials = `${(contact.firstName || "U").charAt(0)}${(contact.lastName || "U").charAt(0)}`;
-    const color = getOrAssignColorForTask(taskId, key);
-    nameCircleSection.innerHTML += `
-      <div class="name-circle-add-section-note" style="background-color: ${color}">
+  // Clear current content
+  circleContainer.innerHTML = "";
+
+  // Show first 3 contacts with their initials
+  const firstThreeContacts = contactsList.slice(0, 3);
+  firstThreeContacts.forEach(([contactKey, contactData]) => {
+    // Get initials, with "U" as fallback if name parts missing
+    const firstInitial = (contactData.firstName || "U").charAt(0);
+    const lastInitial = (contactData.lastName || "U").charAt(0);
+    const initials = `${firstInitial}${lastInitial}`;
+
+    // Get a consistent color for this contact
+    const contactColor = getOrAssignColorForTask(taskId, contactKey);
+
+    // Add contact circle to the container
+    circleContainer.innerHTML += `
+      <div class="name-circle-add-section-note" style="background-color: ${contactColor}">
         <span>${initials}</span>
       </div>`;
   });
 
-  // If more than 3 contacts, display the additional count
-  const additionalContacts = contactsArray.length - 3;
-  if (additionalContacts > 0) {
-    nameCircleSection.innerHTML += `
+  // If more than 3 contacts, show a +X indicator
+  const extraContactsCount = contactsList.length - 3;
+  if (extraContactsCount > 0) {
+    circleContainer.innerHTML += `
       <div class="additionalContactNumber">
-        <span>+${additionalContacts}</span>
+        <span>+${extraContactsCount}</span>
       </div>`;
   }
 }
 
-
- /**
-  * Renders the priority icon of a task (e.g., "Urgent", "Medium", or "Low").
-  * 
-  * @param {string} taskId - The unique identifier for the task.
-  * @param {Object} task - The task object containing priority information.
-  * @param {string} column - The name or status of the column where the task is displayed.
-  */
+/**
+ * Sets the correct priority icon for a task
+ *
+ * @param {string} taskId - The ID of the task
+ * @param {Object} task - The task with priority information
+ * @param {string} column - The column status where the task is shown
+ */
 function renderPrioImg(taskId, task, column) {
-  const prioImg = document.getElementById(`prioImg${column}${taskId}`);
-  if (!prioImg) {
+  // Get the priority image element
+  const priorityImage = document.getElementById(`prioImg${column}${taskId}`);
+
+  // Exit if image element not found
+  if (!priorityImage) {
     return;
   }
 
-  const priorityValue = task.priority || task.prio;
-  switch (priorityValue) {
-    case "Urgent":
-      prioImg.src = "assets/img/urgentArrowNote.svg";
-      break;
-    case "Medium":
-      prioImg.src = "assets/img/Prio media (1).svg";
-      break;
-    case "Low":
-      prioImg.src = "assets/img/lowArrowGreeen.svg";
-      break;
+  // Get priority from either priority or prio property
+  const taskPriority = task.priority || task.prio;
+
+  // Set the correct image source based on priority
+  if (taskPriority === "Urgent") {
+    priorityImage.src = "assets/img/urgentArrowNote.svg";
+  } else if (taskPriority === "Medium") {
+    priorityImage.src = "assets/img/Prio media (1).svg";
+  } else {
+    priorityImage.src = "assets/img/lowArrowGreeen.svg";
   }
 }
 
-
- /**
-  * Toggles the mobile menu for a particular task, closing any other open menus.
-  * 
-  * @param {Event} event - The click event triggered by the mobile menu icon.
-  */
+/**
+ * Handles opening and closing the mobile menu for tasks
+ *
+ * @param {Event} event - The click event from the menu button
+ */
 function toggleMenuMobile(event) {
-  event.stopPropagation(); 
+  // Prevent click from reaching underlying elements
+  event.stopPropagation();
 
-  const noteMenuMobile = event.currentTarget;
-  const taskId = noteMenuMobile.getAttribute('data-task-id');
-  const menuSection = document.getElementById(`menuSectionMobile${taskId}`);
+  // Get clicked menu button and its associated task
+  const menuButton = event.currentTarget;
+  const taskId = menuButton.getAttribute("data-task-id");
 
-  if (!menuSection) {
+  // Find the menu container for this task
+  const menuContainer = document.getElementById(`menuSectionMobile${taskId}`);
+
+  // Exit if menu container not found
+  if (!menuContainer) {
     return;
   }
 
-  // Close any previously open menu
-  if (currentlyOpenMenu && currentlyOpenMenu !== menuSection) {
-    currentlyOpenMenu.classList.add('d-none');
-    document.querySelector('.open-menu-mobile')?.classList.replace('open-menu-mobile', 'closed-menu-mobile');
+  // Close previously open menu if different from current one
+  if (currentlyOpenMenu && currentlyOpenMenu !== menuContainer) {
+    // Hide the previously open menu
+    currentlyOpenMenu.classList.add("d-none");
+
+    // Find the button for the previously open menu and reset its style
+    // The ?. operator is used to safely access classList if the element exists
+    const previousButton = document.querySelector(".open-menu-mobile");
+    if (previousButton) {
+      previousButton.classList.remove("open-menu-mobile");
+      previousButton.classList.add("closed-menu-mobile");
+    }
   }
 
-  // Toggle current menu
-  const isMenuOpen = !menuSection.classList.contains('d-none');
+  // Check if current menu is already open
+  const isMenuOpen = !menuContainer.classList.contains("d-none");
+
   if (isMenuOpen) {
-    menuSection.classList.add('d-none');
-    noteMenuMobile.classList.remove('open-menu-mobile');
-    noteMenuMobile.classList.add('closed-menu-mobile');
+    // Close the current menu
+    menuContainer.classList.add("d-none");
+    menuButton.classList.remove("open-menu-mobile");
+    menuButton.classList.add("closed-menu-mobile");
     currentlyOpenMenu = null;
   } else {
-    menuSection.classList.remove('d-none');
-    noteMenuMobile.classList.remove('closed-menu-mobile');
-    noteMenuMobile.classList.add('open-menu-mobile');
-    currentlyOpenMenu = menuSection;
+    // Open the current menu
+    menuContainer.classList.remove("d-none");
+    menuButton.classList.remove("closed-menu-mobile");
+    menuButton.classList.add("open-menu-mobile");
+    currentlyOpenMenu = menuContainer;
   }
 }
 
-
- /**
-  * Retrieves and filters the tasks by their current status.
-  * 
-  * @param {string} status - The status by which to filter tasks (e.g., "ToDo", "InProgress").
-  * @returns {Array} The list of filtered tasks.
-  */
+/**
+ * Extracts tasks with a specific status from all user tasks
+ *
+ * @param {string} status - The status to filter by (e.g., "toDo")
+ * @returns {Array} - Array of tasks with matching status
+ */
 function getFilteredTasks(status) {
-  const tasksArray = Object.values(currentUser.tasks || {});
-  return tasksArray.filter(task => task.currentStatus === status);
+  // Convert tasks object to array, defaulting to empty object if missing
+  const allTasks = Object.values(currentUser.tasks || {});
+
+  // Filter tasks by the requested status
+  const matchingTasks = allTasks.filter(
+    (task) => task.currentStatus === status
+  );
+
+  return matchingTasks;
 }
 
-
- /**
-  * Gets the DOM element for the specified column ID.
-  * 
-  * @param {string} columnId - The ID of the target column element.
-  * @returns {HTMLElement|null} The column element, or null if not found.
-  */
+/**
+ * Gets a DOM element for a board column by its ID
+ *
+ * @param {string} columnId - The ID of the column element
+ * @returns {HTMLElement|null} - The column element or null if not found
+ */
 function getColumnElement(columnId) {
-  const column = document.getElementById(columnId);
-  if (!column) {
+  const columnElement = document.getElementById(columnId);
+
+  // Return null if element not found
+  if (!columnElement) {
     return null;
   }
-  return column;
+
+  return columnElement;
 }
 
-
- /**
-  * Clears all inner HTML of the given column element.
-  * 
-  * @param {HTMLElement} column - The DOM element representing the column.
-  */
+/**
+ * Empties a column's content
+ *
+ * @param {HTMLElement} column - The column element to clear
+ */
 function clearColumnContent(column) {
+  // Remove all HTML content from the column
   column.innerHTML = "";
 }
 
-
- /**
-  * Renders a notification indicating there are no tasks for the given status.
-  * 
-  * @param {HTMLElement} column - The DOM element representing the column.
-  * @param {string} status - The status indicating which tasks were expected.
-  */
+/**
+ * Shows a message when a column has no tasks
+ *
+ * @param {HTMLElement} column - The column element
+ * @param {string} status - The status name to display in the message
+ */
 function renderNoTasksNotification(column, status) {
+  // Format the status with spaces before capital letters
+  const formattedStatus = status.replace(/([A-Z])/g, " $1");
+
+  // Add the empty notification to the column
   column.innerHTML = `
     <div class="empty-notification">
-      <span>No tasks ${status.replace(/([A-Z])/g, ' $1')}</span>
+      <span>No tasks ${formattedStatus}</span>
     </div>`;
 }
 
-
- /**
-  * Builds the HTML content for all tasks in a filtered list.
-  * 
-  * @param {Array} tasks - The list of task objects.
-  * @param {string} status - The current status of these tasks.
-  * @returns {string} A concatenated string of HTML for all tasks.
-  */
+/**
+ * Creates HTML for all tasks in a column
+ *
+ * @param {Array} tasks - List of task objects to render
+ * @param {string} status - The column status these tasks belong to
+ * @returns {string} - Combined HTML string for all tasks
+ */
 function buildColumnContent(tasks, status) {
-  let columnContent = "";
-  tasks.forEach(task => {
+  let allTasksHtml = "";
+
+  // Create HTML for each task in the list
+  tasks.forEach((task) => {
+    // Skip tasks without an ID
     if (!task.id) {
       return;
     }
-    // Assumes getColumnContent is a globally available function
-    columnContent += getColumnContent(task, status);
+
+    // Add this task's HTML to the combined string
+    // Using getColumnContent function which should be defined elsewhere
+    allTasksHtml += getColumnContent(task, status);
   });
-  return columnContent;
+
+  return allTasksHtml;
 }
 
-
- /**
-  * Adds drag-and-drop event listeners to the column element.
-  * 
-  * @param {HTMLElement} column - The DOM element representing the column.
-  * @param {string} columnId - The ID of the column element.
-  * @param {string} status - The current status of the tasks in this column.
-  */
+/**
+ * Sets up drag and drop event handlers for a column
+ *
+ * @param {HTMLElement} column - The column element
+ * @param {string} columnId - The ID of the column
+ * @param {string} status - The status this column represents
+ */
 function addColumnDragAndDropListeners(column, columnId, status) {
-  column.addEventListener('dragover', (event) => {
+  // When dragging over the column
+  column.addEventListener("dragover", (event) => {
+    // Allow dropping by preventing default
     event.preventDefault();
+
+    // Show a dashed outline placeholder
     showEmptyDashedNote(columnId);
   });
 
-  column.addEventListener('dragleave', () => {
+  // When dragging out of the column
+  column.addEventListener("dragleave", () => {
+    // Remove the dashed outline placeholder
     hideEmptyDashedNote(columnId);
   });
 
-  column.addEventListener('drop', (event) => {
+  // When dropping onto the column
+  column.addEventListener("drop", (event) => {
+    // Prevent default browser behavior
     event.preventDefault();
-    // Assumes drop is a globally available function
+
+    // Handle the drop operation (using drop function defined elsewhere)
     drop(event, status);
+
+    // Remove the dashed outline placeholder
     hideEmptyDashedNote(columnId);
   });
 }
 
-
- /**
-  * Renders details (category, names, subtasks, priority) for each task in the list.
-  * 
-  * @param {Array} tasks - The list of task objects.
-  * @param {string} status - The current status of these tasks.
-  */
+/**
+ * Renders additional details for each task in a column
+ *
+ * @param {Array} tasks - List of task objects
+ * @param {string} status - The column status these tasks belong to
+ */
 function renderTasksDetails(tasks, status) {
-  tasks.forEach(task => {
+  // For each task, render all its UI components
+  tasks.forEach((task) => {
     renderTaskCategory(task.id, task, status);
     renderNameCircleSection(task.id, task, status);
     renderSubtaskProgress(task.id, task, status);
@@ -282,27 +356,38 @@ function renderTasksDetails(tasks, status) {
   });
 }
 
-
- /**
-  * Orchestrates rendering of tasks in the given column based on the specified status.
-  * 
-  * @param {string} status - The status of the tasks to be rendered (e.g., "ToDo", "InProgress", etc.).
-  * @param {string} columnId - The ID of the column element where tasks will be displayed.
-  */
+/**
+ * Main function to render a column with its tasks
+ *
+ * @param {string} status - The status for tasks in this column
+ * @param {string} columnId - The HTML ID of the column container
+ */
 function renderColumn(status, columnId) {
-  const filteredTasks = getFilteredTasks(status);
-  const column = getColumnElement(columnId);
-  if (!column) return;
+  // Get tasks for this status
+  const tasksForColumn = getFilteredTasks(status);
 
-  clearColumnContent(column);
+  // Get the column DOM element
+  const columnElement = getColumnElement(columnId);
 
-  if (filteredTasks.length === 0) {
-    renderNoTasksNotification(column, status);
+  // Exit if column element not found
+  if (!columnElement) return;
+
+  // Clear existing content
+  clearColumnContent(columnElement);
+
+  // Check if there are any tasks for this column
+  if (tasksForColumn.length === 0) {
+    // Show empty message if no tasks
+    renderNoTasksNotification(columnElement, status);
   } else {
-    const content = buildColumnContent(filteredTasks, status);
-    column.innerHTML = content;
+    // Create and add task HTML content
+    const columnHtml = buildColumnContent(tasksForColumn, status);
+    columnElement.innerHTML = columnHtml;
   }
 
-  addColumnDragAndDropListeners(column, columnId, status);
-  renderTasksDetails(filteredTasks, status);
+  // Set up drag and drop functionality
+  addColumnDragAndDropListeners(columnElement, columnId, status);
+
+  // Render all task details (category, assigned people, etc.)
+  renderTasksDetails(tasksForColumn, status);
 }
