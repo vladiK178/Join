@@ -3,6 +3,37 @@ const DATABASEURL =
 
 let isPolicyChecked = false;
 
+function validateForm(password, confirmPassword) {
+  return correctForm(password, confirmPassword);
+}
+
+async function createUserData(name, email, password) {
+  const userKey = `user_${name.replace(/\s+/g, "_").toLowerCase()}`;
+  const userData = {
+    personal_data: { name, email, password },
+    contacts: "",
+    tasks: "",
+  };
+
+  return { userKey, userData };
+}
+
+async function sendToFirebase(userKey, userData) {
+  try {
+    const response = await fetch(`${DATABASEURL}/${userKey}.json`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+    console.log("Neuer Benutzer hinzugefügt");
+    return response.json();
+  } catch (error) {
+    console.error("Fehler:", error);
+  }
+}
+
 async function registerUser() {
   const name = document.getElementById("userName").value;
   const email = document.getElementById("userEmail").value;
@@ -10,28 +41,14 @@ async function registerUser() {
   const confirmPassword = document.getElementById(
     "userPasswordConfirmed"
   ).value;
-  let isFormValid = correctForm(password, confirmPassword);
 
-  if (isFormValid == false) {
+  if (!validateForm(password, confirmPassword)) {
     return;
   }
 
-  const userKey = `user_${name.replace(/\s+/g, "_").toLowerCase()}`;
+  const { userKey, userData } = await createUserData(name, email, password);
 
-  try {
-    const response = await fetch(`${DATABASEURL}/users/${userKey}.json`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    const data = await response.json();
-    console.log("Neuer Benutzer hinzugefügt:", data);
-  } catch (error) {
-    console.error("Fehler:", error);
-  }
+  await sendToFirebase(userKey, userData);
 }
 
 function checkUncheckPolicy() {
