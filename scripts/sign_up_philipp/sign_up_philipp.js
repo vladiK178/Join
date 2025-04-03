@@ -35,20 +35,27 @@ async function sendToFirebase(userKey, userData) {
 }
 
 async function registerUser() {
-  const name = document.getElementById("userName").value;
-  const email = document.getElementById("userEmail").value;
-  const password = document.getElementById("userPassword").value;
-  const confirmPassword = document.getElementById(
-    "userPasswordConfirmed"
-  ).value;
+  const name = document.getElementById("userName");
+  const email = document.getElementById("userEmail");
+  const password = document.getElementById("userPassword");
+  const confirmPassword = document.getElementById("userPasswordConfirmed");
 
-  if (!validateForm(password, confirmPassword)) {
+  if (!validateForm(password.value, confirmPassword.value)) {
     return;
   }
 
-  const { userKey, userData } = await createUserData(name, email, password);
+  const { userKey, userData } = await createUserData(
+    name.value,
+    email.value,
+    password.value
+  );
 
   await sendToFirebase(userKey, userData);
+  resetForm(name, email, password, confirmPassword);
+  document.getElementById("logInCheckbox").src =
+    "./assets/img/checkboxEmpty.svg";
+  isPolicyChecked = false;
+  showSuccessMessage();
 }
 
 function checkUncheckPolicy() {
@@ -89,4 +96,11 @@ function isCheckboxChecked() {
     alert("Checkbox wurde nicht angeklickt.");
     return false;
   }
+}
+
+function resetForm(name, email, password, confirmPassword) {
+  name.value = "";
+  email.value = "";
+  password.value = "";
+  confirmPassword.value = "";
 }
