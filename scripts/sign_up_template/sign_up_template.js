@@ -11,11 +11,11 @@ function getSignUpContent() {
                     <!-- Name Input -->
                     <div class="email-password-alert-section">
                         <div class="email-password-fields">
-                            <input id="userName" class="input-email-password" type="text" placeholder="Name">
+                            <input id="userName" class="input-email-password" type="text" placeholder="First and last name">
                             <img src="./assets/img/person.svg" alt="Name Icon">
                         </div>
-                        <span id="alertMessageName" class="alert-message">
-                            Please enter first- and surname.
+                        <span id="alertMessageName" class="hide-alert-message">
+                            Please enter first and last name.
                         </span>
                     </div>
 
@@ -26,10 +26,10 @@ function getSignUpContent() {
                             <img src="./assets/img/mail.svg" alt="Mail Icon">
                         </div>
                         <div class="email-alert-messages">
-                            <span id="alertMessageEmail" class="alert-message">
+                            <span id="alertMessageEmail" class="hide-alert-message">
                                 Please enter a valid email address
                             </span>
-                            <span id="alertMessageEmailExists" class="alert-message">
+                            <span id="alertMessageEmailExists" class="hide-alert-message">
                                 This email address already exists
                             </span>
                         </div>
@@ -42,7 +42,7 @@ function getSignUpContent() {
                                    placeholder="Password" oninput="showClosedEyeImg('userPassword', 'passwordLockImg')">
                             <img id="passwordLockImg" src="./assets/img/lock.svg" alt="Password Icon">
                         </div>
-                        <span id="alertMessageLength" class="alert-message">
+                        <span id="alertMessageLength" class="hide-alert-message">
                             Type in at least 6 characters.
                         </span>
                     </div>
@@ -54,7 +54,7 @@ function getSignUpContent() {
                                    placeholder="Confirm Password" oninput="showClosedEyeImg('userPasswordConfirmed', 'confirmPasswordLockImg')">
                             <img id="confirmPasswordLockImg" src="./assets/img/lock.svg" alt="Confirm Password Icon">
                         </div>
-                        <span id="alertMessagePassword" class="alert-message">
+                        <span id="alertMessagePassword" class="hide-alert-message">
                         Your passwords don't match.
                         </span>
                     </div>
@@ -65,6 +65,9 @@ function getSignUpContent() {
                             <img class="accept-checkbox-img" onclick="toggleCheckbox(), checkUncheckPolicy()" id="logInCheckbox" src="./assets/img/checkboxEmpty.svg" alt="">
                             <span class="light-grey">I accept the <span class="accept-privacy-policy-span">Privacy policy</span></span>
                         </div>
+                        <span id="alertMessagePolicy" class="hide-alert-message">
+                        Accept the Privacy policy.
+                        </span>
                     </div>
 
                     <!-- Sign Up Button -->
