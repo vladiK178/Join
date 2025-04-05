@@ -1,5 +1,5 @@
 function getLoginContent() {
-    return `
+  return `
         <header>
             <img src="./assets/img/JoinLogo.svg" alt="">
             <div class="sign-up-section">
@@ -15,7 +15,7 @@ function getLoginContent() {
                 <span class="Log-In-Headline">Log in</span>
                 <div class="underline-headline"></div>
                 
-                <form class="Log-In-Form" onsubmit="login(); return false">
+                <form class="Log-In-Form" onsubmit="loginUser(event); return false">
                     <div class="inputs-section">
                         <!-- Email Input -->
                         <div id="emailInputField" class="email-password-fields">
@@ -40,7 +40,7 @@ function getLoginContent() {
 
                     <!-- Login Buttons -->
                     <div class="Log-In-and-Guest-Log-In">
-                        <button class="Log-In-Button">Log in</button>
+                        <button type="submit" class="Log-In-Button">Log in</button>
                         <button type="button" onclick="guestLogin()" class="Guest-Log-In-Button">Guest Log in</button>
                     </div>
                 </form>

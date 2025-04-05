@@ -29,8 +29,17 @@ async function createUserData(name, email, password) {
 
   const firstName = formatName(nameParts.firstName);
   const lastName = formatName(nameParts.lastName);
-  const userKey = generateUserKey(email);
-  const userData = buildUserData(email, firstName, lastName, password, userKey);
+
+  const emailLowerCase = email.toLowerCase();
+
+  const userKey = generateUserKey(emailLowerCase);
+  const userData = buildUserData(
+    emailLowerCase,
+    firstName,
+    lastName,
+    password,
+    userKey
+  );
 
   return { userKey, userData };
 }

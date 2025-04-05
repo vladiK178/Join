@@ -1,245 +1,245 @@
 body {
-    background-color: #F6F7F8;
+  background-color: #f6f7f8;
 }
 
 header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 202px;
-    position: absolute;
-    left: 77px;
-    right: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 202px;
+  position: absolute;
+  left: 77px;
+  right: 80px;
 }
 
 header img {
-    margin-top: 80px;
+  margin-top: 80px;
 }
 
 .sign-up-section {
-    display: flex;
-    gap: 35px;
-    height: 49px;
-    width: 279px;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  gap: 35px;
+  height: 49px;
+  width: 279px;
+  align-items: center;
+  justify-content: center;
 }
 
-.sign-up-section-hidden { 
-    display: flex;
-    width: 100%;
-    height: 49px;
-    align-items: center;
-    justify-content: center;
+.sign-up-section-hidden {
+  display: flex;
+  width: 100%;
+  height: 49px;
+  align-items: center;
+  justify-content: center;
 }
 
 .sign-up-section-inner-div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 35px;
-    width: 300px;
-    display: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+  width: 300px;
+  display: none;
 }
 
 .sign-up-button {
-    color: white;
-    width: 91px;
-    height: 49px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #2A3647;
-    border-radius: 8px;
-    cursor: pointer;
+  color: white;
+  width: 91px;
+  height: 49px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a3647;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .sign-up-button:hover {
-    background-color: #29ABE2;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  background-color: #29abe2;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .Log-In-Section {
-    height: calc(100vh - 199px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: calc(100vh - 199px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Log-In-Field {
-    background-color: white;
-    height: 493px;
-    width: 652px;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  height: 493px;
+  width: 652px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .Log-In-Headline {
-    width: 315px;
-    height: 80px;
-    font-size: 61px;
-    font-weight: 700;
-    text-align: center;
-    margin-top: 40px;
-    color: #2A3647;
+  width: 315px;
+  height: 80px;
+  font-size: 61px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 40px;
+  color: #2a3647;
 }
 
 .underline-headline {
-    height: 2px;
-    width: 130px;
-    background-color: #29ABE2;
+  height: 2px;
+  width: 130px;
+  background-color: #29abe2;
 }
 
 .Log-In-Form {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 422px;
-    height: 196px;
-    margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 422px;
+  height: 196px;
+  margin-top: 40px;
 }
 
 .inputs-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .email-password-fields {
-    width: 422px;
-    height: 48px;
-    background-color: white;
-    border-radius: 10px;
-    border: 1px solid lightgray;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  width: 422px;
+  height: 48px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .email-password-fields:focus-within {
-    border-color: #29ABE2;
+  border-color: #29abe2;
 }
 
 .email-password-fields img {
-    height: 24px;
-    width: 24px;
-    margin-right: 21px;
-    cursor: pointer;
+  height: 24px;
+  width: 24px;
+  margin-right: 21px;
+  cursor: pointer;
 }
 
 .input-email-password {
-    height: 45px;
-    padding: 12px 21px 12px 21px;
-    outline: none;
-    border: none;
-    width: 350px;
-    border-radius: 10px;
+  height: 45px;
+  padding: 12px 21px 12px 21px;
+  outline: none;
+  border: none;
+  width: 100%;
+  border-radius: 10px;
 }
 
 .Log-In-and-Guest-Log-In {
-    display: flex;
-    gap: 30px;
-    width: 322px;
-    margin-left: 50px;
+  display: flex;
+  gap: 30px;
+  width: 322px;
+  margin-left: 50px;
 }
 
 .Log-In-Button {
-    width: 110px;
-    height: 48px;
-    color: white;
-    background-color: #2A3647;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 21px;
-    font-weight: 700;
-    cursor: pointer;
-    border: unset;
+  width: 110px;
+  height: 48px;
+  color: white;
+  background-color: #2a3647;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 21px;
+  font-weight: 700;
+  cursor: pointer;
+  border: unset;
 }
 
 .Log-In-Button:hover {
-    background-color: #29ABE2;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  background-color: #29abe2;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .Guest-Log-In-Button {
-    height: 48px;
-    border-radius: 8px;
-    border: 1px solid #2A3647;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 21px;
-    font-weight: 700;
-    padding: 15px 24px 15px 24px;
-    color: #2A3647;
-    cursor: pointer;
-    background-color: white;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #2a3647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 21px;
+  font-weight: 700;
+  padding: 15px 24px 15px 24px;
+  color: #2a3647;
+  cursor: pointer;
+  background-color: white;
 }
 
 .Guest-Log-In-Button:hover {
-    color: #29ABE2;
-    border-color: #29ABE2;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  color: #29abe2;
+  border-color: #29abe2;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 footer {
-    color: #A8A8A8;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+  color: #a8a8a8;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
 footer span:hover {
-    color: #29ABE2;
-    font-weight: bold;
+  color: #29abe2;
+  font-weight: bold;
 }
 
 footer a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .alert-message {
-    color: #FF8190;
-    font-size: 12px;
-    margin-left: 15px;
+  color: #ff8190;
+  font-size: 12px;
+  margin-left: 15px;
 }
 
 .hide-alert-message {
-    color: white;
+  color: white;
 }
 
 .border-col {
-    border-color: red;
+  border-color: red;
 }
 
 .password-input-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .privacy-span {
-    width: 115px;
-    margin-bottom: 20px;
+  width: 115px;
+  margin-bottom: 20px;
 }
 
 .privacy-span a {
-    color: #A8A8A8;
+  color: #a8a8a8;
 }
 
 .legal-span {
-    width: 115px;
-    margin-bottom: 20px;
+  width: 115px;
+  margin-bottom: 20px;
 }
 
 .legal-span a {
-    color: #A8A8A8;
+  color: #a8a8a8;
 }
