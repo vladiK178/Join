@@ -22,6 +22,8 @@ async function loginUser(event) {
       ) {
         localStorage.setItem("contacts", JSON.stringify(user.contacts));
         localStorage.setItem("tasks", JSON.stringify(user.tasks));
+        localStorage.setItem("firstName", JSON.stringify(user.firstName));
+        localStorage.setItem("LastName", JSON.stringify(user.lastName));
         localStorage.setItem("userName", `${user.firstName} ${user.lastName}`);
         localStorage.setItem("userId", user.id);
 
@@ -52,6 +54,9 @@ async function guestLogin() {
 
     localStorage.setItem("contacts", JSON.stringify(guestData.contacts));
     localStorage.setItem("tasks", JSON.stringify(guestData.tasks));
+    localStorage.setItem("firstName", JSON.stringify(guestData.firstName));
+    localStorage.setItem("LastName", JSON.stringify(guestData.lastName));
+    localStorage.setItem("userId", guestData.id);
     localStorage.setItem(
       "userName",
       `${guestData.firstName} ${guestData.lastName}`
