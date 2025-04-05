@@ -32,7 +32,7 @@ function getLoginContent() {
                                     <img id="passwordLockImg" src="./assets/img/lock.svg" alt="">
                                 </div>
                             </div>
-                            <span id="alertMessageEmail" class="alert-message">
+                            <span id="alertMessageEmail" class="hide-alert-message">
                                 Check your email and password
                             </span>
                         </div>

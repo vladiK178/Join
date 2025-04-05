@@ -8,13 +8,9 @@ async function loginUser(event) {
   const emailInput = document.getElementById("email").value.trim();
   const passwordInput = document.getElementById("password").value.trim();
 
-  console.log("Login gestartet");
-
   try {
     const response = await fetch(`${DATABASEURL}.json`);
     const usersData = await response.json();
-    console.log("Daten von Firebase abgerufen");
-    console.log(usersData);
 
     let userFound = false;
     for (let userKey in usersData) {
@@ -24,8 +20,6 @@ async function loginUser(event) {
         user.email.toLowerCase() === emailInput.toLowerCase() &&
         String(user.password) === passwordInput
       ) {
-        console.log("User gefunden:", user);
-        // Login erfolgreich
         localStorage.setItem("contacts", JSON.stringify(user.contacts));
         localStorage.setItem("tasks", JSON.stringify(user.tasks));
         localStorage.setItem("userName", `${user.firstName} ${user.lastName}`);
@@ -38,10 +32,7 @@ async function loginUser(event) {
     }
 
     if (!userFound) {
-      document
-        .getElementById("alertMessageEmail")
-        .classList.add("alert-message");
-      console.log("Kein User gefunden mit dieser E-Mail und Passwort");
+      document.getElementById("alertMessageEmail").className = "alert-message";
     }
   } catch (error) {
     console.error("Login-Fehler:", error);

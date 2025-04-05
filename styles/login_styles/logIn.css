@@ -212,7 +212,7 @@ footer a {
 }
 
 .hide-alert-message {
-  color: white;
+  display: none;
 }
 
 .border-col {

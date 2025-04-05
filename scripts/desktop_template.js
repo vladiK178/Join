@@ -1,5 +1,5 @@
 function getDesktopTemplate() {
-    return `<section class="complete-template-section">
+  return `<section class="complete-template-section">
         <section class="left-template-section">
             <div class="join-logo"><img src="./assets/img/JoinLogoWhite.svg" alt=""></div>
             <div class="link-to-section">
@@ -71,11 +71,11 @@ function getDesktopTemplate() {
 }
 
 function openMenu() {
-    let menuSection = document.getElementById('menuSection');
-    menuSection.classList.toggle('d-none');
+  let menuSection = document.getElementById("menuSection");
+  menuSection.classList.toggle("d-none");
 }
 
 function logout() {
-    localStorage.removeItem('wasGreeted');
-    window.location.href = 'login.html';
+  localStorage.clear();
+  window.location.href = "login.html";
 }
