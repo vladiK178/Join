@@ -3,34 +3,41 @@ const contactColors = {};
 let currentlyOpenMenu = null; // Stores the currently open menu
 
 /**
- * Initializes the contact page with data
+ * Initializes the contact page with data from Firebase
  */
 async function initContactPage() {
-  // Get data from localStorage
-  const contacts = JSON.parse(localStorage.getItem("contacts"));
-  const firstName = localStorage.getItem("firstName");
-  const lastName = localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
   
-  // Use localStorage data if available
-  if (contacts && firstName && lastName) {
-    currentUser = {
-      id: userId,
-      firstName: firstName,
-      lastName: lastName,
-      contacts: contacts
-    };
-  } else {
-    // Otherwise: load the conventional way
-    await getUsersData();
-    const currentUserId = localStorage.getItem('currentUserId');
-    currentUser = users.users[currentUserId];
+  if (!userId) {
+    console.error("No user ID found in localStorage - login required");
+    window.location.href = "login.html";
+    return;
   }
   
-  renderDesktopTemplate();
-  renderContactsContent();
-  changeToChosenContactsSection();
-  renderSpacerAndContactSection();
+  try {
+    // Load directly from Firebase instead of localStorage
+    await getUsersData();
+    currentUser = users.users[userId];
+    
+    // If no user data was found, redirect to login
+    if (!currentUser) {
+      console.error("User not found in database");
+      localStorage.clear();
+      window.location.href = "login.html";
+      return;
+    }
+    
+    // Update user ID in localStorage
+    localStorage.setItem("currentUserId", userId);
+    
+    renderDesktopTemplate();
+    renderContactsContent();
+    changeToChosenContactsSection();
+    renderSpacerAndContactSection();
+  } catch (error) {
+    console.error("Error loading user data from Firebase:", error);
+    window.location.href = "login.html";
+  }
 }
 
 /**
@@ -117,7 +124,7 @@ function closeAddContactSection() {
 }
 
 /**
- * Creates a new contact after validation
+ * Creates a new contact after validation and adds to Firebase
  */
 async function saveNewContact() {
   let name = document.getElementById("contactName").value.trim();
@@ -129,16 +136,24 @@ async function saveNewContact() {
   try {
     initializeContactsObjectIfNeeded();
     let newContact = { firstNameContact: fName, lastNameContact: lName, email, phone };
+    
+    // Firebase: Add contact
     let newContactKey = await addContactToDatabase(currentUser.id, newContact);
+    
+    // Update local object
     currentUser.contacts[newContactKey] = newContact;
     
-    // Update local storage
-    localStorage.setItem("contacts", JSON.stringify(currentUser.contacts));
+    // Reload all data from Firebase
+    await getUsersData();
+    currentUser = users.users[currentUser.id];
 
     showSuccessMessage();
-    setTimeout(() => { closeAddContactSection(); renderSpacerAndContactSection(); }, 2000);
+    setTimeout(() => { 
+      closeAddContactSection(); 
+      renderSpacerAndContactSection(); 
+    }, 2000);
   } catch (error) {
-    console.error("Error saving new contact:", error);
+    console.error("Error saving new contact to Firebase:", error);
   }
 }
 
@@ -279,7 +294,7 @@ function closeEditContactSection() {
 }
 
 /**
- * Saves edited contact information
+ * Saves edited contact information to Firebase
  * @param {string} contactKey - Contact key to update
  */
 async function saveEditedContact(contactKey) {
@@ -297,17 +312,21 @@ async function saveEditedContact(contactKey) {
   };
   
   try {
+    // Firebase: Update contact
     await updateContactInDatabase(currentUser.id, contactKey, updatedContact);
+    
+    // Update local data
     currentUser.contacts[contactKey] = updatedContact;
     
-    // Update local storage
-    localStorage.setItem("contacts", JSON.stringify(currentUser.contacts));
+    // Reload data from Firebase
+    await getUsersData();
+    currentUser = users.users[currentUser.id];
     
     renderSpacerAndContactSection();
     closeEditContactSection();
     renderContactDetails(contactKey);
   } catch (error) {
-    console.error("Error saving edited contact:", error);
+    console.error("Error updating contact in Firebase:", error);
   }
 }
 
@@ -328,7 +347,7 @@ function validateEditedContact(name, email, phone) {
 }
 
 /**
- * Deletes a contact
+ * Deletes a contact from Firebase
  * @param {string} contactKey - Contact key to delete
  */
 async function deleteContact(contactKey) {
@@ -336,15 +355,20 @@ async function deleteContact(contactKey) {
     if (!currentUser.contacts || !currentUser.contacts[contactKey]) {
       throw new Error("Contact not found or invalid key.");
     }
+    
+    // Firebase: Delete contact
     await deleteContactFromDatabase(currentUser.id, contactKey);
+    
+    // Update local data
     delete currentUser.contacts[contactKey];
     
-    // Update local storage
-    localStorage.setItem("contacts", JSON.stringify(currentUser.contacts));
+    // Reload data from Firebase
+    await getUsersData();
+    currentUser = users.users[currentUser.id];
     
     handlePostDeleteUI();
   } catch (error) {
-    console.error("Error deleting contact:", error);
+    console.error("Error deleting contact from Firebase:", error);
   }
 }
 
@@ -381,6 +405,18 @@ function closeEditContactOverlayIfOpen() {
   if (editOverlay && !editOverlay.classList.contains("d-none")) {
     editOverlay.classList.add("d-none");
   }
+}
+
+/**
+ * Returns or assigns a color for a contact
+ * @param {string} contactKey - Contact key
+ * @returns {string} Color hex code
+ */
+function getOrAssignColorForContact(contactKey) {
+  if (!contactColors[contactKey]) {
+    contactColors[contactKey] = getRandomColorFromPalette();
+  }
+  return contactColors[contactKey];
 }
 
 // Event listener for clicks outside the menu
