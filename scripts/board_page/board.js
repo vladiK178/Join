@@ -77,9 +77,29 @@ async function initBoardPage() {
  * Loads user data from storage
  */
 async function loadUserAndSetCurrent() {
-  await getUsersData();
-  const currentUserId = localStorage.getItem("currentUserId");
-  currentUser = users.users[currentUserId];
+  // Daten aus dem Local Storage laden
+  const contacts = JSON.parse(localStorage.getItem("contacts"));
+  const tasks = JSON.parse(localStorage.getItem("tasks"));
+  const firstName = localStorage.getItem("firstName");
+  const lastName = localStorage.getItem("lastName");
+  const userId = localStorage.getItem("userId");
+  const userName = localStorage.getItem("userName");
+  
+  // Falls Daten im Local Storage vorhanden sind, diese verwenden
+  if (tasks && contacts) {
+    currentUser = {
+      id: userId,
+      firstName: firstName,
+      lastName: lastName,
+      tasks: tasks,
+      contacts: contacts
+    };
+  } else {
+    // Fallback: Wenn keine Local Storage Daten vorhanden, von API laden
+    await getUsersData();
+    const currentUserId = localStorage.getItem("currentUserId");
+    currentUser = users.users[currentUserId];
+  }
 }
 
 
