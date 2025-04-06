@@ -5,9 +5,8 @@ const assignedColors = {};
 let colorMap = {};
 let taskColorMap = {};
 
-
 /** ---------------------- Color Functions ---------------------- */
-/** 
+/**
  * Gets or creates a color for a contact
  * @param {string} contactKey - Contact identifier
  */
@@ -18,8 +17,7 @@ function getOrAssignColor(contactKey) {
   return assignedColors[contactKey];
 }
 
-
-/** 
+/**
  * Manages colors for task-contact combinations
  * @param {string} taskId - Task identifier
  * @param {string} contactKey - Contact identifier
@@ -32,8 +30,7 @@ function getOrAssignColorForTask(taskId, contactKey) {
   return taskColorMap[uniqueKey];
 }
 
-
-/** 
+/**
  * Picks a random color from predefined options
  */
 function getRandomColorFromPalette() {
@@ -56,9 +53,8 @@ function getRandomColorFromPalette() {
   return palette[Math.floor(Math.random() * palette.length)];
 }
 
-
 /** ---------------------- Board Setup ---------------------- */
-/** 
+/**
  * Main function to initialize the board page
  */
 async function initBoardPage() {
@@ -72,58 +68,52 @@ async function initBoardPage() {
   attachMobileMenuEventListeners();
 }
 
-
-/** 
- * Loads user data from storage
+/**
+ * Loads user data from Firebase
  */
 async function loadUserAndSetCurrent() {
-  // Daten aus dem Local Storage laden
-  const contacts = JSON.parse(localStorage.getItem("contacts"));
-  const tasks = JSON.parse(localStorage.getItem("tasks"));
-  const firstName = localStorage.getItem("firstName");
-  const lastName = localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
-  const userName = localStorage.getItem("userName");
   
-  // Falls Daten im Local Storage vorhanden sind, diese verwenden
-  if (tasks && contacts) {
-    currentUser = {
-      id: userId,
-      firstName: firstName,
-      lastName: lastName,
-      tasks: tasks,
-      contacts: contacts
-    };
-  } else {
-    // Fallback: Wenn keine Local Storage Daten vorhanden, von API laden
+  if (!userId) {
+    console.error("No user ID found in localStorage - login required");
+    window.location.href = "login.html";
+    return;
+  }
+  
+  try {
+    // Load directly from Firebase instead of from localStorage
     await getUsersData();
-    const currentUserId = localStorage.getItem("currentUserId");
-    currentUser = users.users[currentUserId];
+    currentUser = users.users[userId];
+    
+    // If no user data was found, redirect to login
+    if (!currentUser) {
+      console.error("User not found in database");
+      localStorage.clear(); // Alte Daten löschen
+      window.location.href = "login.html";
+      return;
+    }
+    
+    // Update current user ID in localStorage
+    localStorage.setItem("currentUserId", userId);
+  } catch (error) {
+    console.error("Error loading user data from Firebase:", error);
+    window.location.href = "login.html";
   }
 }
 
-
-/** 
+/**
  * Validates if user data exists
  */
 function checkCurrentUser() {
   if (!currentUser) {
     console.error("User not found - please log in again");
-    // Temporärer Fix: Setze einen Standardbenutzer, wenn keiner gefunden wird
-    currentUser = {
-      id: "default_user",
-      firstName: "Default",
-      lastName: "User",
-      tasks: {}
-    };
-    localStorage.setItem("currentUserId", "default_user");
-    return true; // Wir geben trotzdem true zurück, damit die Seite geladen wird
+    window.location.href = "login.html";
+    return false;
   }
   return true;
 }
 
-
-/** 
+/**
  * Sets up main UI components
  */
 function renderBoardUI() {
@@ -134,8 +124,7 @@ function renderBoardUI() {
   renderAssignedToSection();
 }
 
-
-/** 
+/**
  * Creates the task columns structure
  */
 function setUpBoardColumns() {
@@ -145,8 +134,7 @@ function setUpBoardColumns() {
   renderColumn("inProgress", "inProgressNotes");
 }
 
-
-/** 
+/**
  * Adds keyboard event handler for subtasks
  */
 function addSubtaskEnterListener() {
@@ -158,9 +146,8 @@ function addSubtaskEnterListener() {
   });
 }
 
-
 /** ---------------------- HTML Generation ---------------------- */
-/** 
+/**
  * Loads desktop UI template
  */
 function renderDesktopTemplate() {
@@ -168,8 +155,7 @@ function renderDesktopTemplate() {
   content.innerHTML = getDesktopTemplate(currentUser);
 }
 
-
-/** 
+/**
  * Generates board main content
  */
 function renderBoardContent() {
@@ -177,8 +163,7 @@ function renderBoardContent() {
   content.innerHTML += getBoardContent();
 }
 
-
-/** 
+/**
  * Highlights current section in sidebar
  */
 function changeToChosenBoardSection() {
@@ -193,9 +178,8 @@ function changeToChosenBoardSection() {
   document.getElementById("board-img").classList.add("board-img-chosen");
 }
 
-
 /** ---------------------- Search Functions ---------------------- */
-/** 
+/**
  * Filters tasks based on search input
  * @param {Event} event - Input event
  */
@@ -213,8 +197,7 @@ function filterTasks(event) {
   renderFilteredTasks(filteredTasks);
 }
 
-
-/** 
+/**
  * Clears all task columns
  */
 function clearAllColumns() {
@@ -224,8 +207,7 @@ function clearAllColumns() {
   document.getElementById("doneNotes").innerHTML = "";
 }
 
-
-/** 
+/**
  * Displays filtered tasks in correct columns
  */
 function renderFilteredTasks(tasks) {
@@ -240,8 +222,7 @@ function renderFilteredTasks(tasks) {
   renderFilteredColumn(done, "done", "doneNotes");
 }
 
-
-/** 
+/**
  * Renders all columns with full task list
  */
 function renderAllColumns() {
@@ -251,9 +232,8 @@ function renderAllColumns() {
   renderColumn("done", "doneNotes");
 }
 
-
 /** ---------------------- Mobile Menu Handlers ---------------------- */
-/** 
+/**
  * Sets up mobile menu click handlers
  */
 function attachMobileMenuEventListeners() {
@@ -269,13 +249,12 @@ function attachMobileMenuEventListeners() {
   });
 }
 
-
-/** 
+/**
  * Handles task movement between columns
  * @param {string} taskId - Task identifier
  * @param {string} newColumn - Target column
  */
-function moveTaskToNewColumn(taskId, newColumn) {
+async function moveTaskToNewColumn(taskId, newColumn) {
   let menu = document.getElementById(`menuSectionMobile${taskId}`);
   if (!menu) return console.error(`Menu not found for task ${taskId}`);
 
@@ -284,21 +263,27 @@ function moveTaskToNewColumn(taskId, newColumn) {
   );
   if (!taskKey) return console.error(`Could not find task ${taskId}`);
 
-  // Update task status and save
-  currentUser.tasks[taskKey].currentStatus = newColumn;
-  updateTaskColumnInDatabase(taskKey, newColumn);
-
-  // Remove task card and refresh columns
-  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
-  if (taskElement) taskElement.remove();
-
-  renderAllColumns();
-  menu.classList.add("d-none");
+  try {
+    // Update task status
+    currentUser.tasks[taskKey].currentStatus = newColumn;
+    
+    // In Firebase speichern
+    await updateTaskColumnInDatabase(currentUser.id, taskKey, newColumn);
+    
+    // UI aktualisieren
+    renderAllColumns();
+    menu.classList.add("d-none");
+  } catch (error) {
+    console.error("Error moving task to new column:", error);
+    // Bei Fehler Daten neu laden
+    await getUsersData();
+    currentUser = users.users[currentUser.id];
+    renderAllColumns();
+  }
 }
 
-
 /** ---------------------- Column Helpers ---------------------- */
-/** 
+/**
  * Renders filtered tasks in a column
  * @param {Array} tasks - Tasks to render
  * @param {string} status - Column status
@@ -315,9 +300,8 @@ function renderFilteredColumn(tasks, status, columnId) {
   tasks.forEach(task => column.innerHTML += getColumnTaskHtml(task, status));
 }
 
-
 /** ---------------------- Button Actions ---------------------- */
-/** 
+/**
  * Handles add task button click
  */
 function handleAddTaskButtonClick() {
