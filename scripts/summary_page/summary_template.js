@@ -12,14 +12,14 @@ function getSummaryContent() {
                     <div onclick="changeWindowToBoardSection()" class="to-do-quarter">
                         <div class="circle-dark-blue"><img src="./assets/img/pencil.svg" alt=""></div>
                         <div class="to-do-quarter-details">
-                            <span class="number">1</span>
+                            <span id="todo-count" class="number">0</span>
                             <span class="quarter-description">To-do</span>
                         </div>
                     </div>
                     <div onclick="changeWindowToBoardSection()" class="to-do-quarter">
                         <div class="circle-dark-blue"><img src="./assets/img/Vector (1).svg" alt=""></div>
                         <div class="to-do-quarter-details">
-                            <span class="number">2</span>
+                            <span id="done-count" class="number">0</span>
                             <span class="quarter-description">Done</span>
                         </div>
                     </div>
@@ -29,13 +29,13 @@ function getSummaryContent() {
                         <div class="urgent-deadline-quarter">
                             <div class="circle-red"><img src="./assets/img/arrowUp.svg" alt=""></div>
                             <div class="to-do-quarter-details">
-                                <span class="number">3</span>
+                                <span id="urgent-count" class="number">0</span>
                                 <span class="quarter-description">Urgent</span>
                             </div>
                         </div>
                         <div class="seperator-grey"></div>
                         <div class="date-section">
-                            <span class="date-span">October 16, 2022</span>
+                            <span id="urgent-deadline" class="date-span">-</span>
                             <span class="date-message-span">Upcoming Deadline</span>
                         </div>
                     </div>
@@ -44,20 +44,20 @@ function getSummaryContent() {
                     <div onclick="changeWindowToBoardSection()" class="tasks-board-container-section">
                         <div class="tasks-board-container">
                             <div class="number-and-description">
-                                <span class="number">4</span>
+                                <span id="board-count" class="number">0</span>
                                 <span class="task-section-span">Tasks in Board</span>
                             </div>
                         </div>
                     </div>
                     <div onclick="changeWindowToBoardSection()" class="tasks-progress-container-section">
                         <div class="task-progress-container">
-                            <span class="number">5</span>
+                            <span id="progress-count" class="number">0</span>
                             <span class="task-section-span">Tasks in Progress</span>
                         </div>
                     </div> 
                     <div onclick="changeWindowToBoardSection()" class="feedback-section-container">
                         <div class="feedback-section">
-                            <span class="number">6</span>
+                            <span id="feedback-count" class="number">0</span>
                             <span class="task-section-span">Awaiting Feedback</span>
                         </div>
                     </div>
