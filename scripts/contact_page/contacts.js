@@ -2,23 +2,39 @@ let currentUser;
 const contactColors = {};
 let currentlyOpenMenu = null; // Stores the currently open menu
 
-
 /**
- * Initializes the contact page:
+ * Initializes the contact page with data
  */
 async function initContactPage() {
-  await getUsersData();
-  const currentUserId = localStorage.getItem('currentUserId');
-  currentUser = users.users[currentUserId];
+  // Get data from localStorage
+  const contacts = JSON.parse(localStorage.getItem("contacts"));
+  const firstName = localStorage.getItem("firstName");
+  const lastName = localStorage.getItem("lastName");
+  const userId = localStorage.getItem("userId");
+  
+  // Use localStorage data if available
+  if (contacts && firstName && lastName) {
+    currentUser = {
+      id: userId,
+      firstName: firstName,
+      lastName: lastName,
+      contacts: contacts
+    };
+  } else {
+    // Otherwise: load the conventional way
+    await getUsersData();
+    const currentUserId = localStorage.getItem('currentUserId');
+    currentUser = users.users[currentUserId];
+  }
+  
   renderDesktopTemplate();
   renderContactsContent();
   changeToChosenContactsSection();
   renderSpacerAndContactSection();
 }
 
-
 /**
- * Renders the desktop template inside the 'templateSection' element.
+ * Renders the desktop template in the specified element
  */
 function renderDesktopTemplate() {
   const content = document.getElementById('templateSection');
@@ -26,9 +42,8 @@ function renderDesktopTemplate() {
   content.innerHTML += getDesktopTemplate(currentUser);
 }
 
-
 /**
- * Highlights the "Contacts" section in the navigation bar.
+ * Highlights the contacts section in navigation menu
  */
 function changeToChosenContactsSection() {
   document.getElementById('summary-section').classList.remove('chosen-section');
@@ -39,11 +54,10 @@ function changeToChosenContactsSection() {
   document.getElementById('contacts-img').classList.add('contacts-img-chosen');
 }
 
-
 /**
- * Sorts contacts by their first name.
- * @param {Object} contacts - The contacts object.
- * @returns {Array} An array of sorted contact keys.
+ * Sorts contact list by first name
+ * @param {Object} contacts - Contacts object to sort
+ * @returns {Array} Sorted array of contact keys
  */
 function sortContactsByFirstName(contacts) {
   const entries = Object.entries(contacts);
@@ -53,10 +67,9 @@ function sortContactsByFirstName(contacts) {
   return sorted.map(([key]) => key);
 }
 
-
 /**
- * Handles the selection of a contact by key (mobile or desktop).
- * @param {string} key - The contact's unique key.
+ * Handles contact selection by its key
+ * @param {string} key - Unique contact key
  */
 function chooseContact(key) {
   const contactElement = getContactElement(key);
@@ -68,9 +81,8 @@ function chooseContact(key) {
   renderContactDetails(key);
 }
 
-
 /**
- * Removes the "contact-chosen" class from all contact elements.
+ * Removes selection from all contacts
  */
 function resetAllContacts() {
   document
@@ -78,9 +90,8 @@ function resetAllContacts() {
     .forEach(contact => contact.classList.remove("contact-chosen"));
 }
 
-
 /**
- * Resets the contact view to a default state (nothing selected).
+ * Resets contact view to default state
  */
 function resetToDefaultState() {
   resetAllContacts();
@@ -88,9 +99,8 @@ function resetToDefaultState() {
   if (details) details.innerHTML = "";
 }
 
-
 /**
- * Opens the "Add Contact" overlay and renders its content.
+ * Shows the add contact overlay
  */
 function openAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
@@ -98,19 +108,16 @@ function openAddContactSection() {
   renderAddContactSection();
 }
 
-
 /**
- * Closes the "Add Contact" overlay.
+ * Hides the add contact overlay
  */
 function closeAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
   overlay.classList.add("d-none");
 }
 
-
 /**
- * Saves a new contact with validation and updates the database.
- * @returns {Promise<void>}
+ * Creates a new contact after validation
  */
 async function saveNewContact() {
   let name = document.getElementById("contactName").value.trim();
@@ -124,6 +131,9 @@ async function saveNewContact() {
     let newContact = { firstNameContact: fName, lastNameContact: lName, email, phone };
     let newContactKey = await addContactToDatabase(currentUser.id, newContact);
     currentUser.contacts[newContactKey] = newContact;
+    
+    // Update local storage
+    localStorage.setItem("contacts", JSON.stringify(currentUser.contacts));
 
     showSuccessMessage();
     setTimeout(() => { closeAddContactSection(); renderSpacerAndContactSection(); }, 2000);
@@ -132,13 +142,12 @@ async function saveNewContact() {
   }
 }
 
-
 /**
- * Validates name, email, and phone for a new contact.
- * @param {string} name - The full name (must have at least 2 parts).
- * @param {string} email - The contact's email.
- * @param {string} phone - The contact's phone number.
- * @returns {boolean} True if valid, otherwise false.
+ * Validates contact information
+ * @param {string} name - Full name
+ * @param {string} email - Email address
+ * @param {string} phone - Phone number
+ * @returns {boolean} Validity status
  */
 function validateNewContact(name, email, phone) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -153,27 +162,24 @@ function validateNewContact(name, email, phone) {
   return true;
 }
 
-
 /**
- * Renders the "Add Contact" overlay by setting the innerHTML.
+ * Renders the add contact overlay content
  */
 function renderAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
   overlay.innerHTML = getAddContactSectionHtml();
 }
 
-
 /**
- * Renders the main contacts content area (list + details).
+ * Renders the main contacts content area
  */
 function renderContactsContent() {
   const content = document.getElementById('newContentSection');
   content.innerHTML = getContactsContentHtml();
 }
 
-
 /**
- * Renders the list of contacts, grouped by first-letter spacers.
+ * Renders all contacts grouped by first letter
  */
 function renderSpacerAndContactSection() {
   const container = document.getElementById("spacerAndContactsSection");
@@ -184,30 +190,30 @@ function renderSpacerAndContactSection() {
     container.innerHTML = "<div>No contacts available.</div>";
     return;
   }
+  
   const sortedKeys = Object.keys(currentUser.contacts).sort((a, b) => {
     const cA = currentUser.contacts[a].firstNameContact.toLowerCase();
     const cB = currentUser.contacts[b].firstNameContact.toLowerCase();
     return cA.localeCompare(cB);
   });
 
-  let currentSpacerLetter = "";
+  let currentLetter = "";
   sortedKeys.forEach(key => {
     const contact = currentUser.contacts[key];
     const firstLetter = contact.firstNameContact.charAt(0).toUpperCase();
-    if (firstLetter !== currentSpacerLetter) {
-      currentSpacerLetter = firstLetter;
-      container.innerHTML += `<div class="spacer">${currentSpacerLetter}</div>`;
+    if (firstLetter !== currentLetter) {
+      currentLetter = firstLetter;
+      container.innerHTML += `<div class="spacer">${currentLetter}</div>`;
     }
     container.innerHTML += getContactListItemHtml(key, contact);
   });
 }
 
-
 /**
- * Returns the HTML string for a single contact list item.
- * @param {string} key - Contact key.
- * @param {Object} contact - Contact object.
- * @returns {string} The HTML for a contact list item.
+ * Creates HTML for a single contact list item
+ * @param {string} key - Contact key
+ * @param {Object} contact - Contact data
+ * @returns {string} HTML string
  */
 function getContactListItemHtml(key, contact) {
   const color = getOrAssignColorForContact(key);
@@ -223,10 +229,9 @@ function getContactListItemHtml(key, contact) {
     </div>`;
 }
 
-
 /**
- * Opens the edit overlay for the given contact key.
- * @param {string} contactKey - The contact's unique key.
+ * Opens the edit contact overlay
+ * @param {string} contactKey - Contact key to edit
  */
 function openEditContactSection(contactKey) {
   const contactToEdit = currentUser.contacts[contactKey];
@@ -239,9 +244,8 @@ function openEditContactSection(contactKey) {
   document.querySelector(".edit-contact-container-overlay").classList.remove("d-none");
 }
 
-
 /**
- * Creates the edit overlay container if it doesn't exist.
+ * Creates edit overlay if it doesn't exist
  */
 function createEditOverlayIfMissing() {
   const overlay = document.querySelector(".edit-contact-container-overlay");
@@ -251,11 +255,10 @@ function createEditOverlayIfMissing() {
   }
 }
 
-
 /**
- * Renders the edit contact overlay content.
- * @param {Object} contact - The contact object to edit.
- * @param {string} contactKey - The contact's unique key.
+ * Renders edit contact form with data
+ * @param {Object} contact - Contact to edit
+ * @param {string} contactKey - Contact key
  */
 function renderEditContactSection(contact, contactKey) {
   const overlay = document.querySelector(".edit-contact-container-overlay");
@@ -267,25 +270,24 @@ function renderEditContactSection(contact, contactKey) {
   overlay.innerHTML = getEditContactSectionHtml(contact, contactKey, color);
 }
 
-
 /**
- * Closes the edit contact overlay.
+ * Closes the edit contact overlay
  */
 function closeEditContactSection() {
   const overlay = document.querySelector(".edit-contact-container-overlay");
   if (overlay) overlay.classList.add("d-none");
 }
 
-
 /**
- * Saves an edited contact, updates the database, and re-renders.
- * @param {string} contactKey - The key of the contact to update.
+ * Saves edited contact information
+ * @param {string} contactKey - Contact key to update
  */
 async function saveEditedContact(contactKey) {
   const name = document.getElementById("editContactName").value.trim();
   const email = document.getElementById("editContactEmail").value.trim();
   const phone = document.getElementById("editContactNumber").value.trim();
   if (!validateEditedContact(name, email, phone)) return;
+  
   const [fName, lName] = formatContactName(name);
   const updatedContact = { 
     firstNameContact: fName,
@@ -293,9 +295,14 @@ async function saveEditedContact(contactKey) {
     email: email,
     phone: phone 
   };
+  
   try {
     await updateContactInDatabase(currentUser.id, contactKey, updatedContact);
     currentUser.contacts[contactKey] = updatedContact;
+    
+    // Update local storage
+    localStorage.setItem("contacts", JSON.stringify(currentUser.contacts));
+    
     renderSpacerAndContactSection();
     closeEditContactSection();
     renderContactDetails(contactKey);
@@ -304,13 +311,12 @@ async function saveEditedContact(contactKey) {
   }
 }
 
-
 /**
- * Validates the edited contact data (name, email, phone).
- * @param {string} name - Full name string.
- * @param {string} email - Email address.
- * @param {string} phone - Phone number.
- * @returns {boolean} True if valid, otherwise false.
+ * Validates edited contact data
+ * @param {string} name - Full name
+ * @param {string} email - Email address
+ * @param {string} phone - Phone number
+ * @returns {boolean} Validity status
  */
 function validateEditedContact(name, email, phone) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -321,10 +327,9 @@ function validateEditedContact(name, email, phone) {
   return true;
 }
 
-
 /**
- * Deletes a contact from database and updates local data, then re-renders.
- * @param {string} contactKey - The unique key of the contact to delete.
+ * Deletes a contact
+ * @param {string} contactKey - Contact key to delete
  */
 async function deleteContact(contactKey) {
   try {
@@ -333,15 +338,18 @@ async function deleteContact(contactKey) {
     }
     await deleteContactFromDatabase(currentUser.id, contactKey);
     delete currentUser.contacts[contactKey];
+    
+    // Update local storage
+    localStorage.setItem("contacts", JSON.stringify(currentUser.contacts));
+    
     handlePostDeleteUI();
   } catch (error) {
     console.error("Error deleting contact:", error);
   }
 }
 
-
 /**
- * Manages the UI after a contact is deleted (list, details, overlay).
+ * Updates UI after contact deletion
  */
 function handlePostDeleteUI() {
   renderSpacerAndContactSection();
@@ -351,9 +359,8 @@ function handlePostDeleteUI() {
   closeEditContactOverlayIfOpen();
 }
 
-
 /**
- * Closes the mobile contact view if screen width <= 1000px.
+ * Handles mobile view after deletion
  */
 function closeMobileContactViewIfNeeded() {
   if (window.innerWidth <= 1000) {
@@ -366,9 +373,8 @@ function closeMobileContactViewIfNeeded() {
   }
 }
 
-
 /**
- * Closes the edit overlay if it's currently open.
+ * Closes edit overlay if open
  */
 function closeEditContactOverlayIfOpen() {
   const editOverlay = document.querySelector(".edit-contact-container-overlay");
@@ -377,10 +383,7 @@ function closeEditContactOverlayIfOpen() {
   }
 }
 
-
-/**
- * Closes an open mobile menu if a click occurs outside of it.
- */
+// Event listener for clicks outside the menu
 document.addEventListener("click", event => {
   const menuSection = document.getElementById("menuSectionMobile");
   const menuIcon = document.getElementById("noteMenuMobile");
