@@ -3,8 +3,8 @@
 ---------------------------------- */
 
 let users = {};
-const BASE_URL =
-  "https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/.json";
+const BASE_URL = "https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/.json";
+
 
 /**
  * Fetches all user data from the Firebase base URL and stores it in the global 'users' object.
@@ -18,6 +18,7 @@ async function getUsersData() {
   users = responseAsJson;
 }
 
+
 /**
  * Posts a new task to the database for a specific user.
  * @async
@@ -29,7 +30,7 @@ async function getUsersData() {
  */
 async function postTaskToDatabase(userId, taskData) {
   try {
-    const url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks.json`;
+    const url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/tasks.json`;
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -43,6 +44,7 @@ async function postTaskToDatabase(userId, taskData) {
   }
 }
 
+
 /**
  * Updates the subtasks of a given task in the database.
  * @async
@@ -52,7 +54,7 @@ async function postTaskToDatabase(userId, taskData) {
  * @throws {Error} If the request fails or the response is not OK.
  */
 async function updateSubtasksInDatabase(taskKey) {
-  const taskUrl = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${currentUser.id}/tasks/${taskKey}/subtasks.json`;
+  const taskUrl = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${currentUser.id}/tasks/${taskKey}/subtasks.json`;
   try {
     const response = await fetch(taskUrl, {
       method: "PUT",
@@ -65,6 +67,7 @@ async function updateSubtasksInDatabase(taskKey) {
   }
 }
 
+
 /**
  * Updates the current status (column) of a given task in the database.
  * @async
@@ -75,15 +78,14 @@ async function updateSubtasksInDatabase(taskKey) {
  * @throws {Error} If the request fails or the response is not OK.
  */
 async function updateTaskColumnInDatabase(taskKey, newColumn) {
-  const taskUrl = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${currentUser.id}/tasks/${taskKey}/currentStatus.json`;
+  const taskUrl = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${currentUser.id}/tasks/${taskKey}/currentStatus.json`;
   try {
     const response = await fetch(taskUrl, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newColumn),
     });
-    if (!response.ok)
-      throw new Error("Error updating task column in Firebase.");
+    if (!response.ok) throw new Error("Error updating task column in Firebase.");
   } catch (error) {
     console.error("Error updating the task column:", error);
   }
