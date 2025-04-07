@@ -1,6 +1,5 @@
 const DATABASEURL =
   "https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/";
-let users = {};
 
 async function loginUser(event) {
   event.preventDefault();
@@ -20,6 +19,10 @@ async function loginUser(event) {
         user.email.toLowerCase() === emailInput.toLowerCase() &&
         String(user.password) === passwordInput
       ) {
+        localStorage.setItem("firstName", user.firstName);
+        localStorage.setItem("LastName", user.lastName);
+        localStorage.setItem("currentUserId", user.id);
+
         window.location.href = "summary.html";
         userFound = true;
         break;
@@ -44,6 +47,10 @@ async function guestLogin() {
       alert("Guest user konnte nicht geladen werden.");
       return;
     }
+
+    localStorage.setItem("firstName", guestData.firstName);
+    localStorage.setItem("LastName", guestData.lastName);
+    localStorage.setItem("currentUserId", guestData.id);
 
     window.location.href = "summary.html";
   } catch (error) {
