@@ -14,20 +14,17 @@ async function initAddTaskPage() {
   initOutsideClickListener();
 }
 
-
 /** Sets the current user from localStorage. */
 function setCurrentUser() {
-  let currentUserId = localStorage.getItem('currentUserId');
-  currentUser = users.users[currentUserId];
+  let currentUserId = localStorage.getItem("currentUserId");
+  currentUser = users[currentUserId];
 }
-
 
 /** Renders the main Add Task content into #newContentSection. */
 function renderAddTaskContent() {
-  let content = document.getElementById('newContentSection');
+  let content = document.getElementById("newContentSection");
   content.innerHTML += getAddTaskContent();
 }
-
 
 /** Validates, builds, and saves a new task. */
 async function saveNewTask() {
@@ -37,17 +34,16 @@ async function saveNewTask() {
   if (!validateCategory()) return;
   const newTask = buildNewTask();
   try {
-      const result = await postTaskToDatabase(currentUser.id, newTask);
-      // Removed: console.log("Server Response:", result);
-      showSuccessMessage();
-      setTimeout(() => {
-          initAddTaskPage(); // Lade erst nach 5 Sekunden neu
-      }, 2200);
+    const result = await postTaskToDatabase(currentUser.id, newTask);
+    // Removed: console.log("Server Response:", result);
+    showSuccessMessage();
+    setTimeout(() => {
+      initAddTaskPage(); // Lade erst nach 5 Sekunden neu
+    }, 2200);
   } catch (error) {
-      console.error("Error saving task:", error);
+    console.error("Error saving task:", error);
   }
 }
-
 
 /** Resets the form fields and UI elements. */
 function resetForm() {
@@ -60,85 +56,78 @@ function resetForm() {
   renderNameCircles();
 }
 
-
 /** Builds the new task object from form inputs. */
 function buildNewTask() {
-  let t = document.getElementById('title').value.trim();
-  let d = document.getElementById('description').value.trim();
+  let t = document.getElementById("title").value.trim();
+  let d = document.getElementById("description").value.trim();
   return {
-      id: `task_${Date.now()}`,
-      assignedTo: collectAssignedContacts(),
-      category: getSelectedCategory(),
-      currentStatus: "toDo",
-      dueDate: document.getElementById('date').value,
-      priority: getSelectedPriority(),
-      subtasks: currentSubTask,
-      taskDescription: capitalizeFirstLetter(d),
-      title: capitalizeFirstLetter(t),
+    id: `task_${Date.now()}`,
+    assignedTo: collectAssignedContacts(),
+    category: getSelectedCategory(),
+    currentStatus: "toDo",
+    dueDate: document.getElementById("date").value,
+    priority: getSelectedPriority(),
+    subtasks: currentSubTask,
+    taskDescription: capitalizeFirstLetter(d),
+    title: capitalizeFirstLetter(t),
   };
 }
 
-
 /** Clears text fields and date. */
 function resetFormInputs() {
-  document.getElementById('title').value = "";
-  document.getElementById('description').value = "";
-  document.getElementById('date').value = "";
-  document.getElementById('subtask').value = "";
+  document.getElementById("title").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("date").value = "";
+  document.getElementById("subtask").value = "";
 }
-
 
 /** Resets category label and hides dropdown. */
 function resetCategory() {
-  document.getElementById('selectTaskCategorySpan').innerText = "Select task category";
-  document.getElementById('categoryDropDownSection').classList.add('d-none');
+  document.getElementById("selectTaskCategorySpan").innerText =
+    "Select task category";
+  document.getElementById("categoryDropDownSection").classList.add("d-none");
 }
-
 
 /** Resets priority to Medium by default. */
 function resetPriority() {
-  document.getElementById('prioUrgent').classList.remove('prio-urgent-chosen');
-  document.getElementById('prioUrgent').classList.add('prio-urgent');
-  document.getElementById('prioMedium').classList.add('prio-medium-chosen');
-  document.getElementById('prioLow').classList.remove('prio-low-chosen');
-  document.getElementById('prioLow').classList.add('prio-low');
+  document.getElementById("prioUrgent").classList.remove("prio-urgent-chosen");
+  document.getElementById("prioUrgent").classList.add("prio-urgent");
+  document.getElementById("prioMedium").classList.add("prio-medium-chosen");
+  document.getElementById("prioLow").classList.remove("prio-low-chosen");
+  document.getElementById("prioLow").classList.add("prio-low");
 }
-
 
 /** Hides the "Assigned To" dropdown. */
 function resetDropDowns() {
-  document.getElementById('dropDownSection').classList.add('d-none');
+  document.getElementById("dropDownSection").classList.add("d-none");
 }
-
 
 /** Clears current subtasks from the form. */
 function resetSubtasksUI() {
   currentSubTask = {};
-  document.getElementById('subtaskSection').innerHTML = "";
+  document.getElementById("subtaskSection").innerHTML = "";
 }
-
 
 /** Unchecks all assigned-to checkboxes. */
 function resetAssignedCheckBoxes() {
   const c = currentUser.contacts || {};
   for (let i = 0; i < c.length; i++) {
-      let box = document.getElementById(`assignedToCheckbox${i}`);
-      if (box) {
-          box.checked = false;
-          choseNameAndShowCircle(i);
-      }
+    let box = document.getElementById(`assignedToCheckbox${i}`);
+    if (box) {
+      box.checked = false;
+      choseNameAndShowCircle(i);
+    }
   }
 }
 
-
 /**
-* Displays a success message overlay and redirects to login.html after a delay.
-*/
+ * Displays a success message overlay and redirects to login.html after a delay.
+ */
 function showSuccessMessage() {
   let overlay = document.getElementById("successAddTaskOverlay");
   overlay.classList.remove("d-none");
 
   setTimeout(() => {
-      overlay.classList.add("d-none");
+    overlay.classList.add("d-none");
   }, 2250);
 }

@@ -72,7 +72,7 @@ async function initBoardPage() {
  * Loads user data from Firebase
  */
 async function loadUserAndSetCurrent() {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("currentUserId");
   
   if (!userId) {
     console.error("No user ID found in localStorage - login required");
@@ -83,7 +83,7 @@ async function loadUserAndSetCurrent() {
   try {
     // Load directly from Firebase instead of from localStorage
     await getUsersData();
-    currentUser = users.users[userId];
+    currentUser = users[userId];
     
     // If no user data was found, redirect to login
     if (!currentUser) {
@@ -277,7 +277,7 @@ async function moveTaskToNewColumn(taskId, newColumn) {
     console.error("Error moving task to new column:", error);
     // Bei Fehler Daten neu laden
     await getUsersData();
-    currentUser = users.users[currentUser.id];
+    currentUser = users[currentUser.id];
     renderAllColumns();
   }
 }
