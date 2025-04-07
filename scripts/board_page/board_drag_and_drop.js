@@ -110,7 +110,7 @@ async function moveTo(newStatus) {
     await getUsersData();
 
     // Update current user
-    currentUser = users.users[currentUser.id];
+    currentUser = users[currentUser.id];
   } catch (error) {
     console.error("Error moving task:", error);
     return;

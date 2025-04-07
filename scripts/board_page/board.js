@@ -72,7 +72,9 @@ async function initBoardPage() {
  * Loads user data from Firebase
  */
 async function loadUserAndSetCurrent() {
-  const userId = localStorage.getItem("currentUserId");
+  const userId = localStorage.getItem("userId");
+  console.log(userId);
+  
   
   if (!userId) {
     console.error("No user ID found in localStorage - login required");

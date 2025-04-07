@@ -5,7 +5,7 @@ async function initPrivacyNoticePage() {
     currentSubTask = {};
 
     let currentUserId = localStorage.getItem('currentUserId');
-    currentUser = users.users[currentUserId];
+    currentUser = users[currentUserId];
     renderDesktopTemplate();
     changeToChosenPrivacyPoliceSection();
     renderPrivacyPolicyContentUnlogged();

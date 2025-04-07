@@ -5,7 +5,7 @@ async function initLegalNoticePage() {
     currentSubTask = {};
 
     let currentUserId = localStorage.getItem('currentUserId');
-    currentUser = users.users[currentUserId];
+    currentUser = users[currentUserId];
     renderDesktopTemplate();
     changeToChosenLegalNoticeSection();
     renderLegalNoticeContent();

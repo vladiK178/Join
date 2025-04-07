@@ -17,7 +17,7 @@ async function initContactPage() {
   try {
     // Load directly from Firebase instead of localStorage
     await getUsersData();
-    currentUser = users.users[userId];
+    currentUser = users[userId];
     
     // If no user data was found, redirect to login
     if (!currentUser) {
@@ -145,7 +145,7 @@ async function saveNewContact() {
     
     // Reload all data from Firebase
     await getUsersData();
-    currentUser = users.users[currentUser.id];
+    currentUser = users[currentUser.id];
 
     showSuccessMessage();
     setTimeout(() => { 
@@ -320,7 +320,7 @@ async function saveEditedContact(contactKey) {
     
     // Reload data from Firebase
     await getUsersData();
-    currentUser = users.users[currentUser.id];
+    currentUser = users[currentUser.id];
     
     renderSpacerAndContactSection();
     closeEditContactSection();
@@ -364,7 +364,7 @@ async function deleteContact(contactKey) {
     
     // Reload data from Firebase
     await getUsersData();
-    currentUser = users.users[currentUser.id];
+    currentUser = users[currentUser.id];
     
     handlePostDeleteUI();
   } catch (error) {
