@@ -20,13 +20,6 @@ async function loginUser(event) {
         user.email.toLowerCase() === emailInput.toLowerCase() &&
         String(user.password) === passwordInput
       ) {
-        localStorage.setItem("contacts", JSON.stringify(user.contacts));
-        localStorage.setItem("tasks", JSON.stringify(user.tasks));
-        localStorage.setItem("firstName", user.firstName);
-        localStorage.setItem("LastName", user.lastName);
-        localStorage.setItem("userName", `${user.firstName} ${user.lastName}`);
-        localStorage.setItem("userId", user.id);
-
         window.location.href = "summary.html";
         userFound = true;
         break;
@@ -51,16 +44,6 @@ async function guestLogin() {
       alert("Guest user konnte nicht geladen werden.");
       return;
     }
-
-    localStorage.setItem("contacts", JSON.stringify(guestData.contacts));
-    localStorage.setItem("tasks", JSON.stringify(guestData.tasks));
-    localStorage.setItem("firstName", guestData.firstName);
-    localStorage.setItem("LastName", guestData.lastName);
-    localStorage.setItem("userId", guestData.id);
-    localStorage.setItem(
-      "userName",
-      `${guestData.firstName} ${guestData.lastName}`
-    );
 
     window.location.href = "summary.html";
   } catch (error) {
