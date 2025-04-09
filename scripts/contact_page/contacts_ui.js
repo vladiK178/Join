@@ -1,154 +1,148 @@
 /**
- * Returns or assigns a color for the contact based on its key.
- * @param {string} contactKey - The unique key for the contact.
- * @returns {string} The assigned or newly generated color.
+ * Gets or creates color for contact
+ * @param {string} contactKey - Contact identifier
+ * @returns {string} Color hex code
  */
 function getOrAssignColorForContact(contactKey) {
-    if (!contactColors[contactKey]) {
-      contactColors[contactKey] = getRandomColorFromPalette();
-    }
-    return contactColors[contactKey];
+  if (!contactColors[contactKey]) {
+    contactColors[contactKey] = getRandomColorFromPalette();
   }
+  return contactColors[contactKey];
+}
 
-
-  /**
- * Renders the detailed view of a contact by key.
- * @param {string} contactKey - Unique key of the contact to show.
+/**
+ * Renders contact details in right panel
+ * @param {string} contactKey - Contact to display
  */
 function renderContactDetails(contactKey) {
-    const contactDetails = document.getElementById("contactDetails");
-    const contact = currentUser.contacts[contactKey];
-    if (!contact) return showMissingContactError(contactDetails, contactKey);
-  
-    const color = getOrAssignColorForContact(contactKey);
-    contactDetails.innerHTML = getContactDetailsHtml(contactKey, contact, color);
-  }
-  
+  const container = document.getElementById("contactDetails");
+  const contact = currentUser.contacts[contactKey];
 
-  /**
- * Displays an error if the contact is missing, used by renderContactDetails.
- * @param {HTMLElement} container - The details container.
- * @param {string} contactKey - The missing contact key.
- */
-function showMissingContactError(container, contactKey) {
+  // Handle missing contact
+  if (!contact) {
     console.error("Contact not found:", contactKey);
     if (container) container.innerHTML = "<div>Contact not available.</div>";
+    return;
   }
 
+  // Render contact with assigned color
+  const color = getOrAssignColorForContact(contactKey);
+  container.innerHTML = getContactDetailsHtml(contactKey, contact, color);
+}
 
-  /**
- * Returns the contact element by key or logs an error if not found.
- * @param {string} key - The contact's unique key.
- * @returns {HTMLElement|null} The contact element or null if not found.
+/**
+ * Gets contact element by its key
+ * @param {string} key - Contact key
+ * @returns {HTMLElement|null} Contact element or null
  */
 function getContactElement(key) {
-    const el = document.getElementById(`contact-${key}`);
-    if (!el) console.error(`Contact with ID 'contact-${key}' not found.`);
-    return el;
-  }
+  const element = document.getElementById(`contact-${key}`);
+  if (!element) console.error(`Contact ${key} not found in DOM`);
+  return element;
+}
 
-
-  /**
- * Checks if the contact element is already chosen.
- * @param {HTMLElement} contactElement - The DOM element for the contact.
- * @returns {boolean} True if chosen, otherwise false.
+/**
+ * Checks if contact is already selected
+ * @param {HTMLElement} element - Contact element
+ * @returns {boolean} True if selected
  */
-function isContactAlreadyChosen(contactElement) {
-    return contactElement.classList.contains("contact-chosen");
-  }
+function isContactAlreadyChosen(element) {
+  return element.classList.contains("contact-chosen");
+}
 
-
-  /**
- * Checks if current window width indicates a mobile view.
- * @returns {boolean} True if window width is <= 1000px, otherwise false.
+/**
+ * Checks if viewport is mobile size
+ * @returns {boolean} True if mobile width
  */
 function isMobileView() {
-    return window.innerWidth <= 1000;
-  }
+  return window.innerWidth <= 1000;
+}
 
-
-  /**
- * Handles the contact selection logic in mobile view.
- * @param {string} key - The contact's unique key.
+/**
+ * Handles contact selection on mobile
+ * @param {string} key - Selected contact key
  */
 function handleMobileContactSelection(key) {
-    const contactSection = document.querySelector(".contact-section");
-    const showContact = document.querySelector(".show-contact");
-    if (contactSection && showContact) {
-      contactSection.style.display = "none";
-      showContact.style.display = "block";
-    }
-    renderContactDetails(key);
+  // Get container elements
+  const listSection = document.querySelector(".contact-section");
+  const detailSection = document.querySelector(".show-contact");
+
+  // Switch view if both elements exist
+  if (listSection && detailSection) {
+    listSection.style.display = "none";
+    detailSection.style.display = "block";
   }
 
+  // Show selected contact details
+  renderContactDetails(key);
+}
 
-  /**
- * Shows the contacts list and hides the single contact detail view.
+/**
+ * Returns to contacts list from detail view
  */
 function goBackToContacts() {
-    const contactSection = document.querySelector(".contact-section");
-    const showContact = document.querySelector(".show-contact");
-    if (contactSection && showContact) {
-      contactSection.style.display = "block";
-      showContact.style.display = "none";
-    }
+  const listSection = document.querySelector(".contact-section");
+  const detailSection = document.querySelector(".show-contact");
+
+  if (listSection && detailSection) {
+    listSection.style.display = "block";
+    detailSection.style.display = "none";
   }
+}
 
-
-  /**
- * Toggles the mobile menu for editing/deleting a contact.
- * @param {MouseEvent} event - The click event.
+/**
+ * Toggles mobile menu visibility
+ * @param {Event} event - Click event
  */
 function toggleMenuMobile(event) {
-    event.stopPropagation();
-    const menuSection = document.getElementById("menuSectionMobile");
-    const menuIcon = document.getElementById("noteMenuMobile");
-    if (!menuSection || !menuIcon) return console.error("Menu or icon not found.");
-  
-    const menuIsOpen = !menuSection.classList.contains("d-none");
-    if (menuIsOpen) return closeMobileMenu(menuSection, menuIcon);
-    openMobileMenu(menuSection, menuIcon);
+  // Prevent event bubbling
+  event.stopPropagation();
+
+  // Get menu elements
+  const menu = document.getElementById("menuSectionMobile");
+  const icon = document.getElementById("noteMenuMobile");
+
+  if (!menu || !icon) {
+    console.error("Menu elements not found");
+    return;
   }
 
+  // Check if menu is open
+  const isOpen = !menu.classList.contains("d-none");
 
-  /**
- * Closes the mobile menu.
- * @param {HTMLElement} menuSection - The menu element.
- * @param {HTMLElement} menuIcon - The menu icon element.
- */
-function closeMobileMenu(menuSection, menuIcon) {
-    menuSection.classList.add("d-none");
-    menuIcon.classList.remove("open-menu-mobile");
-    menuIcon.classList.add("closed-menu-mobile");
-  }
-
-
-  /**
- * Opens the mobile menu, closing any previously open menu if necessary.
- * @param {HTMLElement} menuSection - The menu element.
- * @param {HTMLElement} menuIcon - The menu icon element.
- */
-function openMobileMenu(menuSection, menuIcon) {
-    if (currentlyOpenMenu && currentlyOpenMenu !== menuSection) {
+  // Close if open, open if closed
+  if (isOpen) {
+    menu.classList.add("d-none");
+    icon.classList.remove("open-menu-mobile");
+    icon.classList.add("closed-menu-mobile");
+  } else {
+    // Close any other open menu first
+    if (currentlyOpenMenu && currentlyOpenMenu !== menu) {
       currentlyOpenMenu.classList.add("d-none");
-      const icon = document.getElementById("noteMenuMobile");
-      icon.classList.remove("open-menu-mobile");
-      icon.classList.add("closed-menu-mobile");
+      const prevIcon = document.getElementById("noteMenuMobile");
+      if (prevIcon) {
+        prevIcon.classList.remove("open-menu-mobile");
+        prevIcon.classList.add("closed-menu-mobile");
+      }
     }
-    menuSection.classList.remove("d-none");
-    menuIcon.classList.remove("closed-menu-mobile");
-    menuIcon.classList.add("open-menu-mobile");
-    currentlyOpenMenu = menuSection;
-  }
 
-  /**
- * Displays a success message overlay.
- */
-  function showSuccessMessage() {
-    let overlay = document.getElementById("successContactsOverlay");
-    overlay.classList.remove("d-none");
-    setTimeout(() => {
-      overlay.classList.add("d-none");
-    }, 2250);
+    // Open this menu
+    menu.classList.remove("d-none");
+    icon.classList.remove("closed-menu-mobile");
+    icon.classList.add("open-menu-mobile");
+    currentlyOpenMenu = menu;
   }
-  
+}
+
+/**
+ * Shows success message temporarily
+ */
+function showSuccessMessage() {
+  const overlay = document.getElementById("successContactsOverlay");
+  overlay.classList.remove("d-none");
+
+  // Hide after delay
+  setTimeout(() => {
+    overlay.classList.add("d-none");
+  }, 2250);
+}
