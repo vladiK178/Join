@@ -6,7 +6,7 @@ let currentlyOpenMenu = null; // Stores the currently open menu
  * Initializes the contact page with data from Firebase
  */
 async function initContactPage() {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("currentUserId");
   
   if (!userId) {
     console.error("No user ID found in localStorage - login required");

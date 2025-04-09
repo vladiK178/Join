@@ -72,7 +72,7 @@ async function initBoardPage() {
  * Loads user data from Firebase
  */
 async function loadUserAndSetCurrent() {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("currentUserId");
   console.log(userId);
   
   
