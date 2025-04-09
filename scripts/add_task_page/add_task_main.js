@@ -1,9 +1,9 @@
-/** Initializes the Add Task page. */
+let currentUser;
+
 async function initAddTaskPage() {
   await getUsersData();
   currentSubTask = {};
   setCurrentUser();
-  // Removed: console.log("Current User:", currentUser);
   renderDesktopTemplate();
   highlightAddTaskSection();
   renderAddTaskContent();

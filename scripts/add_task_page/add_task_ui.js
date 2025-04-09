@@ -137,9 +137,9 @@ document.getElementById('subtask').addEventListener('keydown', (evt) => {
 /** Initializes the outside-click listener for closing UI sections. */
 function initOutsideClickListener() {
 document.addEventListener('click', (evt) => {
-  closeAssignedToIfClickedOutside(evt);
-  closeCategoryIfClickedOutside(evt);
-  closeSubtaskIfClickedOutside(evt);
+  closeAssignedToOnOutsideClick(evt);
+  closeCategoryOnOutsideClick(evt);
+  closeSubtaskOnOutsideClick(evt);
 });
 }
 

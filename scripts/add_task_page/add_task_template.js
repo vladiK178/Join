@@ -15,7 +15,7 @@ function getAddTaskContent() {
                 </form>
                 <form class="input-order" action="">
                     <label for="assigned-to">Assigned to<span class="red-star">*</span></label>
-                    <div onclick="openAndCloseAssignedToSection()" id="assignedToSection" class="assigned-to-section">
+                    <div onclick="toggleAssignedToSection()" id="assignedToSection" class="assigned-to-section">
                         <input type="text" placeholder="Select contacts to assign">
                         <div class="dropDown-img">
                             <img id="dropDownImg" src="./assets/img/dropDownArrowDown.svg" alt="">
@@ -53,7 +53,7 @@ function getAddTaskContent() {
                     <div class="hl-and-red-star">
                         <span>Category</span><span class="red-star">*</span>
                     </div>
-                    <div id="categorySection" onclick="openAndCloseCategorySection()" class="category-section">
+                    <div id="categorySection" onclick="toggleCategorySection()" class="category-section">
                         <div><span id="selectTaskCategorySpan">Select task category</span></div>
                         <div class="dropDown-img">
                             <img id="dropDownImgCategory" src="./assets/img/dropDownArrowDown.svg" alt="">
@@ -78,7 +78,7 @@ function getAddTaskContent() {
                     </div>
                     <div id="subtaskSection" class="created-subtask"></div>
                 </form>
-            </div> <!-- Schließendes div für task-details-right hinzugefügt -->
+            </div>
         </div>
     </div>
     <div class="field-required-clear-create-button-section">
