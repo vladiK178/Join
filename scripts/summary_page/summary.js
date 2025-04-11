@@ -11,11 +11,14 @@ function initSummaryPage() {
  * Includes template, content, greeting, and metrics update.
  */
 function renderPage() {
+  const userId = localStorage.getItem("currentUserId");
+  if (!userId) {
+    window.location.href = "login.html";
+  }
+
   renderDesktopTemplate();
   renderSummaryContent();
   greetingMessage();
-
-  const userId = localStorage.getItem("userId") || "guest_user";
   updateSummaryMetricsFromDB(userId);
 }
 
