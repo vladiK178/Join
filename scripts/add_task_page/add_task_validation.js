@@ -1,75 +1,98 @@
-/** Validates the title field. */
 function validateTitle() {
-    let t = document.getElementById('title');
-    if (!t || t.value.trim().length === 0) {
-      document.getElementById('alertMessageTitle').classList.remove('hide-alert-message');
-      rotateMessage();
-      return false;
-    }
-    document.getElementById('alertMessageTitle').classList.add('hide-alert-message');
-    return true;
-  }
-  
-  /** Validates at least one contact is assigned. */
-  function validateAssignedContacts() {
-    let hasOne = false;
-    const allContacts = currentUser.contacts || {};
-    for (let key in allContacts) {
-      let box = document.getElementById(`assignedToCheckbox${key}`);
-      if (box && box.checked) hasOne = true;
-    }
-    if (!hasOne) rotateMessage();
-    return hasOne;
-  }
-  
-  /** Validates the chosen end date. */
-  function validateEndDate() {
-    let d = document.getElementById('date');
-    if (!d || !d.value) {
-      document.getElementById('alertMessageDate').classList.remove('hide-alert-message');
-      rotateMessage();
-      return false;
-    }
-    document.getElementById('alertMessageDate').classList.add('hide-alert-message');
-    return true;
-  }
-  
-  /** Validates if category is "Technical Task" or "User Story". */
-  function validateCategory() {
-    let cat = document.getElementById('selectTaskCategorySpan');
-    if (!cat || (!cat.innerText.includes("Technical Task") && !cat.innerText.includes("User Story"))) {
-      rotateMessage();
-      return false;
-    }
-    return true;
+  const titleInput = document.getElementById("title");
+  const alert = document.getElementById("alertMessageTitle");
+
+  if (!titleInput || titleInput.value.trim() === "") {
+    alert.classList.remove("hide-alert-message");
+    rotateMessage();
+    return false;
   }
 
+  alert.classList.add("hide-alert-message");
+  return true;
+}
 
-  /** Gathers all checked contacts into an object. */
+function validateAssignedContacts() {
+  const contacts = currentUser.contacts || {};
+  let atLeastOneChecked = false;
+
+  for (const key in contacts) {
+    const checkbox = document.getElementById(`assignedToCheckbox${key}`);
+    if (checkbox?.checked) {
+      atLeastOneChecked = true;
+      break;
+    }
+  }
+
+  if (!atLeastOneChecked) rotateMessage();
+  return atLeastOneChecked;
+}
+
+function validateEndDate() {
+  const dateInput = document.getElementById("date");
+  const alert = document.getElementById("alertMessageDate");
+
+  if (!dateInput || !dateInput.value) {
+    alert.classList.remove("hide-alert-message");
+    rotateMessage();
+    return false;
+  }
+
+  alert.classList.add("hide-alert-message");
+  return true;
+}
+
+function validateCategory() {
+  const categorySpan = document.getElementById("selectTaskCategorySpan");
+  const validCategories = ["Technical Task", "User Story"];
+
+  if (
+    !categorySpan ||
+    !validCategories.some((cat) => categorySpan.innerText.includes(cat))
+  ) {
+    rotateMessage();
+    return false;
+  }
+
+  return true;
+}
+
 function collectAssignedContacts() {
-  const c = currentUser.contacts || {};
-  let chosen = {};
-  for (let key in c) {
-    let box = document.getElementById(`assignedToCheckbox${key}`);
-    if (box && box.checked) {
-      chosen[`contact_${key}`] = {
-        firstName: c[key].firstNameContact,
-        lastName: c[key].lastNameContact
+  const contacts = currentUser.contacts || {};
+  const selectedContacts = {};
+
+  for (const key in contacts) {
+    const checkbox = document.getElementById(`assignedToCheckbox${key}`);
+    if (checkbox?.checked) {
+      selectedContacts[`contact_${key}`] = {
+        firstName: contacts[key].firstNameContact,
+        lastName: contacts[key].lastNameContact,
       };
     }
   }
-  return chosen;
+
+  return selectedContacts;
 }
 
-/** Retrieves the selected category text. */
 function getSelectedCategory() {
-  let catSpan = document.getElementById('selectTaskCategorySpan');
-  return catSpan.innerText.includes("Technical Task") ? "Technical Task" : "User Story";
+  const categorySpan = document.getElementById("selectTaskCategorySpan");
+  return categorySpan.innerText.includes("Technical Task")
+    ? "Technical Task"
+    : "User Story";
 }
 
-/** Determines the current priority selected. */
 function getSelectedPriority() {
-  if (document.getElementById('prioUrgent').classList.contains('prio-urgent-chosen')) return "Urgent";
-  if (document.getElementById('prioMedium').classList.contains('prio-medium-chosen')) return "Medium";
+  if (
+    document
+      .getElementById("prioUrgent")
+      .classList.contains("prio-urgent-chosen")
+  )
+    return "Urgent";
+  if (
+    document
+      .getElementById("prioMedium")
+      .classList.contains("prio-medium-chosen")
+  )
+    return "Medium";
   return "Low";
 }
