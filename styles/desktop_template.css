@@ -6,6 +6,9 @@
 .left-template-section {
   width: 200px;
   background-color: #2a3647;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .join-logo {
@@ -406,7 +409,8 @@ header span {
   .left-template-section {
     width: 200px;
     background-color: #2a3647;
-    height: auto;
+    min-height: 100vh;
+    padding-bottom: 40px;
     position: unset;
   }
 

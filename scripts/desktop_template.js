@@ -1,6 +1,7 @@
 function getDesktopTemplate() {
   return `<section class="complete-template-section">
         <section class="left-template-section">
+          <div>
             <div class="join-logo"><img src="./assets/img/JoinLogoWhite.svg" alt=""></div>
             <div class="link-to-section">
     
@@ -32,20 +33,20 @@ function getDesktopTemplate() {
                 </a>
                 </div>
 
-                </div>
-                <div class="privacy-legal-section">
-                <div id="privacySection" class="privacy-section-template">
-                <div class="span-section">
-                <a href="privacy_policy.html">Privacy Policy</a>
-                </div>  
-                </div>
-  
-                <div id="legalSection" class="legal-section-template">
-                <div class="span-section">
-                <a href="legal_notice.html">Legal notice</a>
+              </div>
             </div>
-                </div>
+            <div class="privacy-legal-section">
+            <div id="privacySection" class="privacy-section-template">
+            <div class="span-section">
+            <a href="privacy_policy.html">Privacy Policy</a>
+            </div>  
             </div>
+
+            <div id="legalSection" class="legal-section-template">
+            <div class="span-section">
+              <a href="legal_notice.html">Legal notice</a>
+            </div>
+          </div>
         </section>
         <section class="right-template-section">
             <header>
