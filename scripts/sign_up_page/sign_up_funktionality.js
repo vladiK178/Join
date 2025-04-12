@@ -46,14 +46,17 @@ async function createUserData(name, email, password) {
 
 async function sendToFirebase(userKey, userData) {
   try {
-    const checkRes = await fetch(`${DATABASEURL}/${userKey}.json`);
+    const normalizedKey = userKey.toLowerCase();
+    userData.email = userData.email.toLowerCase();
+
+    const checkRes = await fetch(`${DATABASEURL}/${normalizedKey}.json`);
     const existingUser = await checkRes.json();
 
     if (existingUser) {
       return null;
     }
 
-    const response = await fetch(`${DATABASEURL}/${userKey}.json`, {
+    const response = await fetch(`${DATABASEURL}/${normalizedKey}.json`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -78,13 +81,13 @@ async function registerUser() {
 }
 
 async function processRegistration(name, email, password, confirmPassword) {
-  if (!handleInvalidEmail(email.value)) return;
+  if (!handleInvalidEmail(email.value.toLowerCase())) return;
 
   if (!validateForm(password.value, confirmPassword.value)) return;
 
   if (await handleExistingEmail(email.value)) return;
 
-  const result = await createUserData(name.value, email.value, password.value);
+  const result = await createUserData(name.value, email.value.toLowerCase(), password.value);
   if (!result) return;
 
   await finalizeRegistration(result, name, email, password, confirmPassword);
@@ -92,11 +95,12 @@ async function processRegistration(name, email, password, confirmPassword) {
 
 async function checkIfEmailExists(email) {
   try {
+    const normalizedEmail = email.toLowerCase();
     const response = await fetch(`${DATABASEURL}.json`);
     const data = await response.json();
 
     for (const userKey in data) {
-      if (data[userKey].email === email) {
+      if (data[userKey].email.toLowerCase() === normalizedEmail) {
         return true;
       }
     }
