@@ -1,6 +1,6 @@
 .new-section {
     background-color: #F6F7F8;
-    min-height:calc(100vh - 96px);
+    height:calc(100vh - 96px);
 }
 
 .complete-board-section {
@@ -20,7 +20,6 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
-
 }
 
 .search-add-task-section {
