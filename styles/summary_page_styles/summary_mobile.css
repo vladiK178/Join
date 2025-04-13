@@ -372,6 +372,10 @@
 }
 
 @media (min-width: 1200px) {
+    .greeting-meesage-section {
+        padding-left: 100px;
+    }
+
     .join-title {
         display: flex;
         width: 550px;
