@@ -46,7 +46,7 @@ function getHelpContent() {
           <h2>How to use it</h2>
           <p>
             Here is a step-by-step guide on how to use
-            <span class="accentuated">Join</span> :
+            <span class="accentuated">Join</span>:
           </p>
   
           <table class="how-to-join">
@@ -106,7 +106,7 @@ function getHelpContent() {
                 <br />
                 <br />
                 Have more questions about <span class="accentuated">Join</span>
-                ? Feel free to contact us at <a class="accentuated" href="mailto:schebad@mail.de">schebad@mail.de</a>. We're here to
+                ? Feel free to contact us at <a class="accentuated" href="mailto:join440mail.de">join440mail.de</a>. We're here to
                 help you!
               </td>
             </tr>

@@ -8,15 +8,15 @@ function getLegalNoticeContent() {
 
       <h2>Imprint</h2>
       <ul>
-        <li>Scheker Badjaj</li>
+        <li>Vladislav Krämer | Phillip Wimmer | Scheker Badjaj</li>
         <li>Join-Straße 18</li>
-        <li>45326 Essen</li>
+        <li>80331 München</li>
       </ul>
 
       <h3 class="mar-top">Exploring the Board</h3>
       <p>
         Email:
-        <a class="accentuated" href="mailto:schebad@mail.de">schebad@mail.de</a>
+        <a class="accentuated" href="mailto:join440mail.de">join440mail.de</a>
       </p>
 
       <br />
@@ -103,7 +103,7 @@ function getLegalNoticeContent() {
       <br />
       <p>
         For any questions or notices, please contact us at
-        <a class="accentuated" href="mailto:schebad@mail.de">schebad@mail.de</a>.
+        <a class="accentuated" href="mailto:join440mail.de">join440mail.de</a>.
       </p>
       <br />
       <p class="mar-bot">Date: July 26, 2023</p>
