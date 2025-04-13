@@ -24,8 +24,8 @@ function getSummaryContent() {
                         </div>
                     </div>
                 </div>
-                <div onclick="changeWindowToBoardSection()" class="urgent-deadline-section-container">
-                    <div class="urgent-deadline-secction">
+                <div class="urgent-deadline-section-container">
+                    <div onclick="changeWindowToBoardSection()" class="urgent-deadline-secction">
                         <div class="urgent-deadline-quarter">
                             <div class="circle-red"><img src="./assets/img/arrowUp.svg" alt=""></div>
                             <div class="to-do-quarter-details">
