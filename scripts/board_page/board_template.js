@@ -16,12 +16,15 @@ function getBoardContent() {
                   <div class="search-add-task-section">
                       <div class="search-bar">
                           <input type="text" placeholder="Find Task" oninput="filterTasks(event)">
-                          <div class="search-img-container">
-                              <img src="./assets/img/search.svg" alt="">
+                          <div class="search-separator-icon">
+                              <div class="search-separator"></div>
+                              <div class="search-icon-container">
+                                  <img src="./assets/img/search.svg" alt="">
+                              </div>
                           </div>
                       </div>
                       <div onclick="handleAddTaskButtonClick()" class="add-task-button-board">
-                          <span>Add task</span>
+                          <span>Add Task</span>
                           <img src="./assets/img/addCrossWhite.svg" alt="">
                       </div>
                   </div>
