@@ -3,8 +3,7 @@
         width: 95%;
         max-width: 320px;
         padding: 20px;
-        min-height: 100vh;
-        max-height: calc(100vh - 50px);
+        height: calc(100vh - 130px);
         overflow-y: auto;
     }
 

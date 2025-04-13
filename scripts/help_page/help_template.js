@@ -111,7 +111,7 @@ function getHelpContent() {
               </td>
             </tr>
           </table>
-          <h2 class="mar-bot">Enjoy using Join!</h2>
+          <h2>Enjoy using Join!</h2>
         </div>
       </section>
     </div>

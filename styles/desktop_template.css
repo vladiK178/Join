@@ -283,6 +283,8 @@ header span {
     bottom: 0;
     z-index: 1000;
     width: 100%;
+    height: auto;
+    top: auto;
   }
 
   .privacy-legal-section {
@@ -551,5 +553,12 @@ header span {
 
   .help-profile-section a {
     display: flex;
+  }
+
+  @media (min-width: 1200px) {
+    body {
+      overflow: hidden;
+      height: 100vh;
+    }
   }
 }
