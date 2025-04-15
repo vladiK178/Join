@@ -1,227 +1,179 @@
 /**
  * Variables to track drag and drop state
  */
-let currentDraggedTaskId = null;
-let originalColumnId = null;
+let currentDraggedElement = null;
+let draggedTaskId = null;
+let originalColumn = null;
 
 /**
- * Starts the drag operation for a task
- * @param {string} taskId - ID of the task being dragged
+ * Initiates drag operation and sets up data transfer
+ * @param {DragEvent} event - The drag event
+ * @param {string} taskId - ID of the task to drag
  */
-function startDragging(taskId) {
-  // Store task ID for later use
-  currentDraggedTaskId = taskId;
+function startDrag(event, taskId) {
+  // Save a reference to the dragged element
+  currentDraggedElement = event.target;
+  draggedTaskId = taskId;
 
-  // Find the task element
-  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+  // Remember original column
+  originalColumn = event.target.parentElement;
 
-  // Store original column ID for potential cancelation
-  if (taskElement && taskElement.parentElement) {
-    originalColumnId = taskElement.parentElement.id;
-  }
+  // Set data transfer
+  event.dataTransfer.setData("text/plain", taskId);
 
-  // Add visual feedback for dragging
-  if (taskElement && taskElement.classList.contains("note")) {
-    taskElement.classList.add("rotated-note");
-  }
+  // Add visual feedback
+  setTimeout(() => {
+    event.target.classList.add("rotated-note");
+  }, 10);
 }
 
 /**
- * Ends the drag operation and resets visual styles
- * @param {string} taskId - ID of the task being dragged
- */
-function endDragging(taskId) {
-  if (!taskId) return;
-
-  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
-
-  // Remove rotation effect
-  if (taskElement && taskElement.classList.contains("rotated-note")) {
-    taskElement.classList.remove("rotated-note");
-  }
-}
-
-/**
- * Allows dropping by preventing default behavior
- * @param {DragEvent} event - The drag event object
+ * Allows drop targets to accept the dragged element
+ * @param {DragEvent} event - The dragover event
  */
 function allowDrop(event) {
   event.preventDefault();
+
+  // Visual feedback for drop zone
+  if (event.target.classList.contains("to-do-notes")) {
+    if (!event.target.querySelector(".drop-preview")) {
+      const preview = document.createElement("div");
+      preview.className = "drop-preview";
+      preview.style.height = "100px";
+      preview.style.border = "2px dashed #ccc";
+      preview.style.borderRadius = "8px";
+      preview.style.margin = "10px 0";
+      event.target.appendChild(preview);
+    }
+  }
 }
 
 /**
- * Handles dropping a task in a column
- * @param {DragEvent} event - The drop event
- * @param {string} status - Target column status
+ * Removes drop preview when dragging leaves a column
+ * @param {DragEvent} event - The dragleave event
  */
-function drop(event, status) {
-  // Prevent default browser action
+function handleDragLeave(event) {
+  // Only process if leaving a column
+  if (event.target.classList.contains("to-do-notes")) {
+    const preview = event.target.querySelector(".drop-preview");
+    if (preview) {
+      preview.remove();
+    }
+  }
+}
+
+/**
+ * Handles what happens when drag ends (regardless of successful drop)
+ * @param {DragEvent} event - The dragend event
+ */
+function endDrag(event) {
+  // Remove visual effects from dragged item
+  if (currentDraggedElement) {
+    currentDraggedElement.classList.remove("rotated-note");
+  }
+
+  // Clean up any lingering preview elements
+  document.querySelectorAll(".drop-preview").forEach((preview) => {
+    preview.remove();
+  });
+
+  // Reset variables
+  currentDraggedElement = null;
+}
+
+/**
+ * Processes the drop action when task is dropped on a column
+ * @param {DragEvent} event - The drop event
+ * @param {string} columnStatus - Status of target column (to-do, in-progress, etc)
+ */
+function handleDrop(event, columnStatus) {
   event.preventDefault();
 
-  // Get the dragged task ID from transfer data
-  const noteId = event.dataTransfer.getData("text");
+  // Get the dragged task ID
+  const taskId = event.dataTransfer.getData("text/plain");
 
-  // Find task element
-  const noteElement = document.getElementById(noteId);
-  if (!noteElement) {
-    return;
+  // Clean up preview
+  const preview = event.target.querySelector(".drop-preview");
+  if (preview) {
+    preview.remove();
   }
 
-  // Remove rotation effect
-  noteElement.classList.remove("rotated-note");
+  // Find the dragged element
+  const draggedElement = document.querySelector(`[data-task-id="${taskId}"]`);
+  if (!draggedElement) return;
 
-  // Find target column and append task
-  const columnElement = document.getElementById(`${status}Notes`);
-  if (columnElement) {
-    columnElement.appendChild(noteElement);
-  }
+  // Add to new column
+  event.target.appendChild(draggedElement);
+
+  // Update task status in database
+  updateTaskStatus(taskId, columnStatus);
+
+  // End drag cleanly
+  endDrag(event);
 }
 
 /**
- * Moves the currently dragged task to a new status column and updates the database
- * @param {string} newStatus - Target status column
+ * Updates a task's status in the database
+ * @param {string} taskId - ID of the dragged task
+ * @param {string} newStatus - New status (column) for the task
  */
-async function moveTo(newStatus) {
-  // Find task key by ID
-  const taskKey = Object.keys(currentUser.tasks).find(
-    (key) => currentUser.tasks[key].id === currentDraggedTaskId
-  );
-
-  // Get task object
-  const taskObj = currentUser.tasks[taskKey];
-
-  // If task not found, abort
-  if (!taskKey || !taskObj) {
-    return;
-  }
-
-  // Update status
-  taskObj.currentStatus = newStatus;
-
+async function updateTaskStatus(taskId, newStatus) {
   try {
-    // Update in Firebase
-    await updateTaskInFirebase(currentUser.id, taskKey, taskObj);
+    // Find the task in our data
+    const taskKey = Object.keys(currentUser.tasks || {}).find(
+      (key) => currentUser.tasks[key].id === taskId
+    );
 
-    // Reload data from Firebase
-    await getUsersData();
+    if (!taskKey) return;
 
-    // Update current user data
-    currentUser = users[currentUser.id];
+    // Update status in memory
+    currentUser.tasks[taskKey].currentStatus = newStatus;
+
+    // Update in database
+    await updateTaskColumnInDatabase(currentUser.id, taskKey, newStatus);
+
+    // Show success message
+    showToastMessage("Task status updated!");
   } catch (error) {
-    console.error("Error moving task:", error);
-    return;
-  }
+    console.error("Failed to update task status:", error);
 
-  // Re-render board
-  renderAllColumns();
-}
-
-/**
- * Re-renders all columns of the board
- */
-function renderAllColumns() {
-  // Check if user and tasks exist
-  if (!currentUser || !currentUser.tasks) {
-    return;
-  }
-
-  // Render all columns
-  renderColumn("toDo", "toDoNotes");
-  renderColumn("inProgress", "inProgressNotes");
-  renderColumn("awaitFeedback", "awaitFeedbackNotes");
-  renderColumn("done", "doneNotes");
-}
-
-/**
- * Updates a task in the Firebase database
- * @param {string} userId - The user ID
- * @param {string} taskKey - The key of the task
- * @param {object} updatedTask - The updated task object
- */
-async function updateTaskInFirebase(userId, taskKey, updatedTask) {
-  // Create Firebase URL
-  const firebaseUrl = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/tasks/${taskKey}.json`;
-
-  try {
-    // Send PUT request
-    const response = await fetch(firebaseUrl, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedTask),
-    });
-
-    // Check response status
-    if (!response.ok) {
-      throw new Error(`Error updating task in Firebase: ${response.status}`);
-    }
-  } catch (error) {
-    console.error("Firebase update failed:", error);
-    throw error;
+    // Show error message
+    showToastMessage("Failed to update task. Please try again.", true);
   }
 }
 
 /**
- * Finds a task by its ID and returns key and object
- * @param {string} taskId - Task ID to find
- * @returns {[string, object]|null} Array with key and task or null if not found
+ * Shows a toast message to the user
+ * @param {string} message - Message to display
+ * @param {boolean} isError - Whether this is an error message
  */
-function findTaskById(taskId) {
-  // Check if tasks exist
-  if (!currentUser || !currentUser.tasks) {
-    return null;
+function showToastMessage(message, isError = false) {
+  // Create toast if it doesn't exist
+  let toast = document.getElementById("toast-message");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast-message";
+    toast.style.position = "fixed";
+    toast.style.bottom = "20px";
+    toast.style.left = "50%";
+    toast.style.transform = "translateX(-50%)";
+    toast.style.padding = "10px 20px";
+    toast.style.borderRadius = "4px";
+    toast.style.backgroundColor = isError ? "#ff4d4f" : "#2a3647";
+    toast.style.color = "white";
+    toast.style.zIndex = "1000";
+    document.body.appendChild(toast);
   }
 
-  // Find task key
-  const key = Object.keys(currentUser.tasks).find(
-    (k) => currentUser.tasks[k].id === taskId
-  );
+  // Set message
+  toast.textContent = message;
+  toast.style.backgroundColor = isError ? "#ff4d4f" : "#2a3647";
 
-  // Return key and task or null
-  return key ? [key, currentUser.tasks[key]] : null;
-}
+  // Show toast
+  toast.style.display = "block";
 
-/**
- * Shows a dashed placeholder in a column when dragging over
- * @param {string} columnId - ID of the column
- */
-function showEmptyDashedNote(columnId) {
-  // Get column element
-  const column = document.getElementById(columnId);
-  if (!column) {
-    return;
-  }
-
-  // Check if placeholder already exists
-  if (!column.querySelector(".empty-dashed-note")) {
-    // Create placeholder element
-    const dashedNote = document.createElement("div");
-    dashedNote.classList.add("empty-dashed-note");
-
-    // Add styling
-    dashedNote.style.width = "100%";
-    dashedNote.style.height = "250px";
-    dashedNote.style.border = "1px dashed #A8A8A8";
-    dashedNote.style.borderRadius = "32px";
-
-    // Add to column
-    column.appendChild(dashedNote);
-  }
-}
-
-/**
- * Removes the dashed placeholder from a column
- * @param {string} columnId - ID of the column
- */
-function hideEmptyDashedNote(columnId) {
-  // Get column element
-  const column = document.getElementById(columnId);
-  if (!column) {
-    return;
-  }
-
-  // Find and remove placeholder
-  const dashedNote = column.querySelector(".empty-dashed-note");
-  if (dashedNote) {
-    dashedNote.remove();
-  }
+  // Hide after 3 seconds
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 3000);
 }

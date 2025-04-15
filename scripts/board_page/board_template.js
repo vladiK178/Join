@@ -85,7 +85,7 @@ function getBoardContent() {
 function getColumnContent(task, status) {
   return `
           <div draggable="true"
-               ondragstart="startDragging('${task.id}')"
+               ondragstart="startDragging('${task.id}', event)"
                ondragend="endDragging('${task.id}')"
                class="note"
                data-task-id="${task.id}"
