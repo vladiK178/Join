@@ -6,38 +6,36 @@ let draggedTaskId = null;
 let originalColumn = null;
 
 /**
- * Begins the drag operation when a task is being dragged
+ * Initiates drag operation for a task
  * @param {string} taskId - ID of the task being dragged
  * @param {Event} event - The drag event
  */
 function startDragging(taskId, event) {
-  // Store reference to current task
+  // Set task references for the drag operation
   draggedTaskId = taskId;
   currentDraggedElement = event.target;
   originalColumn = event.target.parentElement.id;
 
-  // Set data transfer for HTML5 drag and drop
+  // Set data for HTML5 drag/drop API
   event.dataTransfer.setData("text", taskId);
 
-  // Visual feedback
+  // Visual feedback with slight delay for animation
   setTimeout(() => {
     currentDraggedElement.classList.add("rotated-note");
   }, 10);
 }
 
 /**
- * Handles the end of a drag operation
+ * Handles the end of drag operation
  */
 function endDragging() {
-  // Reset task appearance when drag operation ends
+  // Reset visual state
   if (currentDraggedElement) {
     currentDraggedElement.classList.remove("rotated-note");
   }
 
-  // Remove any drop indicators
-  document.querySelectorAll(".empty-dashed-note").forEach((element) => {
-    element.remove();
-  });
+  // Clean up any drop indicators
+  document.querySelectorAll(".empty-dashed-note").forEach((el) => el.remove());
 
   // Reset tracking variables
   currentDraggedElement = null;
@@ -45,48 +43,51 @@ function endDragging() {
 }
 
 /**
- * Shows a dashed outline when dragging over a column
- * @param {string} columnId - ID of the column
+ * Shows drop indicator when hovering over column
+ * @param {string} columnId - Target column ID
  */
 function showEmptyDashedNote(columnId) {
-  // Get column element
   const column = document.getElementById(columnId);
   if (!column) return;
 
-  // Don't add another placeholder if one already exists
+  // Avoid multiple indicators
   if (column.querySelector(".empty-dashed-note")) return;
 
-  // Create and append placeholder element
+  // Add visual placeholder
   const emptyNote = document.createElement("div");
   emptyNote.className = "empty-dashed-note";
   column.appendChild(emptyNote);
 }
 
 /**
- * Removes the dashed outline when not dragging over a column
- * @param {string} columnId - ID of the column
+ * Removes drop indicator when leaving column
+ * @param {string} columnId - Column ID to remove indicator from
  */
 function hideEmptyDashedNote(columnId) {
-  // Get column element
   const column = document.getElementById(columnId);
   if (!column) return;
 
-  // Find and remove any placeholders
   const emptyNote = column.querySelector(".empty-dashed-note");
-  if (emptyNote) {
-    emptyNote.remove();
-  }
+  if (emptyNote) emptyNote.remove();
 }
 
 /**
- * Handles the drop event when a task is dropped into a column
+ * Allows drops on elements during drag
+ * @param {Event} event - The drag event
+ */
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+/**
+ * Handles task dropping to update status
  * @param {Event} event - The drop event
- * @param {string} targetStatus - Status of the target column
+ * @param {string} targetStatus - New status for the task
  */
 function drop(event, targetStatus) {
   event.preventDefault();
 
-  // Get the task ID from the data transfer
+  // Get task ID from data transfer
   const taskId = event.dataTransfer.getData("text");
   if (!taskId) return;
 
@@ -94,116 +95,92 @@ function drop(event, targetStatus) {
   const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
   if (!taskElement) return;
 
-  // Find the task key in the user's data
-  const taskKey = Object.keys(currentUser.tasks || {}).find(
-    (key) => currentUser.tasks[key].id === taskId
-  );
-
+  // Find task in user data
+  const taskKey = findTaskKeyById(taskId);
   if (!taskKey) {
-    console.error(`Task not found with ID: ${taskId}`);
+    console.error(`Task not found: ${taskId}`);
     return;
   }
 
-  // Update the task status in memory
-  const originalStatus = currentUser.tasks[taskKey].currentStatus;
-  if (originalStatus === targetStatus) {
-    // If dropping in the same column, do nothing
-    return;
-  }
-
-  // Update task status in memory and database
-  currentUser.tasks[taskKey].currentStatus = targetStatus;
-  updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
-    .then(() => {
-      // Successfully updated in database
-      // Reload columns to reflect the new state
-      renderColumn("toDo", "toDoNotes");
-      renderColumn("inProgress", "inProgressNotes");
-      renderColumn("awaitFeedback", "awaitFeedbackNotes");
-      renderColumn("done", "doneNotes");
-
-      // Show success message
-      showSuccessToast("Task moved successfully!");
-    })
-    .catch((error) => {
-      // Error handling
-      console.error("Failed to update task status:", error);
-
-      // Revert the change in memory
-      currentUser.tasks[taskKey].currentStatus = originalStatus;
-
-      // Show error message
-      showSuccessToast("Failed to move task. Please try again.", true);
-
-      // Reload columns to reflect original state
-      renderColumn("toDo", "toDoNotes");
-      renderColumn("inProgress", "inProgressNotes");
-      renderColumn("awaitFeedback", "awaitFeedbackNotes");
-      renderColumn("done", "doneNotes");
-    });
-}
-
-/**
- * Handles dropping a task to a specific column
- * @param {string} targetStatus - Name of the target column/status
- */
-function moveTo(targetStatus) {
-  // Check if we have a task being dragged
-  if (!draggedTaskId) return;
-
-  // Find the task in the data
-  const taskKey = Object.keys(currentUser.tasks || {}).find(
-    (key) => currentUser.tasks[key].id === draggedTaskId
-  );
-
-  if (!taskKey) {
-    console.error(`Task not found with ID: ${draggedTaskId}`);
-    return;
-  }
-
-  // Update task status in memory and database
+  // Check if status actually changed
   const originalStatus = currentUser.tasks[taskKey].currentStatus;
   if (originalStatus === targetStatus) return;
 
+  // Update task status in memory
   currentUser.tasks[taskKey].currentStatus = targetStatus;
 
-  // Send update to database
+  // Save to database and update UI
   updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
     .then(() => {
-      // Re-render all columns to reflect changes
-      renderColumn("toDo", "toDoNotes");
-      renderColumn("inProgress", "inProgressNotes");
-      renderColumn("awaitFeedback", "awaitFeedbackNotes");
-      renderColumn("done", "doneNotes");
-
-      // Success feedback
+      refreshAllColumns();
       showSuccessToast("Task moved successfully!");
     })
     .catch((error) => {
-      // Error handling
       console.error("Failed to update task:", error);
 
-      // Revert the memory change
+      // Revert change in memory
       currentUser.tasks[taskKey].currentStatus = originalStatus;
-
-      // Error feedback
+      refreshAllColumns();
       showSuccessToast("Failed to move task. Please try again.", true);
-
-      // Reload to original state
-      renderColumn("toDo", "toDoNotes");
-      renderColumn("inProgress", "inProgressNotes");
-      renderColumn("awaitFeedback", "awaitFeedbackNotes");
-      renderColumn("done", "doneNotes");
     });
 }
 
 /**
- * Displays a toast notification to the user
- * @param {string} message - Message to display
- * @param {boolean} isError - Whether it's an error message
+ * Finds task key by ID
+ * @param {string} taskId - Task ID to find
+ * @returns {string|undefined} Task key if found
+ */
+function findTaskKeyById(taskId) {
+  return Object.keys(currentUser.tasks || {}).find(
+    (key) => currentUser.tasks[key].id === taskId
+  );
+}
+
+/**
+ * Refreshes all column content
+ */
+function refreshAllColumns() {
+  renderColumn("toDo", "toDoNotes");
+  renderColumn("inProgress", "inProgressNotes");
+  renderColumn("awaitFeedback", "awaitFeedbackNotes");
+  renderColumn("done", "doneNotes");
+}
+
+/**
+ * Handles direct column selection for task movement
+ * @param {string} targetStatus - Column to move task to
+ */
+function moveTo(targetStatus) {
+  if (!draggedTaskId) return;
+
+  const taskKey = findTaskKeyById(draggedTaskId);
+  if (!taskKey) return;
+
+  const originalStatus = currentUser.tasks[taskKey].currentStatus;
+  if (originalStatus === targetStatus) return;
+
+  // Update status and save
+  currentUser.tasks[taskKey].currentStatus = targetStatus;
+  updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
+    .then(() => {
+      refreshAllColumns();
+      showSuccessToast("Task moved successfully!");
+    })
+    .catch((error) => {
+      console.error("Failed to update task:", error);
+      currentUser.tasks[taskKey].currentStatus = originalStatus;
+      refreshAllColumns();
+      showSuccessToast("Failed to move task. Please try again.", true);
+    });
+}
+
+/**
+ * Shows feedback toast message
+ * @param {string} message - Text to display
+ * @param {boolean} isError - Whether it's an error
  */
 function showSuccessToast(message, isError = false) {
-  // Create toast element if it doesn't exist
+  // Create or reuse toast element
   let toast = document.getElementById("toast-notification");
   if (!toast) {
     toast = document.createElement("div");
@@ -218,15 +195,13 @@ function showSuccessToast(message, isError = false) {
     document.body.appendChild(toast);
   }
 
-  // Set toast styles based on message type
+  // Set style based on message type
   toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
   toast.style.color = "white";
   toast.textContent = message;
-
-  // Show toast
   toast.style.display = "block";
 
-  // Hide after 3 seconds
+  // Auto-hide after delay
   setTimeout(() => {
     toast.style.display = "none";
   }, 3000);
