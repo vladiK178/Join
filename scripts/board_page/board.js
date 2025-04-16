@@ -22,7 +22,7 @@ function getOrAssignColor(contactKey) {
 }
 
 /**
- * Gets or assigns color for task-contact combination
+ * Gets or assigns color for task-contact pair
  * @param {string} taskId - Task identifier
  * @param {string} contactKey - Contact identifier
  * @returns {string} Color code
@@ -294,6 +294,19 @@ function renderFilteredTasks(tasks) {
     done: tasks.filter(t => t.currentStatus === "done")
   };
 
+  // If no tasks match search, show empty message
+  const totalTasks = Object.values(byStatus).flat().length;
+  if (totalTasks === 0) {
+    ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"]
+      .forEach(id => {
+        const column = document.getElementById(id);
+        if (column) {
+          column.innerHTML = `<div class="empty-notification"><span>No tasks found</span></div>`;
+        }
+      });
+    return;
+  }
+
   renderFilteredColumn(byStatus.toDo, "toDo", "toDoNotes");
   renderFilteredColumn(byStatus.inProgress, "inProgress", "inProgressNotes");
   renderFilteredColumn(byStatus.awaitFeedback, "awaitFeedback", "awaitFeedbackNotes");
@@ -395,3 +408,4 @@ function handleInitError() {
   console.error("Could not initialize board");
   window.location.href = "login.html";
 }
+
