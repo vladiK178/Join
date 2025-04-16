@@ -6,27 +6,27 @@ let draggedTaskId = null;
 let originalColumn = null;
 
 /**
- * Initiates drag operation for a task
- * @param {string} taskId - ID of the task being dragged
+ * Starts the drag operation for a task
+ * @param {string} taskId - ID of task being dragged
  * @param {Event} event - The drag event
  */
 function startDragging(taskId, event) {
-  // Set task references for the drag operation
+  // Set task references
   draggedTaskId = taskId;
   currentDraggedElement = event.target;
   originalColumn = event.target.parentElement.id;
 
-  // Set data for HTML5 drag/drop API
+  // Set data for HTML5 drag API
   event.dataTransfer.setData("text", taskId);
 
-  // Visual feedback with slight delay for animation
+  // Add slight delay for better visual effect
   setTimeout(() => {
     currentDraggedElement.classList.add("rotated-note");
   }, 10);
 }
 
 /**
- * Handles the end of drag operation
+ * Handles end of drag operation and resets visual styles
  */
 function endDragging() {
   // Reset visual state
@@ -34,8 +34,9 @@ function endDragging() {
     currentDraggedElement.classList.remove("rotated-note");
   }
 
-  // Clean up any drop indicators
-  document.querySelectorAll(".empty-dashed-note").forEach((el) => el.remove());
+  // Remove drop indicators
+  const emptyNotes = document.querySelectorAll(".empty-dashed-note");
+  emptyNotes.forEach((note) => note.remove());
 
   // Reset tracking variables
   currentDraggedElement = null;
@@ -43,25 +44,25 @@ function endDragging() {
 }
 
 /**
- * Shows drop indicator when hovering over column
+ * Shows visual drop zone indicator when hovering over column
  * @param {string} columnId - Target column ID
  */
 function showEmptyDashedNote(columnId) {
   const column = document.getElementById(columnId);
   if (!column) return;
 
-  // Avoid multiple indicators
+  // Prevent duplicates
   if (column.querySelector(".empty-dashed-note")) return;
 
-  // Add visual placeholder
+  // Create visual drop placeholder
   const emptyNote = document.createElement("div");
   emptyNote.className = "empty-dashed-note";
   column.appendChild(emptyNote);
 }
 
 /**
- * Removes drop indicator when leaving column
- * @param {string} columnId - Column ID to remove indicator from
+ * Removes drop zone indicator when leaving column
+ * @param {string} columnId - Column to remove indicator from
  */
 function hideEmptyDashedNote(columnId) {
   const column = document.getElementById(columnId);
@@ -72,8 +73,8 @@ function hideEmptyDashedNote(columnId) {
 }
 
 /**
- * Allows drops on elements during drag
- * @param {Event} event - The drag event
+ * Allows drop operation on valid targets
+ * @param {Event} event - The dragover event
  */
 function allowDrop(event) {
   event.preventDefault();
@@ -102,7 +103,7 @@ function drop(event, targetStatus) {
     return;
   }
 
-  // Check if status actually changed
+  // Skip if status not changed
   const originalStatus = currentUser.tasks[taskKey].currentStatus;
   if (originalStatus === targetStatus) return;
 
@@ -113,20 +114,20 @@ function drop(event, targetStatus) {
   updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
     .then(() => {
       refreshAllColumns();
-      showSuccessToast("Task moved successfully!");
+      showToastMessage("Task moved successfully!");
     })
     .catch((error) => {
       console.error("Failed to update task:", error);
 
-      // Revert change in memory
+      // Revert change on error
       currentUser.tasks[taskKey].currentStatus = originalStatus;
       refreshAllColumns();
-      showSuccessToast("Failed to move task. Please try again.", true);
+      showToastMessage("Failed to move task. Please try again.", true);
     });
 }
 
 /**
- * Finds task key by ID
+ * Finds task key by ID in current user's tasks
  * @param {string} taskId - Task ID to find
  * @returns {string|undefined} Task key if found
  */
@@ -147,7 +148,7 @@ function refreshAllColumns() {
 }
 
 /**
- * Handles direct column selection for task movement
+ * Handles column selection for task movement
  * @param {string} targetStatus - Column to move task to
  */
 function moveTo(targetStatus) {
@@ -159,32 +160,36 @@ function moveTo(targetStatus) {
   const originalStatus = currentUser.tasks[taskKey].currentStatus;
   if (originalStatus === targetStatus) return;
 
-  // Update status and save
+  // Update status in memory
   currentUser.tasks[taskKey].currentStatus = targetStatus;
+
+  // Save to database
   updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
     .then(() => {
       refreshAllColumns();
-      showSuccessToast("Task moved successfully!");
+      showToastMessage("Task moved successfully!");
     })
     .catch((error) => {
       console.error("Failed to update task:", error);
+
+      // Revert on error
       currentUser.tasks[taskKey].currentStatus = originalStatus;
       refreshAllColumns();
-      showSuccessToast("Failed to move task. Please try again.", true);
+      showToastMessage("Failed to move task. Please try again.", true);
     });
 }
 
 /**
- * Shows feedback toast message
+ * Shows feedback message to user
  * @param {string} message - Text to display
- * @param {boolean} isError - Whether it's an error
+ * @param {boolean} isError - Whether message is an error
  */
-function showSuccessToast(message, isError = false) {
-  // Create or reuse toast element
-  let toast = document.getElementById("toast-notification");
+function showToastMessage(message, isError = false) {
+  // Create toast element
+  let toast = document.getElementById("toast-message");
   if (!toast) {
     toast = document.createElement("div");
-    toast.id = "toast-notification";
+    toast.id = "toast-message";
     toast.style.position = "fixed";
     toast.style.bottom = "20px";
     toast.style.left = "50%";
@@ -195,7 +200,7 @@ function showSuccessToast(message, isError = false) {
     document.body.appendChild(toast);
   }
 
-  // Set style based on message type
+  // Set style and content
   toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
   toast.style.color = "white";
   toast.textContent = message;
