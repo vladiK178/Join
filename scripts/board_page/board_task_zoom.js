@@ -59,10 +59,16 @@ function renderTaskCategoryAndCloseSection(task) {
  */
 function renderSubtaskZoomSection(task) {
   let subtaskSection = document.getElementById("subtaskZoomSection");
+
+  // Clear existing content first to prevent duplication
   subtaskSection.innerHTML = "";
 
   // Check if subtasks exist and are in the correct format
-  if (!task.subtasks || typeof task.subtasks !== "object") {
+  if (
+    !task.subtasks ||
+    typeof task.subtasks !== "object" ||
+    Object.keys(task.subtasks).length === 0
+  ) {
     subtaskSection.innerHTML = `<span>No subtasks</span>`;
     return;
   }
@@ -96,13 +102,14 @@ async function checkOrUncheckSubtask(taskId, subtaskId) {
     // Update in Firebase
     await updateSpecificSubtask(currentUser.id, taskKey, subtaskId, subtask);
 
-    // Update UI
+    // Update UI - Only update the relevant parts
     let task = currentUser.tasks[taskKey];
+
+    // Only update the specific subtask indicator
     renderSubtaskProgress(taskId, task, task.currentStatus);
 
-    // Re-render affected sections
-    renderColumn(task.currentStatus, `${task.currentStatus}Notes`);
-    renderTaskZoomSection(taskId);
+    // Only refresh the subtasks in the zoom view, not the whole task
+    renderSubtaskZoomSection(task);
   } catch (err) {
     console.error("Error toggling subtask:", err);
   }
@@ -266,6 +273,10 @@ function refreshBoardAfterDeletion() {
 function renderTaskZoomSection(taskId) {
   // Find the task
   let task = findTaskById(taskId);
+  if (!task) {
+    console.error("Task not found:", taskId);
+    return;
+  }
 
   // Update the HTML with task details
   document.getElementById("taskZoomSection").innerHTML = getZoomTaskSection(
