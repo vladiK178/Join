@@ -1,4 +1,4 @@
-@media (min-width: 320px) {
+@media (min-width: 200px) {
     .greeting-meesage-section {
         position: absolute;
         top: 0;
@@ -34,13 +34,14 @@
         flex-direction: column;
         width: 202px;
         height: 90px;
+        margin-bottom: 30px;
         align-items: start;
         justify-content: flex-start;
         position: relative;
     }
 
     .seperator {
-        width: 59px;
+        width: 100px;
         height: 3px;
         background-color: #29ABE2;
         position: absolute;
@@ -59,16 +60,24 @@
         color: #2A3647;
     }
 
+    .new {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .new-content-section {
         background-color: #F6F7F8;
         height: calc(100vh - 130px);
         width: 100%;
         padding-top: 20px;
+        padding-bottom: 25px;
         padding-left: 0;
         z-index: 1;
         position: relative;
         display: flex;
         justify-content: center;
+        align-items: center;
         overflow: auto;
     }
 
@@ -243,7 +252,7 @@
     }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 500px) {
     .to-do-and-done-section {
         width: 430px;
         display: flex;
@@ -346,6 +355,10 @@
         height: 120px;
     }
 
+    .join-title {
+        margin-bottom: 0;
+    }
+
     .join-title-span {
         font-size: 50px;
         font-weight: 700;
@@ -376,6 +389,10 @@
         padding-left: 100px;
     }
 
+    .new {
+        align-items: flex-start;
+    }
+
     .join-title {
         display: flex;
         width: 550px;
@@ -383,6 +400,7 @@
         align-items: center;
         justify-content: space-between;
         flex-direction: row;
+        margin-bottom: 0;
     }
     
     .join-title-span {
@@ -603,7 +621,7 @@
     .new-content-section {
         background-color: #F6F7F8;
         height: calc(100vh - 96px);
-        padding-top: 25px;
+        padding-top: 20px;
         padding-left: 75px;
         z-index: 1;
         position: relative;

@@ -9,18 +9,18 @@ function validateTitleAndDate() {
   
   // Check title field
   if (!title.value.trim()) {
-    document.getElementById("alertMessageTitleEdit").classList.remove("hide-alert-message");
+    document.getElementById("alertMessageTitleEdit").classList.remove("d-none");
     valid = false;
   } else {
-    document.getElementById("alertMessageTitleEdit").classList.add("hide-alert-message");
+    document.getElementById("alertMessageTitleEdit").classList.add("d-none");
   }
   
   // Check date field
   if (!date.value) {
-    document.getElementById("alertMessageDateEdit").classList.remove("hide-alert-message");
+    document.getElementById("alertMessageDateEdit").classList.remove("d-none");
     valid = false;
   } else {
-    document.getElementById("alertMessageDateEdit").classList.add("hide-alert-message");
+    document.getElementById("alertMessageDateEdit").classList.add("d-none");
   }
   
   return valid;

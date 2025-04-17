@@ -8,11 +8,19 @@
     background-color: #2A3647;
 }
 
+.sidebar-space-between {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .join-logo {
     padding-top: 64px;
     display: flex;
     justify-content: center;
     width: 100%;
+    margin-bottom: 100px;
 }
 
 .link-to-section {
@@ -29,7 +37,11 @@
     align-items: center;
     justify-content: center;
     height: 46px;
-    cursor: pointer;
+}
+
+.div-link-section a {
+    height: 100%;
+    width: 100%;
 }
 
 .div-link-section:hover {
@@ -223,7 +235,7 @@ header span {
     object-fit: cover;
 }
 
-@media (min-width: 320px) {
+@media (min-width: 200px) {
     .left-template-section {
         position: absolute;
         bottom: 0;
@@ -233,6 +245,12 @@ header span {
         justify-content: space-between;
         padding-right: 20px;
         padding-left: 20px;
+    }
+
+    .sidebar-space-between {
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
     }
 
     .privacy-legal-section {
@@ -355,13 +373,26 @@ header span {
         display: unset;
         padding-left: 0;
         padding-right: 0;
+        padding-bottom: 40px;
+    }
 
+    .span-section a {
+        margin: 0 !important;
+    }
+
+    .sidebar-space-between {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .privacy-legal-style {
+        width: 100%;
     }
 
     .privacy-legal-section {
         display: block;
         width: 100%;
-        padding-top: 195px;
     }
 
     .link-to-section {
@@ -375,9 +406,9 @@ header span {
 
     .privacy-legal-section a {
         display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: 115px;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
         cursor: pointer;
         margin-left: 15px;
         color: #A8A8A8;
@@ -390,12 +421,11 @@ header span {
         align-items: center;
         justify-content: center;
         height: 46px;
-        cursor: pointer;
     }
 
     .div-link {
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
         width: 105px;
         gap: 8px;

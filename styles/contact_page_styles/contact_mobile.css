@@ -1,4 +1,4 @@
-@media (min-width: 320px) {
+@media (min-width: 200px) {
     html, body {
         margin: 0;
         padding: 0;
@@ -27,6 +27,12 @@
         height: 35px;
         border: 2px solid white;
         font-size: 14px;
+    }
+
+    .input-group img {
+        position: absolute;
+        right: 40px;
+        margin: 0;
     }
 
     .name-and-email {
@@ -286,7 +292,7 @@
 
     .add-contact-container {
         width: 450px;
-        height: 765px;
+        height: 680px;
     }
 
     .left-section h1 {
@@ -302,7 +308,7 @@
     }
 
     .close-button-mobile {
-        top: -315px;
+        top: -270px;
         right: 30px;
     }
 
@@ -419,6 +425,10 @@
         font-weight: 700;
         cursor: pointer;
         gap: 16px;
+    }
+
+    .input-group img {
+        right: 60px;
     }
 
     .add-contact-and-contact-list-section {

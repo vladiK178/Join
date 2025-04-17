@@ -20,14 +20,14 @@ function getDesktopTemplate() {
                 </div>
 
                 <div class="div-link-section">
-                <a id="board-section" href="board.html" class="div-link">
+                <a id="board-section" href="board.html" class="div-link board-sidebar-padding">
                 <div id="board-img" class="board-img"></div>
                 <span class="div-link-span">Board</span>
                 </a>
                 </div>
 
                 <div class="div-link-section">
-                <a id="contacts-section" href="contacts.html" class="div-link">
+                <a id="contacts-section" href="contacts.html" class="div-link contacts-sidebar-padding">
                 <div id="contacts-img" class="contacts-img"></div>
                 <span class="div-link-span">Contacts</span>
                 </a>

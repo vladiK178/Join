@@ -63,7 +63,12 @@ function getSignUpContent() {
                     <div class="remember-me-section-parent">
                         <div id="rememberMeSection" class="remember-me-section">
                             <img class="accept-checkbox-img" onclick="toggleCheckbox(), checkUncheckPolicy()" id="logInCheckbox" src="./assets/img/checkboxEmpty.svg" alt="">
-                            <span class="light-grey">I accept the <span class="accept-privacy-policy-span">Privacy policy</span></span>
+                            <span class="light-grey">
+                                I accept the 
+                                <span class="accept-privacy-policy-span">
+                                    <a href="./privacy_policy_unlogged.html">Privacy policy</a>
+                                </span>
+                            </span>
                         </div>
                         <span id="alertMessagePolicy" class="hide-alert-message">
                         Accept the Privacy policy.

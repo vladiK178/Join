@@ -7,6 +7,10 @@ body {
     height: calc(100vh - 96px)
 }
 
+.new-content-section {
+    overflow-y: auto;
+}
+
 .add-task-headline {
     font-weight: bold;
     font-size: 50px;
@@ -35,7 +39,6 @@ body {
 .task-detail-section {
     display: flex;
     width: 761px;
-    height: 565px;
 }
 
 .input-order input:focus {
@@ -205,7 +208,7 @@ body {
 
 .task-seperator {
     width: 1px;
-    height: 565px;
+    height: 450px;
     margin-left: 40px;
     margin-right: 40px;
     background-color: #D1D1D1;

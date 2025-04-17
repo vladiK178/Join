@@ -148,7 +148,10 @@ body {
 
 .accept-privacy-policy-span {
   width: 110px;
-  color: #29abe2;
+}
+
+.accept-privacy-policy-span a {
+  color: #29abe2 !important;
 }
 
 .accept-privacy-policy-span:hover {
@@ -179,7 +182,6 @@ footer {
   display: flex;
   justify-content: center;
   gap: 20px;
-  cursor: pointer;
 }
 
 footer span:hover {

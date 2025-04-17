@@ -51,7 +51,14 @@ header img {
   align-items: center;
   background-color: #2a3647;
   border-radius: 8px;
-  cursor: pointer;
+}
+
+.sign-up-button a {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sign-up-button:hover {

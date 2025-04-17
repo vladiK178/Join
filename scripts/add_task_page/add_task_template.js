@@ -7,7 +7,7 @@ function getAddTaskContent() {
                 <form class="input-order" action="">
                     <label for="title">Title<span class="red-star">*</span></label>
                     <input type="text" id="title" required placeholder="Enter a title">
-                    <span id="alertMessageTitle" class="alert-message hide-alert-message">This field is required</span>
+                    <span id="alertMessageTitle" class="alert-message d-none">This field is required</span>
                 </form>
                 <form class="input-order" action="">
                     <label for="description">Description</label>
@@ -16,7 +16,7 @@ function getAddTaskContent() {
                 <form class="input-order" action="">
                     <label for="assigned-to">Assigned to<span class="red-star">*</span></label>
                     <div onclick="toggleAssignedToSection()" id="assignedToSection" class="assigned-to-section">
-                        <input type="text" placeholder="Select contacts to assign">
+                        <input type="text" id="assigned-to" placeholder="Select contacts to assign">
                         <div class="dropDown-img">
                             <img id="dropDownImg" src="./assets/img/dropDownArrowDown.svg" alt="">
                         </div>
@@ -30,7 +30,7 @@ function getAddTaskContent() {
                 <form class="input-order" action="">
                     <label for="date">Due Date<span class="red-star">*</span></label>
                     <input type="date" id="date" required placeholder="Enter a title">
-                    <span id="alertMessageDate" class="alert-message hide-alert-message">This field is required</span>
+                    <span id="alertMessageDate" class="alert-message d-none">This field is required</span>
                 </form>
                 <div class="prio-section">
                     <span>Prio</span>

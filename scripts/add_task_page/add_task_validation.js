@@ -3,12 +3,12 @@ function validateTitle() {
   const alert = document.getElementById("alertMessageTitle");
 
   if (!titleInput || titleInput.value.trim() === "") {
-    alert.classList.remove("hide-alert-message");
+    alert.classList.remove("d-none");
     rotateMessage();
     return false;
   }
 
-  alert.classList.add("hide-alert-message");
+  alert.classList.add("d-none");
   return true;
 }
 
@@ -33,12 +33,12 @@ function validateEndDate() {
   const alert = document.getElementById("alertMessageDate");
 
   if (!dateInput || !dateInput.value) {
-    alert.classList.remove("hide-alert-message");
+    alert.classList.remove("d-none");
     rotateMessage();
     return false;
   }
 
-  alert.classList.add("hide-alert-message");
+  alert.classList.add("d-none");
   return true;
 }
 

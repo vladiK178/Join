@@ -25,9 +25,8 @@
     .task-detail-section {
         flex-direction: column;
         width: auto;
-        height: 360px;
-        overflow: auto;
         align-items: center;
+        min-height: 700px;
     }
 
     .input-order {
@@ -48,6 +47,8 @@
 
     .choosen-names {
         width: 300px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .drop-down-section {
@@ -135,17 +136,18 @@
     }
 
     .fieldRequiredSection {
-        display: none;
+        margin-top: 10px;
     }
 
     .field-required-clear-create-button-section {
         width: 100%;
-        margin-top: 0px;
+        margin-top: 25px;
         margin-left: 0px;
-        position: absolute;
-        bottom: 0;
+        padding-bottom: 50px;
+        position: relative;
         height: 50px;
         display: flex;
+        flex-direction: column-reverse;
         align-items: center;
         justify-content: center;
         background-color: #F6F7F8;
@@ -188,10 +190,7 @@
 
     .choosen-names {
         width: 500px;
-    }
 
-    .task-detail-section {
-        height: 685px;
     }
 
     .task-details-right {
@@ -207,7 +206,7 @@
     .prio-levels {
         width: 500px;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
     }
 
     .category-section {
@@ -242,7 +241,8 @@
 
     .task-detail-section {
         width: 863px;
-        height: 565px;
+        height: 550px;
+        min-height: unset;
         flex-direction: row;
         overflow: hidden;
         align-items: flex-start;
@@ -304,7 +304,7 @@
     }
 
     .task-details-right {
-        gap: 50px;
+        gap: 40px;
         margin-top: 0;
     }
 
@@ -362,6 +362,7 @@
 
     .fieldRequiredSection {
         display: flex;
+        margin-top: 0;
     }
 
     .add-task-button {
@@ -373,8 +374,9 @@
         width: 934px;
         position: unset;
         justify-content: space-between;
+        flex-direction: row;
         padding-left: 75px;
-        padding-top: 25px;
+        padding-bottom: 50px;
     }
 
     .new-section {
