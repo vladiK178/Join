@@ -1,84 +1,52 @@
+const CONTACTS_BASE_URL = "https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app";
+
 /**
- * Adds new contact to Firebase database
- * @param {string} userId - User identifier
- * @param {Object} newContact - Contact data
- * @returns {Promise<string>} Firebase generated key
+ * Adds a new contact to Firebase under the given user
+ * @param {string} userId - the ID of the current user
+ * @param {Object} newContact - the contact data to add
+ * @returns {Promise<string>} - the generated Firebase key for the new contact
  */
 async function addContactToDatabase(userId, newContact) {
-  // Create Firebase URL for contacts
-  const dbUrl = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/contacts.json`;
-
-  try {
-    // Send POST request with contact data
-    const response = await fetch(dbUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newContact),
-    });
-
-    // Check if request was successful
-    if (!response.ok) {
-      throw new Error("Failed to add contact to database.");
-    }
-
-    // Parse response and get generated key
-    const result = await response.json();
-    return result.name;
-  } catch (error) {
-    console.error("Database error:", error);
-    throw error;
+  const url = `${CONTACTS_BASE_URL}/${userId}/contacts.json`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newContact),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to add contact (status ${response.status})`);
   }
+  const data = await response.json();
+  return data.name;
 }
 
 /**
- * Updates existing contact data
- * @param {string} userId - User identifier
- * @param {string} contactKey - Contact identifier
- * @param {Object} updatedContact - New contact data
+ * Updates an existing contact in Firebase for the given user
+ * @param {string} userId - the ID of the current user
+ * @param {string} contactKey - the Firebase key of the contact to update
+ * @param {Object} updatedContact - the new contact data
  */
 async function updateContactInDatabase(userId, contactKey, updatedContact) {
-  // Create URL for specific contact
-  const contactUrl = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/contacts/${contactKey}.json`;
-
-  try {
-    // Send PUT request to update contact
-    const response = await fetch(contactUrl, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedContact),
-    });
-
-    // Check response status
-    if (!response.ok) {
-      throw new Error("Failed to update contact in database.");
-    }
-  } catch (error) {
-    console.error("Update error:", error);
-    throw error;
+  const url = `${CONTACTS_BASE_URL}/${userId}/contacts/${contactKey}.json`;
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedContact),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to update contact (status ${response.status})`);
   }
 }
 
 /**
- * Removes contact from database
- * @param {string} userId - User identifier
- * @param {string} contactKey - Contact to delete
+ * Deletes a contact from Firebase for the given user
+ * @param {string} userId - the ID of the current user
+ * @param {string} contactKey - the Firebase key of the contact to delete
  */
 async function deleteContactFromDatabase(userId, contactKey) {
-  // Create URL for contact to delete
-  const deleteUrl = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/contacts/${contactKey}.json`;
-
-  try {
-    // Send DELETE request
-    const response = await fetch(deleteUrl, {
-      method: "DELETE",
-    });
-
-    // Verify deletion was successful
-    if (!response.ok) {
-      throw new Error("Failed to delete contact from database.");
-    }
-  } catch (error) {
-    console.error("Deletion error:", error);
-    throw error;
+  const url = `${CONTACTS_BASE_URL}/${userId}/contacts/${contactKey}.json`;
+  const response = await fetch(url, { method: "DELETE" });
+  if (!response.ok) {
+    throw new Error(`Failed to delete contact (status ${response.status})`);
   }
 }
