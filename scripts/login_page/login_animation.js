@@ -1,40 +1,40 @@
 /**
- * Initializes the login page with an animation sequence
- * Shows splash screen first, then fades to login form
+ * Initializes login page with animation sequence
+ * Shows splash screen then transitions to login form
  */
 function initLoginAnimation() {
-    // First hide the content
+    // Hide content initially
     const contentElement = document.getElementById('content');
     contentElement.classList.add('content-hidden');
     
-    // Create and append splash screen if it doesn't exist
+    // Create splash screen if needed
     if (!document.getElementById('splash-screen')) {
       createSplashScreen();
     }
     
-    // Render login content behind splash screen
+    // Load login form in background
     renderLoginContent();
     
     // Start animation sequence
     setTimeout(() => {
       const splashScreen = document.getElementById('splash-screen');
       
-      // Fade out splash screen
+      // Start fade out
       if (splashScreen) {
         splashScreen.style.opacity = '0';
         
-        // After fade out completes, remove splash and show content
+        // Remove splash after transition completes
         setTimeout(() => {
           splashScreen.remove();
           contentElement.classList.remove('content-hidden');
           contentElement.classList.add('content-visible');
-        }, 500); // Duration of opacity transition
+        }, 500);
       }
-    }, 2000); // Delay before starting fade (logo animation duration + delay)
+    }, 2000);
   }
   
   /**
-   * Creates and appends the splash screen element with logo
+   * Creates splash screen with logo
    */
   function createSplashScreen() {
     const splashScreen = document.createElement('div');
