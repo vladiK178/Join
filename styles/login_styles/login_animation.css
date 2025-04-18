@@ -20,7 +20,6 @@
     animation-delay: 0.5s;
   }
   
-  /* Animation für Logo-Bewegung in die linke obere Ecke */
   @keyframes logoMoveToCorner {
     0% {
       transform: translate(0, 0) scale(1);
