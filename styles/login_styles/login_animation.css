@@ -30,13 +30,11 @@
     }
   }
   
-  /* Versteckter Login-Content */
   .content-hidden {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
   }
   
-  /* Sichtbarer Login-Content */
   .content-visible {
     opacity: 1;
   }
