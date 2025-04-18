@@ -1,8 +1,26 @@
+// scripts/login_page/login.js
+
 /**
  * Renders the login content into the designated container.
+ * Called after animation sequence in login_animation.js
  */
 function renderLoginContent() {
   document.getElementById('content').innerHTML = getLoginContent();
+  
+  // Initialize any event listeners for the login form
+  initLoginEventListeners();
+}
+
+/**
+ * Sets up event listeners for the login form elements
+ * Called after rendering the login content
+ */
+function initLoginEventListeners() {
+  // Setup password field event listeners
+  const passwordInput = document.getElementById('password');
+  if (passwordInput) {
+    passwordInput.addEventListener('input', updatePasswordLockImg);
+  }
 }
 
 /**
