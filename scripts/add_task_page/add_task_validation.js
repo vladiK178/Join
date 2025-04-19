@@ -14,6 +14,7 @@ function validateTitle() {
 
 function validateAssignedContacts() {
   const contacts = currentUser.contacts || {};
+  const assignedToId = document.getElementById("alertMessageAssignedTo");
   let atLeastOneChecked = false;
 
   for (const key in contacts) {
@@ -24,7 +25,13 @@ function validateAssignedContacts() {
     }
   }
 
-  if (!atLeastOneChecked) rotateMessage();
+  if (!atLeastOneChecked) {
+    assignedToId.classList.remove("d-none")
+    rotateMessage();
+    return;
+  } 
+
+  assignedToId.classList.add("d-none");
   return atLeastOneChecked;
 }
 
@@ -45,15 +52,18 @@ function validateEndDate() {
 function validateCategory() {
   const categorySpan = document.getElementById("selectTaskCategorySpan");
   const validCategories = ["Technical Task", "User Story"];
+  const categorySelectionId = document.getElementById("alertMessageCategory");
 
   if (
     !categorySpan ||
     !validCategories.some((cat) => categorySpan.innerText.includes(cat))
   ) {
+    categorySelectionId.classList.remove("d-none");
     rotateMessage();
     return false;
   }
 
+  categorySelectionId.classList.add("d-none");
   return true;
 }
 

@@ -21,6 +21,7 @@ function getAddTaskContent() {
                             <img id="dropDownImg" src="./assets/img/dropDownArrowDown.svg" alt="">
                         </div>
                     </div>
+                    <span id="alertMessageAssignedTo" class="alert-message d-none">This field is required</span>
                     <div id="dropDownSection" class="drop-down-section d-none"></div>
                     <div id="choosenNamesSection" class="choosen-names"></div>
                 </form>
@@ -59,6 +60,7 @@ function getAddTaskContent() {
                             <img id="dropDownImgCategory" src="./assets/img/dropDownArrowDown.svg" alt="">
                         </div>
                     </div>
+                    <span id="alertMessageCategory" class="alert-message d-none">This field is required</span>
                     <div id="categoryDropDownSection" class="category-drop-down-section d-none">
                         <div onclick="choseTechnicalTask()" class="category-name">
                             <span>Technical Task</span>
