@@ -1,4 +1,4 @@
-function getDesktopTemplate() {
+function getDesktopTemplate(userCircle) {
   return `<section class="complete-template-section">
         <section class="left-template-section">
           <div>
@@ -55,7 +55,7 @@ function getDesktopTemplate() {
                 <div class="help-profile-section">
                 <a href="help.html"><img src="./assets/img/help.svg" alt=""></a>
 
-                    <div onclick="openMenu()" class="profile-circle">GU</div>
+                    <div onclick="openMenu()" id="profile-circle" class="profile-circle">${userCircle}</div>
                 </div>
             </header>
             <div id="menuSection" class="menu-section d-none">

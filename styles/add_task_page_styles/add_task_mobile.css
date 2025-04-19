@@ -241,7 +241,6 @@
 
     .task-detail-section {
         width: 863px;
-        height: 550px;
         min-height: unset;
         flex-direction: row;
         overflow: hidden;

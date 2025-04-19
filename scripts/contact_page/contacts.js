@@ -40,13 +40,24 @@ async function initContactPage() {
   }
 }
 
+let userCircle;
+
+function renderCurrentUserCircle() {
+  const currentUserFirstName = localStorage.getItem("firstName");
+  const currentUserLastName = localStorage.getItem("lastName");
+  const userCircle =
+    currentUserFirstName[0].toUpperCase() +
+    currentUserLastName[0].toUpperCase();
+  return userCircle;
+}
+
 /**
  * Renders the desktop template in the specified element
  */
 function renderDesktopTemplate() {
   const content = document.getElementById('templateSection');
   content.innerHTML = "";
-  content.innerHTML += getDesktopTemplate(currentUser);
+  content.innerHTML += getDesktopTemplate(renderCurrentUserCircle());
 }
 
 /**

@@ -1,6 +1,17 @@
+let userCircle;
+
+function renderCurrentUserCircle() {
+  const currentUserFirstName = localStorage.getItem("firstName");
+  const currentUserLastName = localStorage.getItem("lastName");
+  const userCircle =
+    currentUserFirstName[0].toUpperCase() +
+    currentUserLastName[0].toUpperCase();
+  return userCircle;
+}
+
 function renderDesktopTemplate() {
   document.getElementById("templateSection").innerHTML =
-    getDesktopTemplate(currentUser);
+    getDesktopTemplate(renderCurrentUserCircle());
 }
 
 function highlightAddTaskSection() {

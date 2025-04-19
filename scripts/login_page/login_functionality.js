@@ -20,7 +20,7 @@ async function loginUser(event) {
         String(user.password) === passwordInput
       ) {
         localStorage.setItem("firstName", user.firstName);
-        localStorage.setItem("LastName", user.lastName);
+        localStorage.setItem("lastName", user.lastName);
         localStorage.setItem("currentUserId", user.id);
 
         window.location.href = "summary.html";
@@ -49,7 +49,7 @@ async function guestLogin() {
     }
 
     localStorage.setItem("firstName", guestData.firstName);
-    localStorage.setItem("LastName", guestData.lastName);
+    localStorage.setItem("lastName", guestData.lastName);
     localStorage.setItem("currentUserId", guestData.id);
 
     window.location.href = "summary.html";

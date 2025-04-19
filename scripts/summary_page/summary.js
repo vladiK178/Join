@@ -22,12 +22,23 @@ function renderPage() {
   updateSummaryMetricsFromDB(userId);
 }
 
+let userCircle;
+
+function renderCurrentUserCircle() {
+  const currentUserFirstName = localStorage.getItem("firstName");
+  const currentUserLastName = localStorage.getItem("lastName");
+  const userCircle =
+    currentUserFirstName[0].toUpperCase() +
+    currentUserLastName[0].toUpperCase();
+  return userCircle;
+}
+
 /**
  * Injects the desktop HTML template into the page.
  */
 function renderDesktopTemplate() {
   let content = document.getElementById("templateSection");
-  content.innerHTML = getDesktopTemplate();
+  content.innerHTML = getDesktopTemplate(renderCurrentUserCircle());
 }
 
 /**

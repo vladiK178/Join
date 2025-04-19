@@ -11,11 +11,21 @@ async function initPrivacyNoticePage() {
     renderPrivacyPolicyContent();
 }
 
+let userCircle;
+
+function renderCurrentUserCircle() {
+  const currentUserFirstName = localStorage.getItem("firstName");
+  const currentUserLastName = localStorage.getItem("lastName");
+  const userCircle =
+    currentUserFirstName[0].toUpperCase() +
+    currentUserLastName[0].toUpperCase();
+  return userCircle;
+}
 
 function renderDesktopTemplate() {
     let content = document.getElementById('templateSection');
     content.innerHTML = "";
-    content.innerHTML += getDesktopTemplate(currentUser);
+    content.innerHTML += getDesktopTemplate(renderCurrentUserCircle());
 }
 
 function changeToChosenPrivacyPoliceSection() {

@@ -204,14 +204,25 @@ function addSubtaskEnterListener() {
   }
 }
 
+let userCircle;
+
 /**
  * Loads desktop template
  */
 function renderDesktopTemplate() {
   const container = document.getElementById("templateSection");
   if (container) {
-    container.innerHTML = getDesktopTemplate(currentUser);
+    container.innerHTML = getDesktopTemplate(renderCurrentUserCircle());
   }
+}
+
+function renderCurrentUserCircle() {
+  const currentUserFirstName = localStorage.getItem("firstName");
+  const currentUserLastName = localStorage.getItem("lastName");
+  const userCircle =
+    currentUserFirstName[0].toUpperCase() +
+    currentUserLastName[0].toUpperCase();
+  return userCircle;
 }
 
 /**
@@ -220,7 +231,7 @@ function renderDesktopTemplate() {
 function renderBoardContent() {
   const container = document.getElementById("newContentSection");
   if (container) {
-    container.innerHTML += getBoardContent();
+    container.innerHTML += getBoardContent(renderCurrentUserCircle());
   }
 }
 
