@@ -10,7 +10,7 @@ function initOutsideClickListener() {
 }
 
 /**
- * Central handler for clicks outside various UI elements
+ * Handles clicks outside of dropdowns and inputs
  * @param {MouseEvent} event - Click event
  */
 function outsideClickHandler(event) {
@@ -20,10 +20,27 @@ function outsideClickHandler(event) {
   const categoryDropDown = document.getElementById("categoryDropDownSection");
   const subtaskDiv = document.getElementById("subtaskSectionInput");
 
-  closeAssignedToIfClickedOutside(assignedToSection, assignedDropDown, event);
-  closeCategoryIfClickedOutside(categorySection, categoryDropDown, event);
-  closeSubtaskIfClickedOutside(subtaskDiv, event);
+  // improved Check for Assigned-to Dropdown
+  if (assignedToSection && assignedDropDown && 
+      !assignedToSection.contains(event.target) && 
+      !assignedDropDown.contains(event.target)) {
+    closeAssignedToDropdown();
+  }
+
+  // improved Check for Category Dropdown
+  if (categorySection && categoryDropDown && 
+      !categorySection.contains(event.target) &&
+      !categoryDropDown.classList.contains("d-none") &&
+      !categoryDropDown.contains(event.target)) {
+    closeCategoryDropdown();
+  }
+
+  // Check for Subtask Input
+  if (subtaskDiv && !subtaskDiv.contains(event.target)) {
+    closeInputSubtaskSection(event);
+  }
 }
+
 
 /**
  * Closes assigned-to dropdown on outside clicks
@@ -355,8 +372,19 @@ function renderNameCircles() {
 function closeAssignedToDropdown() {
   const dropDownSection = document.getElementById("dropDownSection");
   const dropDownImg = document.getElementById("dropDownImg");
-  if (dropDownSection) dropDownSection.classList.add("d-none");
-  if (dropDownImg) dropDownImg.src = "assets/img/dropDownArrowDown.svg";
+  const assignedToSection = document.getElementById("assignedToSection");
+  
+  if (dropDownSection && !dropDownSection.classList.contains("d-none")) {
+    dropDownSection.classList.add("d-none");
+    
+    if (dropDownImg) {
+      dropDownImg.src = "assets/img/dropDownArrowDown.svg";
+    }
+    
+    if (assignedToSection) {
+      assignedToSection.classList.remove("blue-border");
+    }
+  }
 }
 
 /**
@@ -365,6 +393,17 @@ function closeAssignedToDropdown() {
 function closeCategoryDropdown() {
   const dropDownSection = document.getElementById("categoryDropDownSection");
   const dropDownImg = document.getElementById("dropDownImgCategory");
-  if (dropDownSection) dropDownSection.classList.add("d-none");
-  if (dropDownImg) dropDownImg.src = "assets/img/dropDownArrowDown.svg";
+  const categorySection = document.getElementById("categorySection");
+  
+  if (dropDownSection && !dropDownSection.classList.contains("d-none")) {
+    dropDownSection.classList.add("d-none");
+    
+    if (dropDownImg) {
+      dropDownImg.src = "assets/img/dropDownArrowDown.svg";
+    }
+    
+    if (categorySection) {
+      categorySection.classList.remove("blue-border");
+    }
+  }
 }
