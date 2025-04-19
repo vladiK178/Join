@@ -15,7 +15,7 @@ function getBoardContent() {
                   </div>
                   <div class="search-add-task-section">
                       <div class="search-bar">
-                          <input type="text" placeholder="Find Task" oninput="filterTasks(event)">
+                          <input type="text" name="task-search" placeholder="Find Task" oninput="filterTasks(event)">
                           <div class="search-separator-icon">
                               <div class="search-separator"></div>
                               <div class="search-icon-container">
@@ -448,7 +448,7 @@ function getAddTaskSectionContent() {
               <form class="input-order" action="">
                   <label for="assigned-to">Assigned to<span class="red-star">*</span></label>
                   <div onclick="openAndCloseAssignedToSection()" id="assignedToSection" class="assigned-to-section">
-                      <input type="text" placeholder="Select contacts to assign">
+                      <input type="text" id="assigned-to" placeholder="Select contacts to assign">
                       <div class="dropDown-img">
                           <img id="dropDownImg" src="./assets/img/dropDownArrowDown.svg" alt="">
                       </div>
