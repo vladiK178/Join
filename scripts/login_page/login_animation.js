@@ -42,7 +42,7 @@ function initLoginAnimation() {
     splashScreen.className = 'splash-screen';
     
     const logo = document.createElement('img');
-    logo.src = './assets/img/JoinLogo.svg';
+    logo.src = './assets/img/joinLogo.svg';
     logo.alt = 'Join Logo';
     logo.className = 'splash-logo';
     
