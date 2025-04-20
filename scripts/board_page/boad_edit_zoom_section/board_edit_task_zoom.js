@@ -39,6 +39,7 @@ async function saveTaskChangesZoom(taskKey) {
     await updateTaskInFirebase(currentUser.id, taskKey, currentUser.tasks[taskKey]);
     refreshColumns();
     closeTaskZoomEditSectionZoom();
+    showToastMessage("Edited task");
   } catch (err) {
     console.error("Save error:", err);
     alert("Failed to save changes. Please try again.");

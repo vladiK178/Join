@@ -244,6 +244,7 @@ async function deleteTask(taskId) {
 
     // Update UI
     refreshBoardAfterDeletion();
+    showToastMessage("Task deleted");
   } catch (err) {
     console.error("Error deleting task:", err);
   }
