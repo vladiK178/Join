@@ -52,12 +52,12 @@ function getPrivacyPolicyContentUnlogged() {
           <br />
   
           <h2 id="bp-01">Controller</h2>
-          <p>Scheker Badjaj</p>
+          <p>Vladislav Krämer | Phillip Wimmer | Scheker Badjaj</p>
           <p>Join-Straße 18</p>
-          <p>45326 Essen</p>
+          <p>80331 München</p>
           <p>
             Email:
-            <a class="accentuated" href="mailto:schebad@mail.de">schebad@mail.de</a>
+            <a class="accentuated" href="mailto:join440mail.de">join440mail.de</a>
           </p>
           <p>Phone: 01-23456-789</p>
           <br />
