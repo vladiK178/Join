@@ -305,6 +305,39 @@ function closeEditContactSection() {
 }
 
 /**
+ * Shows feedback message to user
+ * @param {string} message - Text to display
+ * @param {boolean} isError - Whether message is an error
+ */
+function showToastMessage(message, isError = false) {
+  // Create toast element
+  let toast = document.getElementById("toast-message");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast-message";
+    toast.style.position = "fixed";
+    toast.style.bottom = "100px";
+    toast.style.left = "50%";
+    toast.style.transform = "translateX(-50%)";
+    toast.style.padding = "10px 20px";
+    toast.style.borderRadius = "4px";
+    toast.style.zIndex = "1000";
+    document.body.appendChild(toast);
+  }
+
+  // Set style and content
+  toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
+  toast.style.color = "white";
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  // Auto-hide after delay
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 3000);
+}
+
+/**
  * Saves edited contact information to Firebase
  * @param {string} contactKey - Contact key to update
  */
@@ -333,6 +366,7 @@ async function saveEditedContact(contactKey) {
     await getUsersData();
     currentUser = users[currentUser.id];
     
+    showToastMessage("Saved changes");
     renderSpacerAndContactSection();
     closeEditContactSection();
     renderContactDetails(contactKey);
@@ -376,7 +410,8 @@ async function deleteContact(contactKey) {
     // Reload data from Firebase
     await getUsersData();
     currentUser = users[currentUser.id];
-    
+
+    showToastMessage("Contact deleted");
     handlePostDeleteUI();
   } catch (error) {
     console.error("Error deleting contact from Firebase:", error);
