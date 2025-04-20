@@ -200,12 +200,26 @@ function renderPrioIconImg(priority) {
  * @returns {Promise<void>}
  */
 async function updateSpecificSubtask(userId, taskKey, subtaskKey, subtask) {
-  let url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/tasks/${taskKey}/subtasks/${subtaskKey}.json`;
+  let url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks/${taskKey}/subtasks/${subtaskKey}.json`;
 
   let response = await fetch(url, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(subtask),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Firebase update failed with status: ${response.status}`);
+  }
+}
+
+async function updateTaskInFirebase(userId, taskKey, currentUserTask) {
+  let url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks/${taskKey}.json`;
+
+  let response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(currentUserTask),
   });
 
   if (!response.ok) {
@@ -241,7 +255,7 @@ async function deleteTask(taskId) {
  * @returns {Promise<void>}
  */
 async function fetchDeleteTaskFromFirebase(taskKey) {
-  let url = `https://join-67494-default-rtdb.europe-west1.firebasedatabase.app/users/${currentUser.id}/tasks/${taskKey}.json`;
+  let url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${currentUser.id}/tasks/${taskKey}.json`;
 
   let response = await fetch(url, { method: "DELETE" });
 

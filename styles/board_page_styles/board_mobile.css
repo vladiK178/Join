@@ -165,7 +165,7 @@
 
     .task-card {
         width: 300px;
-        height: 500px;
+        min-height: 470px;
     }
 
     .task-zoom-section-edit {
@@ -324,7 +324,7 @@
     }
     
     .description-input {
-        padding: 17px 5px;
+        padding: 5px 5px;
         font-size: 14px;
     }
 
@@ -410,7 +410,7 @@
 
     .task-card {
         width: 400px;
-        height: 650px;
+        min-height: 520px;
     }
 
     .subtask-zoom-title {
@@ -553,6 +553,10 @@
         box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.08);
         margin-top: 0;
         margin-bottom: 0;
+    }
+
+    .task-card {
+        min-height: 580px;
     }
 
     .change-column-menu-mobile {
