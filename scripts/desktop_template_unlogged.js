@@ -5,7 +5,7 @@ function getDesktopTemplateUnlogged() {
                 <div style="width:100%">
                     <div class="join-logo"><img src="./assets/img/JoinLogoWhite.svg" alt=""></div>
                     <div class="div-link-section">
-                        <a id="summary-section" href="login.html" class="div-link chosen-section">
+                        <a id="summary-section" href="index.html" class="div-link chosen-section">
                         <div id="log-in-img" class="log-in-img"></div>
                         <span class="div-link-span">Log In</span>
                         </a>

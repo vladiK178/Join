@@ -14,11 +14,11 @@ function toggleCheckbox() {
 }
 
 /**
- * Displays a success message overlay and redirects to login.html after a delay.
+ * Displays a success message overlay and redirects to index.html after a delay.
  */
 function showSuccessMessage() {
     document.getElementById("successSignUpOverlay").classList.remove("d-none");
-    setTimeout(() => window.location.href = "login.html", 2250);
+    setTimeout(() => window.location.href = "index.html", 2250);
 }
 
 /**

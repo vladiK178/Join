@@ -149,7 +149,7 @@ async function loadUserAndSetCurrent() {
  */
 function redirectToLogin(reason) {
   console.error(reason + " - redirecting to login");
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
 
 /**
@@ -417,6 +417,6 @@ function handleAddTaskButtonClick() {
  */
 function handleInitError() {
   console.error("Could not initialize board");
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
 

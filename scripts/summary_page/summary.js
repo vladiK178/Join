@@ -13,7 +13,7 @@ function initSummaryPage() {
 function renderPage() {
   const userId = localStorage.getItem("currentUserId");
   if (!userId) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 
   renderDesktopTemplate();

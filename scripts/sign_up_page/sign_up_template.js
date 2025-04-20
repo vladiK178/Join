@@ -83,7 +83,7 @@ function getSignUpContent() {
 
                 <!-- Link to Login Page -->
                 <div class="link-to-log-in">
-                    <a href="login.html">
+                    <a href="index.html">
                         <img class="back-arrow" src="./assets/img/arrow-left-line.svg" alt="Back to login">
                     </a>
                 </div>

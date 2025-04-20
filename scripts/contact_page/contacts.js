@@ -10,7 +10,7 @@ async function initContactPage() {
   
   if (!userId) {
     console.error("No user ID found in localStorage - login required");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
     return;
   }
   
@@ -23,7 +23,7 @@ async function initContactPage() {
     if (!currentUser) {
       console.error("User not found in database");
       localStorage.clear();
-      window.location.href = "login.html";
+      window.location.href = "index.html";
       return;
     }
     
@@ -36,7 +36,7 @@ async function initContactPage() {
     renderSpacerAndContactSection();
   } catch (error) {
     console.error("Error loading user data from Firebase:", error);
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 }
 

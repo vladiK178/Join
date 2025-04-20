@@ -18,7 +18,7 @@ function setCurrentUser() {
   const currentUserId = localStorage.getItem("currentUserId");
   currentUser = users[currentUserId];
   if (!currentUser) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 }
 
