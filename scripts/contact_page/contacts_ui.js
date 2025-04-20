@@ -55,7 +55,7 @@ function isContactAlreadyChosen(element) {
  * @returns {boolean} True if mobile width
  */
 function isMobileView() {
-  return window.innerWidth <= 1000;
+  return window.innerWidth <= 1200;
 }
 
 /**
