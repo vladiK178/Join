@@ -1,14 +1,10 @@
 /**
  * Keeps track of currently open mobile menu
- * @type {HTMLElement|null}
  */
 let currentlyOpenMenu = null;
 
 /**
- * Renders task category label
- * @param {string} taskId - Task identifier
- * @param {Object} task - Task data
- * @param {string} column - Column status
+ * Renders task category
  */
 function renderTaskCategory(taskId, task, column) {
   const container = document.getElementById(`taskCategory${column}${taskId}`);
@@ -24,10 +20,7 @@ function renderTaskCategory(taskId, task, column) {
 }
 
 /**
- * Renders subtask progress bar
- * @param {string} taskId - Task identifier
- * @param {Object} task - Task data
- * @param {string} column - Column status
+ * Renders subtask progress bar if subtasks exist
  */
 function renderSubtaskProgress(taskId, task, column) {
   const container = document.getElementById(
@@ -36,10 +29,16 @@ function renderSubtaskProgress(taskId, task, column) {
   if (!container) return;
 
   const subtasks = Object.values(task.subtasks || {});
-  const completedCount = subtasks.filter((st) => st.checked).length;
   const totalCount = subtasks.length;
-  const progressPercent =
-    totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+
+  // Hide the progress bar if no subtasks exist
+  if (totalCount === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const completedCount = subtasks.filter((st) => st.checked).length;
+  const progressPercent = (completedCount / totalCount) * 100;
 
   container.innerHTML = `
     <div class="subtask-bar">
@@ -50,7 +49,6 @@ function renderSubtaskProgress(taskId, task, column) {
 
 /**
  * Opens task detail view
- * @param {string} taskId - Task to view
  */
 function handleTaskClick(taskId) {
   if (!taskId) return;
@@ -60,9 +58,6 @@ function handleTaskClick(taskId) {
 
 /**
  * Renders contact circles for task
- * @param {string} taskId - Task identifier
- * @param {Object} task - Task data
- * @param {string} column - Column status
  */
 function renderNameCircleSection(taskId, task, column) {
   const container = document.getElementById(
@@ -100,9 +95,6 @@ function renderNameCircleSection(taskId, task, column) {
 
 /**
  * Sets priority icon for task
- * @param {string} taskId - Task identifier
- * @param {Object} task - Task data
- * @param {string} column - Column status
  */
 function renderPrioImg(taskId, task, column) {
   const imgElement = document.getElementById(`prioImg${column}${taskId}`);
@@ -124,7 +116,6 @@ function renderPrioImg(taskId, task, column) {
 
 /**
  * Toggles mobile menu visibility
- * @param {Event} event - Click event
  */
 function toggleMenuMobile(event) {
   event.stopPropagation();
@@ -165,8 +156,6 @@ function toggleMenuMobile(event) {
 
 /**
  * Gets tasks with specific status
- * @param {string} status - Status to filter by
- * @returns {Array} Filtered tasks
  */
 function getFilteredTasks(status) {
   return Object.values(currentUser.tasks || {}).filter(
@@ -175,9 +164,7 @@ function getFilteredTasks(status) {
 }
 
 /**
- * Safely gets column DOM element
- * @param {string} columnId - Column identifier
- * @returns {HTMLElement|null} Column element
+ * Gets column DOM element by id
  */
 function getColumnElement(columnId) {
   return document.getElementById(columnId);
@@ -185,7 +172,6 @@ function getColumnElement(columnId) {
 
 /**
  * Clears column content
- * @param {HTMLElement} column - Column to clear
  */
 function clearColumnContent(column) {
   column.innerHTML = "";
@@ -193,11 +179,8 @@ function clearColumnContent(column) {
 
 /**
  * Shows empty column message
- * @param {HTMLElement} column - Column element
- * @param {string} status - Status name
  */
 function renderNoTasksNotification(column, status) {
-  // Format status for display (add spaces before capitals)
   const formattedStatus = status.replace(/([A-Z])/g, " $1");
 
   column.innerHTML = `
@@ -207,10 +190,7 @@ function renderNoTasksNotification(column, status) {
 }
 
 /**
- * Generates HTML for all tasks in column
- * @param {Array} tasks - Tasks to render
- * @param {string} status - Column status
- * @returns {string} Combined HTML
+ * Builds HTML for column tasks
  */
 function buildColumnContent(tasks, status) {
   return tasks
@@ -220,23 +200,17 @@ function buildColumnContent(tasks, status) {
 
 /**
  * Sets up column drag/drop events
- * @param {HTMLElement} column - Column element
- * @param {string} columnId - Column ID
- * @param {string} status - Column status
  */
 function addColumnDragAndDropListeners(column, columnId, status) {
-  // Dragover event
   column.addEventListener("dragover", (event) => {
     event.preventDefault();
     showEmptyDashedNote(columnId);
   });
 
-  // Dragleave event
   column.addEventListener("dragleave", () => {
     hideEmptyDashedNote(columnId);
   });
 
-  // Drop event
   column.addEventListener("drop", (event) => {
     event.preventDefault();
     drop(event, status);
@@ -245,9 +219,7 @@ function addColumnDragAndDropListeners(column, columnId, status) {
 }
 
 /**
- * Renders task details within column
- * @param {Array} tasks - Tasks to render
- * @param {string} status - Column status
+ * Renders details for tasks in column
  */
 function renderTasksDetails(tasks, status) {
   tasks.forEach((task) => {
@@ -260,9 +232,6 @@ function renderTasksDetails(tasks, status) {
 
 /**
  * Renders filtered tasks in column
- * @param {Array} tasks - Tasks to display
- * @param {string} status - Column status
- * @param {string} columnId - Column DOM element ID
  */
 function renderFilteredColumn(tasks, status, columnId) {
   const column = document.getElementById(columnId);
@@ -279,8 +248,6 @@ function renderFilteredColumn(tasks, status, columnId) {
 
 /**
  * Renders column with tasks
- * @param {string} status - Column status
- * @param {string} columnId - Column DOM ID
  */
 function renderColumn(status, columnId) {
   const tasks = getFilteredTasks(status);
