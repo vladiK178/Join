@@ -123,6 +123,7 @@ function resetToDefaultState() {
 function openAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
   overlay.classList.remove("d-none");
+  overlay.classList.add("add-contact-slide-in");
   renderAddContactSection();
 }
 
