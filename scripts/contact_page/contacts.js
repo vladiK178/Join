@@ -117,6 +117,11 @@ function resetToDefaultState() {
   if (details) details.innerHTML = "";
 }
 
+function animateSlideInFromRight(element) {
+  element.classList.add("add-contact-slide-in");
+  setTimeout(() => element.classList.remove("add-contact-slide-in"), 500);
+}
+
 /**
  * Shows the add contact overlay
  */
@@ -125,9 +130,7 @@ function openAddContactSection() {
   overlay.classList.remove("d-none");
   overlay.classList.add("add-contact-slide-in");
   renderAddContactSection();
-  setTimeout(() => {
-    overlay.classList.remove("add-contact-slide-in");
-  }, 500);  
+  animateSlideInFromRight(overlay);
 }
 
 /**
