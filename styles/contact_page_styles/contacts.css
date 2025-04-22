@@ -688,3 +688,16 @@
 .add-contact-slide-out {
     animation: slideOutToRight 0.4s ease-out;
 }
+
+@keyframes fadeInOverlay {
+    from {
+      background-color: rgba(184, 185, 186, 0); /* ganz transparent */
+    }
+    to {
+      background-color: rgba(184, 185, 186, 0.8); /* gewünschte Deckkraft */
+    }
+  }
+  
+  .overlay-fade-in {
+    animation: fadeInOverlay 0.4s ease forwards;
+  }  
