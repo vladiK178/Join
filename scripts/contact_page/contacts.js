@@ -125,6 +125,9 @@ function openAddContactSection() {
   overlay.classList.remove("d-none");
   overlay.classList.add("add-contact-slide-in");
   renderAddContactSection();
+  setTimeout(() => {
+    overlay.classList.remove("add-contact-slide-in");
+  }, 500);  
 }
 
 /**
