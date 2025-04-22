@@ -117,6 +117,9 @@ function resetToDefaultState() {
   if (details) details.innerHTML = "";
 }
 
+/**
+ * Slide-in animation for Add Contact overlay
+ */
 function animateSlideInFromRight(element) {
   element.classList.add("add-contact-slide-in");
   setTimeout(() => element.classList.remove("add-contact-slide-in"), 500);
