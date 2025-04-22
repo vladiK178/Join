@@ -658,3 +658,18 @@
 .d-none {
     display: none;
 }
+
+@keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .add-contact-slide-in {
+    animation: slideInFromRight 0.4s ease-out;
+  }  
