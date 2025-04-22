@@ -141,7 +141,11 @@ function openAddContactSection() {
  */
 function closeAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
-  overlay.classList.add("d-none");
+  overlay.classList.add("add-contact-slide-out");
+  setTimeout(() => {
+    overlay.classList.remove("add-contact-slide-out");
+    overlay.classList.add("d-none");
+  }, 400); 
 }
 
 /**
