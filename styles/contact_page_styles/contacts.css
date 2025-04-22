@@ -668,8 +668,23 @@
       transform: translateX(0);
       opacity: 1;
     }
-  }
+}
   
-  .add-contact-slide-in {
+.add-contact-slide-in {
     animation: slideInFromRight 0.4s ease-out;
-  }  
+}
+  
+@keyframes slideOutToRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+}
+  
+.add-contact-slide-out {
+    animation: slideOutToRight 0.4s ease-out;
+}
