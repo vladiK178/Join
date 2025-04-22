@@ -4,7 +4,7 @@
  */
 function getAddContactSectionHtml() {
   return `
-    <div class="add-contact-container">
+    <div id="addContactCard" class="add-contact-container">
       <div class="left-section">
         <img src="./assets/img/joinLogoAddContact.svg" alt="Logo">
         <div class="add-contact-headline-and-span"></div>
