@@ -129,11 +129,12 @@ function animateSlideInFromRight(element) {
  * Shows the add contact overlay
  */
 function openAddContactSection() {
+  const card = document.getElementById("addContactCard"); 
   const overlay = document.getElementById("addContactContainerOverlay");
   overlay.classList.remove("d-none");
-  overlay.classList.add("add-contact-slide-in");
+  overlay.classList.add("overlay-fade-in"); 
   renderAddContactSection();
-  animateSlideInFromRight(overlay);
+  animateSlideInFromRight(card); 
 }
 
 /**
