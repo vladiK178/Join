@@ -144,9 +144,12 @@ function closeAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
   const card = document.getElementById("addContactCard");
   card.classList.add("add-contact-slide-out");
+  overlay.classList.remove("overlay-fade-in");
+  overlay.classList.add("overlay-fade-out");   
   setTimeout(() => {
     card.classList.remove("add-contact-slide-out");
     overlay.classList.add("d-none");
+    overlay.classList.remove("overlay-fade-out");
   }, 400);
 }
 
