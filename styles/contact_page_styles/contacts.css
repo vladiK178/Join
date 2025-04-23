@@ -701,3 +701,16 @@
   .overlay-fade-in {
     animation: fadeInOverlay 0.4s ease forwards;
   }  
+
+  @keyframes fadeOutOverlay {
+    from {
+      background-color: rgba(184, 185, 186, 0.8);
+    }
+    to {
+      background-color: rgba(184, 185, 186, 0);
+    }
+  }
+  
+  .overlay-fade-out {
+    animation: fadeOutOverlay 0.4s ease forwards;
+  }  
