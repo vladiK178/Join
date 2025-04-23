@@ -28,21 +28,24 @@ function getAddContactSectionHtml() {
           <div class="add-contact-input-section">
             <div>
               <div class="input-group">
-                <input id="contactName" type="text" placeholder="Name">
+                <input id="contactName" type="text" placeholder="Name" onblur="validateNameParts(this.value, 'alertMessageTitle')"
+                oninput="checkAllInputsValid()">
                 <img class="input-icon" src="./assets/img/person.svg" alt="Name Icon">
               </div>
               <span id="alertMessageTitle" class="alert-message hide-alert-message">This field is required</span>
             </div>
             <div>
               <div class="input-group">
-                <input id="contactEmail" type="email" placeholder="Email">
+                <input id="contactEmail" type="email" placeholder="Email" onblur="validateEmail(this.value, /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, 'alertMessageEmail')"
+                oninput="checkAllInputsValid()">
                 <img src="./assets/img/mail.svg" alt="Email Icon">
               </div>
               <span id="alertMessageEmail" class="alert-message hide-alert-message">This field is required</span>
             </div>
             <div>
               <div class="input-group">
-                <input id="contactNumber" type="tel" placeholder="Phone">
+                <input id="contactNumber" type="tel" placeholder="Phone" onblur="validatePhone(this.value, /^\\+?[0-9\\s]{10,15}$/, 'alertMessageNumber')"
+                oninput="checkAllInputsValid()">
                 <img src="./assets/img/phone.svg" alt="Phone Icon">
               </div>
               <span id="alertMessageNumber" class="alert-message hide-alert-message">This field is required</span>
@@ -52,7 +55,7 @@ function getAddContactSectionHtml() {
                 <span>Cancel</span>
                 <img class="cancel-icon" src="./assets/img/cancelImg.svg" alt="">
               </div>
-              <div onclick="saveNewContact()" class="create-button">
+              <div onclick="saveNewContact()" class="create-button" disabled>
                 <span>Create contact</span>
                 <img src="./assets/img/check.svg" alt="">
               </div>

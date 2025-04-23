@@ -124,7 +124,7 @@
     }
 
     .name-circle-add-section-note span {
-        font-size: 14px;
+        font-size: 16px;
     }
 
 
@@ -281,11 +281,11 @@
     }
 
     .name-circle-add-section span {
-        font-size: 12px !important;
+        font-size: 16px !important;
     }
 
     .name-section span {
-        font-size: 13px !important;
+        font-size: 16px !important;
     }
 
     .subtask-section {
@@ -320,12 +320,12 @@
 
     .input-order input {
         padding: 6px 5px;
-        font-size: 14px;
+        font-size: 16px;
     }
     
     .description-input {
         padding: 5px 5px;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .change-column-menu-mobile {
@@ -361,7 +361,7 @@
     }
     
     .menu-mobile a {
-        font-size: 14px;
+        font-size: 16px;
         width: 117px;
         border-radius: 20px 20px 20px 20px;
     }

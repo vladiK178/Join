@@ -454,7 +454,7 @@
 }
 
 .create-button {
-    background-color: #2a3647;
+    background-color: #5c5c5c;
     color: white;
     border-radius: 10px;
     display: flex;
@@ -548,7 +548,7 @@
 
 .alert-message {
     color: #FF8190;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .hide-alert-message {
@@ -611,7 +611,7 @@
 }
 
 .menu-mobile a {
-    font-size: 14px;
+    font-size: 16px;
     width: 117px;
     color: #2A3647;
 }

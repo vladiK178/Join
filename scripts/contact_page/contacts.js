@@ -187,6 +187,8 @@ async function saveNewContact() {
   }
 }
 
+
+
 /**
  * Validates contact information
  * @param {string} name - Full name
@@ -194,17 +196,43 @@ async function saveNewContact() {
  * @param {string} phone - Phone number
  * @returns {boolean} Validity status
  */
+function checkAllInputsValid() {
+  const name = document.getElementById("contactName").value.trim();
+  const email = document.getElementById("contactEmail").value.trim();
+  const phone = document.getElementById("contactNumber").value.trim();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\+?[0-9\s]{10,15}$/;
+
+  const nameValid = name.split(" ").filter(Boolean).length >= 2;
+  const emailValid = emailRegex.test(email);
+  const phoneValid = phoneRegex.test(phone);
+
+  const button = document.querySelector(".create-button");
+
+  const allValid = nameValid && emailValid && phoneValid;
+
+  button.disabled = !allValid;
+  button.style.backgroundColor = allValid ? "#2a3647" : "#5c5c5c";
+  button.style.cursor = allValid ? "pointer" : "default";
+}
+
 function validateNewContact(name, email, phone) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[0-9\s]{10,15}$/;
-  if (!validateNameParts(name, 'alertMessageTitle')) return false;
-  if (!validateEmail(email, emailRegex, 'alertMessageEmail')) return false;
+
+  let isValid = true;
+
+  if (!validateNameParts(name, "alertMessageTitle")) isValid = false;
+  if (!validateEmail(email, emailRegex, "alertMessageEmail")) isValid = false;
+  if (!validatePhone(phone, phoneRegex, "alertMessageNumber")) isValid = false;
+
   if (isEmailExisting(email)) {
-    showEmailAlreadyExists('alertMessageEmail');
-    return false;
+    showEmailAlreadyExists("alertMessageEmail");
+    isValid = false;
   }
-  if (!validatePhone(phone, phoneRegex, 'alertMessageNumber')) return false;
-  return true;
+
+  return isValid;
 }
 
 /**

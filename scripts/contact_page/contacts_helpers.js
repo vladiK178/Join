@@ -16,10 +16,18 @@ function capitalizeFirstLetter(string) {
  * @returns {boolean} True if valid
  */
 function validateEmail(email, regex, alertId) {
-  if (!regex.test(email)) {
+  const trimmedEmail = email.trim();
+
+  if (trimmedEmail === "") {
+    hideAlertMessage(alertId); // Kein Fehlertext bei leer
+    return false;
+  }
+
+  if (!regex.test(trimmedEmail)) {
     showAlertMessage(alertId, "Please enter a valid email.");
     return false;
   }
+
   hideAlertMessage(alertId);
   return true;
 }
@@ -32,10 +40,18 @@ function validateEmail(email, regex, alertId) {
  * @returns {boolean} True if valid
  */
 function validatePhone(phone, regex, alertId) {
-  if (!regex.test(phone)) {
+  const trimmedPhone = phone.trim();
+
+  if (trimmedPhone === "") {
+    hideAlertMessage(alertId); // Kein Text wenn leer
+    return false;
+  }
+
+  if (!regex.test(trimmedPhone)) {
     showAlertMessage(alertId, "Please enter a valid phone number.");
     return false;
   }
+
   hideAlertMessage(alertId);
   return true;
 }
@@ -47,11 +63,19 @@ function validatePhone(phone, regex, alertId) {
  * @returns {boolean} True if valid
  */
 function validateNameParts(name, alertId) {
-  const parts = name.split(" ").filter(Boolean);
+  const trimmedName = name.trim();
+  const parts = trimmedName.split(" ").filter(Boolean);
+
+  if (trimmedName === "") {
+    hideAlertMessage(alertId); // Keine Meldung bei leerem Feld
+    return false;
+  }
+
   if (parts.length < 2) {
     showAlertMessage(alertId, "Please enter both first and last names.");
     return false;
   }
+
   hideAlertMessage(alertId);
   return true;
 }
