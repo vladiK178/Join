@@ -142,11 +142,12 @@ function openAddContactSection() {
  */
 function closeAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
-  overlay.classList.add("add-contact-slide-out");
+  const card = document.getElementById("addContactCard");
+  card.classList.add("add-contact-slide-out");
   setTimeout(() => {
-    overlay.classList.remove("add-contact-slide-out");
+    card.classList.remove("add-contact-slide-out");
     overlay.classList.add("d-none");
-  }, 400); 
+  }, 400);
 }
 
 /**
