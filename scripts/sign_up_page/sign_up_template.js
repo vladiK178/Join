@@ -1,6 +1,6 @@
 function getSignUpContent() {
   return `
-        <img class="join-logo" src="./assets/img/JoinLogo.svg" alt="Join Logo">
+        <img class="join-logo" src="./assets/img/joinLogo.svg" alt="Join Logo">
         
         <section class="Log-In-Section">
             <div class="Log-In-Field">

@@ -307,7 +307,7 @@ header span {
     }
 
     .div-link-span{
-        font-size: 12px;
+        font-size: 16px;
     }
 
     .chosen-section {
@@ -435,10 +435,6 @@ header span {
 
     .div-link-section:hover {
         background-color: #33445b !important;
-    }
-
-    .div-link-span{
-        font-size: 16px;
     }
 
     .legal-section-template {

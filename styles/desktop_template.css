@@ -320,11 +320,11 @@ header span {
   }
 
   .div-link-span {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .chosen-section {
-    width: 57px;
+    width: 75px;
     height: 57px;
     border-radius: 10px;
   }
@@ -462,10 +462,6 @@ header span {
 
   .div-link-section:hover {
     background-color: #33445b !important;
-  }
-
-  .div-link-span {
-    font-size: 16px;
   }
 
   .chosen-section {

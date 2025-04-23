@@ -1,7 +1,7 @@
 function getLoginContent() {
   return `
         <header>
-            <img src="./assets/img/JoinLogo.svg" alt="">
+            <img src="./assets/img/joinLogo.svg" alt="">
             <div class="sign-up-section">
                 <span>Not a Join user?</span>
                 <div class="sign-up-button">
