@@ -247,6 +247,13 @@
         display: flex;
         gap: 5px;
         align-items: center;
+        justify-content: center;
+    }
+
+    .seperator-edid-delete {
+        height: 2px;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
     }
 
     .delete-button {

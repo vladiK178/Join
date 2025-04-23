@@ -179,6 +179,7 @@ function getContactDetailsHtml(contactKey, contact, color) {
              Edit
           </a>
         </div>
+        <div class="seperator-edid-delete"></div>
         <div class="menu-mobile-container">
           <img src="./assets/img/trashImg.svg" alt="">
           <a href="javascript:void(0);" 
