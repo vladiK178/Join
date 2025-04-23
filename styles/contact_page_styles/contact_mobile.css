@@ -84,6 +84,7 @@
         width: 80px;
         height: 80px;
         font-size: 30px;
+        aspect-ratio: 1 / 1;
     }
 
     .edit-and-delete-section {
@@ -92,6 +93,7 @@
 
     .big-name-span {
         font-size: 36px;
+        word-break: break-word;
     }
 
     .contact-details {
@@ -198,7 +200,7 @@
     }
 
     .input-group input {
-        width: auto;
+        width: 195px;
         padding-left: 13px;
         padding-top: 8px;
         padding-bottom: 8px;
@@ -266,7 +268,7 @@
     }
 
     .name-and-edit-and-delete-section {
-        width: 200px;
+        width: auto;
     }
 
     .spacer-and-contact-section {
@@ -279,6 +281,12 @@
         padding: 20px 10px;
     }
 
+}
+
+@media (max-width: 370px) {
+    .big-name-span {
+        font-size: 28px;
+    }
 }
 
 @media (min-width: 600px) {
@@ -336,10 +344,6 @@
     .profile-placeholder-section {
         right: 167px;
         bottom: 377px;
-    }
-
-    .name-and-edit-and-delete-section {
-        width: auto;
     }
 
     .complete-right-section {
@@ -593,7 +597,7 @@
     }
 
     .input-group input {
-        width: 300px;
+        width: 250px;
         font-size: 16px;
         border: none;
         border-radius: 8px;
