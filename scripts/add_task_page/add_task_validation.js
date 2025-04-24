@@ -49,6 +49,24 @@ function validateEndDate() {
   return true;
 }
 
+function getLocalTodayDateString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function setMinDateToday() {
+  const today = getLocalTodayDateString();
+  document.getElementById("date").setAttribute("min", today);
+}
+
+function focusDateInput() {
+  setMinDateToday();
+  document.getElementById("date").focus();
+}
+
 function validateCategory() {
   const categorySpan = document.getElementById("selectTaskCategorySpan");
   const validCategories = ["Technical Task", "User Story"];

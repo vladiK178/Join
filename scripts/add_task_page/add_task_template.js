@@ -22,7 +22,7 @@ function getAddTaskContent() {
                         </div>
                     </div>
                     <span id="alertMessageAssignedTo" class="alert-message d-none">This field is required</span>
-                    <div id="dropDownSection" class="drop-down-section d-none"></div>
+                    <div id="dropDownSection" class="drop-down-section transition-drop-down"></div>
                     <div id="choosenNamesSection" class="choosen-names"></div>
                 </form>
             </div>
@@ -30,7 +30,7 @@ function getAddTaskContent() {
             <div class="task-details-right">
                 <form class="input-order" action="">
                     <label for="date">Due Date<span class="red-star">*</span></label>
-                    <input type="date" id="date" required placeholder="Enter a title">
+                    <input type="date" id="date" min="" onclick="focusDateInput()" required placeholder="Enter a title">
                     <span id="alertMessageDate" class="alert-message d-none">This field is required</span>
                 </form>
                 <div class="prio-section">
@@ -61,7 +61,7 @@ function getAddTaskContent() {
                         </div>
                     </div>
                     <span id="alertMessageCategory" class="alert-message d-none">This field is required</span>
-                    <div id="categoryDropDownSection" class="category-drop-down-section d-none">
+                    <div id="categoryDropDownSection" class="category-drop-down-section transition-drop-down">
                         <div onclick="choseTechnicalTask()" class="category-name">
                             <span>Technical Task</span>
                         </div>

@@ -42,25 +42,26 @@ function selectCategory(name) {
   const icon = document.getElementById("dropDownImgCategory");
 
   field.innerHTML = name;
-  dropdown.classList.toggle("d-none");
-  icon.src = dropdown.classList.contains("d-none")
-  ? "assets/img/dropDownArrowDown.svg"
-  : "assets/img/dropDownArrowUp.svg";
+
+  dropdown.classList.remove("open");
+  dropdown.style.maxHeight = "0px";
+
+  icon.src = "assets/img/dropDownArrowDown.svg";
 }
 
 function toggleDropdown(type) {
   const dropdown = document.getElementById(
-    `${type === "assignedTo" ? "dropDownSection" : "categoryDropDownSection"}`
+    type === "assignedTo" ? "dropDownSection" : "categoryDropDownSection"
   );
   const icon = document.getElementById(
-    `${type === "assignedTo" ? "dropDownImg" : "dropDownImgCategory"}`
+    type === "assignedTo" ? "dropDownImg" : "dropDownImgCategory"
   );
   const section = document.getElementById(
-    `${type === "assignedTo" ? "assignedToSection" : "categorySection"}`
+    type === "assignedTo" ? "assignedToSection" : "categorySection"
   );
 
-  dropdown.classList.toggle("d-none");
-  const isOpen = !dropdown.classList.contains("d-none");
+  dropdown.classList.toggle("open");
+  const isOpen = dropdown.classList.contains("open");
 
   icon.src = isOpen
     ? "assets/img/dropDownArrowUp.svg"
@@ -70,17 +71,18 @@ function toggleDropdown(type) {
 
 function closeDropdownIfOpen(type) {
   const dropdown = document.getElementById(
-    `${type === "assignedTo" ? "dropDownSection" : "categoryDropDownSection"}`
+    type === "assignedTo" ? "dropDownSection" : "categoryDropDownSection"
   );
   const icon = document.getElementById(
-    `${type === "assignedTo" ? "dropDownImg" : "dropDownImgCategory"}`
+    type === "assignedTo" ? "dropDownImg" : "dropDownImgCategory"
   );
   const section = document.getElementById(
-    `${type === "assignedTo" ? "assignedToSection" : "categorySection"}`
+    type === "assignedTo" ? "assignedToSection" : "categorySection"
   );
 
-  if (!dropdown.classList.contains("d-none")) {
-    dropdown.classList.add("d-none");
+  if (dropdown.classList.contains("open")) {
+    dropdown.classList.remove("open");
+    dropdown.style.maxHeight = "0px";
     icon.src = "assets/img/dropDownArrowDown.svg";
     section.classList.remove("blue-border");
   }

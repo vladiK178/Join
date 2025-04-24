@@ -111,7 +111,7 @@ body {
 
 .drop-down-section {
     width: 340px;
-    max-height: 165px;
+    max-height: 220px;
     background-color: white;
     overflow: auto;
     overflow-x: hidden;
@@ -119,6 +119,16 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1px;
+}
+
+.transition-drop-down {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.transition-drop-down.open {
+  max-height: 300px;
 }
 
 .drop-down-section::-webkit-scrollbar, 
