@@ -40,6 +40,18 @@ function validateEndDate() {
   const alert = document.getElementById("alertMessageDate");
 
   if (!dateInput || !dateInput.value) {
+    alert.textContent = "Please select a date.";
+    alert.classList.remove("d-none");
+    rotateMessage();
+    return false;
+  }
+
+  const selectedDate = new Date(dateInput.value);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    alert.textContent = "Date cannot be in the past.";
     alert.classList.remove("d-none");
     rotateMessage();
     return false;

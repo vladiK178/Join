@@ -37,7 +37,7 @@ async function saveNewTask() {
     await postTaskToDatabase(currentUser.id, newTask);
     showSuccessMessage();
     setTimeout(() => {
-      initAddTaskPage();
+      window.location.href = "board.html";
     }, 2200);
   } catch (error) {
     console.error("Error saving task:", error);
