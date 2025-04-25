@@ -691,10 +691,10 @@
 
 @keyframes fadeInOverlay {
     from {
-      background-color: rgba(184, 185, 186, 0); /* ganz transparent */
+      background-color: rgba(184, 185, 186, 0); 
     }
     to {
-      background-color: rgba(184, 185, 186, 0.8); /* gewünschte Deckkraft */
+      background-color: rgba(184, 185, 186, 0.8); 
     }
   }
   
@@ -716,16 +716,16 @@
   }  
 
   @keyframes slideInFromRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.slide-in-from-right {
-  animation: slideInFromRight 0.5s ease-out forwards;
-}
+  
+  .slide-in-from-right {
+    animation: slideInFromRight 0.5s ease-out forwards;
+  }  
