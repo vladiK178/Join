@@ -352,7 +352,9 @@
     }
 
     .complete-right-section {
-        padding-left: 30px;
+        padding: 0;
+        margin: 0;
+        height: calc(100vh - 96px);
     }
 
     .headline-section h1 {
