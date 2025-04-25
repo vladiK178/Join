@@ -1,5 +1,8 @@
 let currentUser;
 
+/**
+ * Initializes the Add Task page with user data and UI elements
+ */
 async function initAddTaskPage() {
   await getUsersData();
   currentSubTask = {};
@@ -14,6 +17,9 @@ async function initAddTaskPage() {
   initOutsideClickListener();
 }
 
+/**
+ * Gets current user from local storage
+ */
 function setCurrentUser() {
   const currentUserId = localStorage.getItem("currentUserId");
   currentUser = users[currentUserId];
@@ -22,16 +28,21 @@ function setCurrentUser() {
   }
 }
 
+/**
+ * Renders the Add Task form in the content section
+ */
 function renderAddTaskContent() {
   const content = document.getElementById("newContentSection");
   content.innerHTML += getAddTaskContent();
 }
 
+/**
+ * Saves a new task after validation
+ */
 async function saveNewTask() {
-  if (!validateTitle()) return;
-  if (!validateAssignedContacts()) return;
-  if (!validateEndDate()) return;
-  if (!validateCategory()) return;
+  // Validate all form fields
+  if (!validateForm()) return;
+  
   const newTask = buildNewTask();
   try {
     await postTaskToDatabase(currentUser.id, newTask);
@@ -44,6 +55,10 @@ async function saveNewTask() {
   }
 }
 
+/**
+ * Builds a task object from form values
+ * @returns {Object} The task object
+ */
 function buildNewTask() {
   const title = document.getElementById("title").value.trim();
   const description = document.getElementById("description").value.trim();
@@ -60,6 +75,9 @@ function buildNewTask() {
   };
 }
 
+/**
+ * Shows success message after saving task
+ */
 function showSuccessMessage() {
   let overlay = document.getElementById("successAddTaskOverlay");
   overlay.classList.remove("d-none");
