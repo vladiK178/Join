@@ -124,7 +124,6 @@ function getContactsContentHtml() {
 * @returns {string} HTML for contact details view
 */
 function getContactDetailsHtml(contactKey, contact, color) {
-  // Get initials from first and last name
   const firstInitial = contact.firstNameContact.charAt(0);
   const lastInitial = contact.lastNameContact.charAt(0);
   
