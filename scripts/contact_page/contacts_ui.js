@@ -27,7 +27,11 @@ function renderContactDetails(contactKey) {
 
   // Render contact with assigned color
   const color = getOrAssignColorForContact(contactKey);
-  container.innerHTML = getContactDetailsHtml(contactKey, contact, color);
+  container.innerHTML = `
+  <div class="slide-in-from-right">
+    ${getContactDetailsHtml(contactKey, contact, color)}
+  </div>
+`;
 }
 
 /**
