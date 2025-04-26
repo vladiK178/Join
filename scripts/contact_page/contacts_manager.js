@@ -1,32 +1,69 @@
 /**
- * Initializes the contact page with data from Firebase
+ * Initializes the contact page with user data.
  */
 async function initContactPage() {
-    const userId = localStorage.getItem("currentUserId");
-    if (!userId) {
-      console.error("No user ID found in localStorage - login required");
-      window.location.href = "index.html";
-      return;
-    }
+    const userId = getUserIdFromStorage();
+    if (!userId) return redirectToLogin();
+
     try {
-      await getUsersData();
-      currentUser = users[userId];
-      if (!currentUser) {
-        console.error("User not found in database");
-        localStorage.clear();
-        window.location.href = "index.html";
-        return;
-      }
-      localStorage.setItem("currentUserId", userId);
-      renderDesktopTemplate();
-      renderContactsContent();
-      changeToChosenContactsSection();
-      renderSpacerAndContactSection();
+      await loadUserData(userId);
+      setupContactPage();
     } catch (error) {
-      console.error("Error loading user data from Firebase:", error);
-      window.location.href = "index.html";
+      handleInitError(error);
     }
-  }
+}
+
+/**
+ * Retrieves the current user ID from localStorage.
+ * @returns {string|null} User ID or null if not found
+ */
+function getUserIdFromStorage() {
+    return localStorage.getItem("currentUserId");
+}
+
+/**
+ * Redirects the user to the login page.
+ */
+function redirectToLogin() {
+    console.error("No user ID found - login required");
+    window.location.href = "index.html";
+}
+
+/**
+ * Loads user data from Firebase and sets current user.
+ * @param {string} userId - User ID
+ */
+async function loadUserData(userId) {
+    await getUsersData();
+    currentUser = users[userId];
+    if (!currentUser) {
+      console.error("User not found in database");
+      localStorage.clear();
+      window.location.href = "index.html";
+      throw new Error("User not found");
+    }
+    localStorage.setItem("currentUserId", userId);
+}
+
+/**
+ * Sets up the contact page UI.
+ */
+function setupContactPage() {
+    renderDesktopTemplate();
+    renderContactsContent();
+    changeToChosenContactsSection();
+    renderSpacerAndContactSection();
+}
+
+/**
+ * Handles initialization errors.
+ * @param {Error} error - Caught error
+ */
+function handleInitError(error) {
+    console.error("Error loading user data:", error);
+    window.location.href = "index.html";
+}
+
 
   /**
  * Handles contact selection by its key
