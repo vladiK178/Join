@@ -4,6 +4,11 @@ let currentlyOpenMenu = null;
 let currentContactKey = null;
 let userCircle;
 
+/**
+ * Creates the initials for the current user based on their first and last name.
+ * Retrieves names from localStorage and returns the two first letters capitalized.
+ * @returns {string} Initials of the current user (e.g., "AB")
+ */
 function renderCurrentUserCircle() {
   const currentUserFirstName = localStorage.getItem("firstName");
   const currentUserLastName = localStorage.getItem("lastName");
@@ -181,54 +186,31 @@ function renderAddContactSection() {
 }
 
 /**
- * Renders the spacer and contact section for the contact list.
+ * Renders all contacts grouped by first letter
  */
 function renderSpacerAndContactSection() {
-  const contactSection = document.getElementById("contactSection");
-  if (!contactSection) return;
-  contactSection.innerHTML = "";
-  const sortedContacts = getSortedContacts();
-  for (let letter of sortedContacts.keys()) {
-    renderLetterSection(contactSection, letter, sortedContacts.get(letter));
+  const container = document.getElementById("spacerAndContactsSection");
+  if (!container) return;
+  container.innerHTML = "";
+  if (!currentUser.contacts || Object.keys(currentUser.contacts).length === 0) {
+    container.innerHTML = "<div>No contacts available.</div>";
+    return;
   }
-}
-
-/**
- * Sorts contacts alphabetically by the first letter of the last name.
- * @returns {Map<string, Array>} - Sorted contacts
- */
-function getSortedContacts() {
-  const contactsMap = new Map();
-  for (const [key, contact] of Object.entries(currentUser.contacts || {})) {
-    const letter = contact.lastNameContact.charAt(0).toUpperCase();
-    if (!contactsMap.has(letter)) {
-      contactsMap.set(letter, []);
+  const sortedKeys = Object.keys(currentUser.contacts).sort((a, b) => {
+    const cA = currentUser.contacts[a].firstNameContact.toLowerCase();
+    const cB = currentUser.contacts[b].firstNameContact.toLowerCase();
+    return cA.localeCompare(cB);
+  });
+  let currentLetter = "";
+  sortedKeys.forEach(key => {
+    const contact = currentUser.contacts[key];
+    const firstLetter = contact.firstNameContact.charAt(0).toUpperCase();
+    if (firstLetter !== currentLetter) {
+      currentLetter = firstLetter;
+      container.innerHTML += `<div class="spacer">${currentLetter}</div>`;
     }
-    contactsMap.get(letter).push({ key, ...contact });
-  }
-  return new Map([...contactsMap.entries()].sort());
-}
-
-/**
- * Renders a section for a specific letter and its contacts.
- * @param {HTMLElement} container - Container to render into
- * @param {string} letter - Letter of the section
- * @param {Array} contacts - Contacts for the letter
- */
-function renderLetterSection(container, letter, contacts) {
-  const section = document.createElement("div");
-  section.classList.add("letter-section");
-  section.innerHTML = `<h2>${letter}</h2>`;
-  for (let contact of contacts) {
-    const contactDiv = document.createElement("div");
-    contactDiv.classList.add("contact-item");
-    contactDiv.innerHTML = `
-      <div>${contact.firstNameContact} ${contact.lastNameContact}</div>
-    `;
-    contactDiv.addEventListener("click", () => chooseContact(contact.key));
-    section.appendChild(contactDiv);
-  }
-  container.appendChild(section);
+    container.innerHTML += getContactListItemHtml(key, contact);
+  });
 }
 
 /**
@@ -384,48 +366,23 @@ function validateEditedContact(name, email, phone) {
 }
 
 /**
- * Deletes a contact from the database.
- * @param {string} contactKey - Key of the contact to delete
+ * Deletes a contact from Firebase
+ * @param {string} contactKey - Contact key to delete
  */
 async function deleteContact(contactKey) {
   try {
+    if (!currentUser.contacts || !currentUser.contacts[contactKey]) {
+      throw new Error("Contact not found or invalid key.");
+    }
     await deleteContactFromDatabase(currentUser.id, contactKey);
-    await refreshCurrentUser();
-    handleSuccessfulContactDeletion(contactKey);
+    delete currentUser.contacts[contactKey];
+    await getUsersData();
+    currentUser = users[currentUser.id];
+    showToastMessage("Contact deleted");
+    handlePostDeleteUI();
   } catch (error) {
-    handleContactDeletionError(error);
+    console.error("Error deleting contact from Firebase:", error);
   }
-}
-
-/**
- * Handles UI updates after successful contact deletion.
- * @param {string} contactKey - Deleted contact key
- */
-function handleSuccessfulContactDeletion(contactKey) {
-  renderSpacerAndContactSection();
-  showToastMessage("Contact deleted successfully");
-
-  if (isCurrentContactSelected(contactKey)) {
-    resetToDefaultState();
-    closeMobileContactViewIfNeeded();
-  }
-}
-
-/**
- * Checks if the deleted contact was the currently selected one.
- * @param {string} contactKey - Deleted contact key
- * @returns {boolean} True if deleted contact was selected
- */
-function isCurrentContactSelected(contactKey) {
-  return currentContactKey === contactKey;
-}
-
-/**
- * Handles errors during contact deletion.
- * @param {Error} error - Error object
- */
-function handleContactDeletionError(error) {
-  console.error("Error deleting contact from Firebase:", error);
 }
 
 /**
