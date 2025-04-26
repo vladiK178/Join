@@ -14,27 +14,6 @@ function renderCurrentUserCircle() {
 }
 
 /**
- * Renders the desktop template in the specified element
- */
-function renderDesktopTemplate() {
-  const content = document.getElementById('templateSection');
-  content.innerHTML = "";
-  content.innerHTML += getDesktopTemplate(renderCurrentUserCircle());
-}
-
-/**
- * Highlights the contacts section in navigation menu
- */
-function changeToChosenContactsSection() {
-  document.getElementById('summary-section').classList.remove('chosen-section');
-  document.getElementById('summary-img').classList.remove('summary-img-chosen');
-  document.getElementById('summary-img').classList.add('summary-img');
-  document.getElementById('contacts-section').classList.add('chosen-section');
-  document.getElementById('contacts-img').classList.remove('contacts-img');
-  document.getElementById('contacts-img').classList.add('contacts-img-chosen');
-}
-
-/**
  * Sorts contact list by first name
  * @param {Object} contacts - Contacts object to sort
  * @returns {Array} Sorted array of contact keys
@@ -144,14 +123,6 @@ function validateNewContact(name, email, phone) {
 function renderAddContactSection() {
   const overlay = document.getElementById("addContactContainerOverlay");
   overlay.innerHTML = getAddContactSectionHtml();
-}
-
-/**
- * Renders the main contacts content area
- */
-function renderContactsContent() {
-  const content = document.getElementById('newContentSection');
-  content.innerHTML = getContactsContentHtml();
 }
 
 /**
