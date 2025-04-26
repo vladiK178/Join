@@ -514,6 +514,12 @@ function getOrAssignColorForContact(contactKey) {
   return contactColors[contactKey];
 }
 
+/**
+ * Closes the mobile menu and resets the menu icon state.
+ *
+ * @param {HTMLElement} menuSection - The mobile menu element to hide
+ * @param {HTMLElement} menuIcon - The menu icon element to update
+ */
 function closeMobileMenu(menuSection, menuIcon) {
   menuSection.classList.add("d-none");
   menuIcon.classList.remove("open-menu-mobile");
