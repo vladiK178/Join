@@ -64,7 +64,6 @@ function handleInitError(error) {
     window.location.href = "index.html";
 }
 
-
   /**
  * Handles contact selection by its key
  * @param {string} key - Unique contact key
@@ -106,12 +105,23 @@ function animateSlideInFromRight(element) {
     setTimeout(() => element.classList.remove("add-contact-slide-in"), 500);
   }
 
-  /**
- * Shows feedback message to user
- * @param {string} message - Text to display
- * @param {boolean} isError - Whether message is an error
+/**
+ * Displays a toast message.
+ * @param {string} message - Message text
+ * @param {boolean} isError - Is an error message
  */
 function showToastMessage(message, isError = false) {
+    const toast = getOrCreateToast();
+    setToastStyles(toast, isError);
+    toast.textContent = message;
+    showToast(toast);
+}
+
+/**
+ * Retrieves or creates a toast element.
+ * @returns {HTMLElement} Toast element
+ */
+function getOrCreateToast() {
     let toast = document.getElementById("toast-message");
     if (!toast) {
       toast = document.createElement("div");
@@ -125,14 +135,29 @@ function showToastMessage(message, isError = false) {
       toast.style.zIndex = "1000";
       document.body.appendChild(toast);
     }
+    return toast;
+}
+
+/**
+ * Sets the style of the toast based on message type.
+ * @param {HTMLElement} toast - Toast element
+ * @param {boolean} isError - Is an error message
+ */
+function setToastStyles(toast, isError) {
     toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
     toast.style.color = "white";
-    toast.textContent = message;
+}
+
+/**
+ * Shows the toast temporarily.
+ * @param {HTMLElement} toast - Toast element
+ */
+function showToast(toast) {
     toast.style.display = "block";
     setTimeout(() => {
       toast.style.display = "none";
     }, 3000);
-  }
+}
 
   /**
  * Renders the desktop template in the specified element
