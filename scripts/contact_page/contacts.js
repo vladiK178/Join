@@ -278,33 +278,70 @@ function closeEditContactSection() {
 }
 
 /**
- * Saves edited contact information to Firebase
- * @param {string} contactKey - Contact key to update
+ * Saves changes made to an existing contact.
+ * @param {string} contactKey - Key of the contact to edit
  */
 async function saveEditedContact(contactKey) {
-  const name = document.getElementById("editContactName").value.trim();
-  const email = document.getElementById("editContactEmail").value.trim();
-  const phone = document.getElementById("editContactNumber").value.trim();
-  if (!validateEditedContact(name, email, phone)) return;
-  const [fName, lName] = formatContactName(name);
-  const updatedContact = { 
+  const { name, email, phone } = getEditContactInputValues();
+  if (!validateNewContact(name, email, phone)) return;
+
+  try {
+    const { fName, lName } = splitContactName(name);
+    const updatedContact = createUpdatedContactObject(fName, lName, email, phone);
+    await updateContactInDatabase(currentUser.id, contactKey, updatedContact);
+    await refreshCurrentUser();
+    handleSuccessfulContactEdit(contactKey);
+  } catch (error) {
+    handleContactEditError(error);
+  }
+}
+
+/**
+ * Retrieves input values from the edit contact form.
+ * @returns {{name: string, email: string, phone: string}} - Edited contact input values
+ */
+function getEditContactInputValues() {
+  return {
+    name: document.getElementById("editContactName").value.trim(),
+    email: document.getElementById("editContactEmail").value.trim(),
+    phone: document.getElementById("editContactPhone").value.trim()
+  };
+}
+
+/**
+ * Creates a contact object with updated values.
+ * @param {string} fName - First name
+ * @param {string} lName - Last name
+ * @param {string} email - Email address
+ * @param {string} phone - Phone number
+ * @returns {Object} - Updated contact object
+ */
+function createUpdatedContactObject(fName, lName, email, phone) {
+  return {
     firstNameContact: fName,
     lastNameContact: lName,
-    email: email,
-    phone: phone 
+    email,
+    phone
   };
-  try {
-    await updateContactInDatabase(currentUser.id, contactKey, updatedContact);
-    currentUser.contacts[contactKey] = updatedContact;
-    await getUsersData();
-    currentUser = users[currentUser.id];
-    showToastMessage("Saved changes");
+}
+
+/**
+ * Handles UI changes after successfully editing a contact.
+ * @param {string} contactKey - Key of the edited contact
+ */
+function handleSuccessfulContactEdit(contactKey) {
+  setTimeout(() => {
     renderSpacerAndContactSection();
-    closeEditContactSection();
-    renderContactDetails(contactKey);
-  } catch (error) {
-    console.error("Error updating contact in Firebase:", error);
-  }
+    chooseContact(contactKey);
+  }, 2000);
+}
+
+/**
+ * Handles errors during contact editing.
+ * @param {Error} error - Error object
+ */
+function handleContactEditError(error) {
+  console.error("Error updating contact in Firebase:", error);
 }
 
 /**
