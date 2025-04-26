@@ -361,23 +361,48 @@ function validateEditedContact(name, email, phone) {
 }
 
 /**
- * Deletes a contact from Firebase
- * @param {string} contactKey - Contact key to delete
+ * Deletes a contact from the database.
+ * @param {string} contactKey - Key of the contact to delete
  */
 async function deleteContact(contactKey) {
   try {
-    if (!currentUser.contacts || !currentUser.contacts[contactKey]) {
-      throw new Error("Contact not found or invalid key.");
-    }
     await deleteContactFromDatabase(currentUser.id, contactKey);
-    delete currentUser.contacts[contactKey];
-    await getUsersData();
-    currentUser = users[currentUser.id];
-    showToastMessage("Contact deleted");
-    handlePostDeleteUI();
+    await refreshCurrentUser();
+    handleSuccessfulContactDeletion(contactKey);
   } catch (error) {
-    console.error("Error deleting contact from Firebase:", error);
+    handleContactDeletionError(error);
   }
+}
+
+/**
+ * Handles UI updates after successful contact deletion.
+ * @param {string} contactKey - Deleted contact key
+ */
+function handleSuccessfulContactDeletion(contactKey) {
+  renderSpacerAndContactSection();
+  showToastMessage("Contact deleted successfully");
+
+  if (isCurrentContactSelected(contactKey)) {
+    resetToDefaultState();
+    closeMobileContactViewIfNeeded();
+  }
+}
+
+/**
+ * Checks if the deleted contact was the currently selected one.
+ * @param {string} contactKey - Deleted contact key
+ * @returns {boolean} True if deleted contact was selected
+ */
+function isCurrentContactSelected(contactKey) {
+  return currentContactKey === contactKey;
+}
+
+/**
+ * Handles errors during contact deletion.
+ * @param {Error} error - Error object
+ */
+function handleContactDeletionError(error) {
+  console.error("Error deleting contact from Firebase:", error);
 }
 
 /**
