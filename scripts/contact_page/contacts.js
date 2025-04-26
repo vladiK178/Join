@@ -158,14 +158,6 @@ function validateNewContact(name, email, phone) {
 }
 
 /**
- * Renders the add contact overlay content
- */
-function renderAddContactSection() {
-  const overlay = document.getElementById("addContactContainerOverlay");
-  overlay.innerHTML = getAddContactSectionHtml();
-}
-
-/**
  * Renders all contacts grouped by first letter
  */
 function renderSpacerAndContactSection() {
@@ -211,21 +203,6 @@ function getContactListItemHtml(key, contact) {
         <span class="email-span">${email}</span>
       </div>
     </div>`;
-}
-
-/**
- * Opens the edit contact overlay
- * @param {string} contactKey - Contact key to edit
- */
-function openEditContactSection(contactKey) {
-  const contactToEdit = currentUser.contacts[contactKey];
-  if (!contactToEdit) {
-    console.error("Contact not found:", contactKey);
-    return;
-  }
-  createEditOverlayIfMissing();
-  renderEditContactSection(contactToEdit, contactKey);
-  document.querySelector(".edit-contact-container-overlay").classList.remove("d-none");
 }
 
 /**
