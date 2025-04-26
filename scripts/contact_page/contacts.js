@@ -1,6 +1,7 @@
 let currentUser;
 const contactColors = {};
-let currentlyOpenMenu = null; // Stores the currently open menu
+let currentlyOpenMenu = null; 
+let currentContactKey = null;
 
 /**
  * Initializes the contact page with data from Firebase
@@ -90,6 +91,7 @@ function sortContactsByFirstName(contacts) {
  * @param {string} key - Unique contact key
  */
 function chooseContact(key) {
+  currentContactKey = key;
   const contactElement = getContactElement(key);
   if (!contactElement) return;
   if (isContactAlreadyChosen(contactElement)) return resetToDefaultState();
