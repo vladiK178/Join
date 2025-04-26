@@ -181,31 +181,54 @@ function renderAddContactSection() {
 }
 
 /**
- * Renders all contacts grouped by first letter
+ * Renders the spacer and contact section for the contact list.
  */
 function renderSpacerAndContactSection() {
-  const container = document.getElementById("spacerAndContactsSection");
-  if (!container) return;
-  container.innerHTML = "";
-  if (!currentUser.contacts || Object.keys(currentUser.contacts).length === 0) {
-    container.innerHTML = "<div>No contacts available.</div>";
-    return;
+  const contactSection = document.getElementById("contactSection");
+  if (!contactSection) return;
+  contactSection.innerHTML = "";
+  const sortedContacts = getSortedContacts();
+  for (let letter of sortedContacts.keys()) {
+    renderLetterSection(contactSection, letter, sortedContacts.get(letter));
   }
-  const sortedKeys = Object.keys(currentUser.contacts).sort((a, b) => {
-    const cA = currentUser.contacts[a].firstNameContact.toLowerCase();
-    const cB = currentUser.contacts[b].firstNameContact.toLowerCase();
-    return cA.localeCompare(cB);
-  });
-  let currentLetter = "";
-  sortedKeys.forEach(key => {
-    const contact = currentUser.contacts[key];
-    const firstLetter = contact.firstNameContact.charAt(0).toUpperCase();
-    if (firstLetter !== currentLetter) {
-      currentLetter = firstLetter;
-      container.innerHTML += `<div class="spacer">${currentLetter}</div>`;
+}
+
+/**
+ * Sorts contacts alphabetically by the first letter of the last name.
+ * @returns {Map<string, Array>} - Sorted contacts
+ */
+function getSortedContacts() {
+  const contactsMap = new Map();
+  for (const [key, contact] of Object.entries(currentUser.contacts || {})) {
+    const letter = contact.lastNameContact.charAt(0).toUpperCase();
+    if (!contactsMap.has(letter)) {
+      contactsMap.set(letter, []);
     }
-    container.innerHTML += getContactListItemHtml(key, contact);
-  });
+    contactsMap.get(letter).push({ key, ...contact });
+  }
+  return new Map([...contactsMap.entries()].sort());
+}
+
+/**
+ * Renders a section for a specific letter and its contacts.
+ * @param {HTMLElement} container - Container to render into
+ * @param {string} letter - Letter of the section
+ * @param {Array} contacts - Contacts for the letter
+ */
+function renderLetterSection(container, letter, contacts) {
+  const section = document.createElement("div");
+  section.classList.add("letter-section");
+  section.innerHTML = `<h2>${letter}</h2>`;
+  for (let contact of contacts) {
+    const contactDiv = document.createElement("div");
+    contactDiv.classList.add("contact-item");
+    contactDiv.innerHTML = `
+      <div>${contact.firstNameContact} ${contact.lastNameContact}</div>
+    `;
+    contactDiv.addEventListener("click", () => chooseContact(contact.key));
+    section.appendChild(contactDiv);
+  }
+  container.appendChild(section);
 }
 
 /**
