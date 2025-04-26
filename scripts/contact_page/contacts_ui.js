@@ -17,19 +17,13 @@ function getOrAssignColorForContact(contactKey) {
 function renderContactDetails(contactKey) {
   const container = document.getElementById("contactDetails");
   const contact = currentUser.contacts[contactKey];
-
-  // Handle missing contact
   if (!contact) {
     console.error("Contact not found:", contactKey);
     if (container) container.innerHTML = "<div>Contact not available.</div>";
     return;
   }
-
-  // Render contact with assigned color
   const color = getOrAssignColorForContact(contactKey);
   container.innerHTML = getContactDetailsHtml(contactKey, contact, color);
-
-  // Nur den Inhalt animieren
   const contentDiv = document.getElementById("contactDetailsContent");
   if (contentDiv) {
     contentDiv.classList.add("slide-in-from-right");
