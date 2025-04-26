@@ -8,29 +8,21 @@ let currentContactKey = null;
  */
 async function initContactPage() {
   const userId = localStorage.getItem("currentUserId");
-  
   if (!userId) {
     console.error("No user ID found in localStorage - login required");
     window.location.href = "index.html";
     return;
   }
-  
   try {
-    // Load directly from Firebase instead of localStorage
     await getUsersData();
     currentUser = users[userId];
-    
-    // If no user data was found, redirect to login
     if (!currentUser) {
       console.error("User not found in database");
       localStorage.clear();
       window.location.href = "index.html";
       return;
     }
-    
-    // Update user ID in localStorage
     localStorage.setItem("currentUserId", userId);
-    
     renderDesktopTemplate();
     renderContactsContent();
     changeToChosenContactsSection();
@@ -163,22 +155,14 @@ async function saveNewContact() {
   let email = document.getElementById("contactEmail").value.trim();
   let phone = document.getElementById("contactNumber").value.trim();
   if (!validateNewContact(name, email, phone)) return;
-
   let [fName, lName] = formatContactName(name);
   try {
     initializeContactsObjectIfNeeded();
     let newContact = { firstNameContact: fName, lastNameContact: lName, email, phone };
-    
-    // Firebase: Add contact
     let newContactKey = await addContactToDatabase(currentUser.id, newContact);
-    
-    // Update local object
     currentUser.contacts[newContactKey] = newContact;
-    
-    // Reload all data from Firebase
     await getUsersData();
     currentUser = users[currentUser.id];
-
     showSuccessMessage();
     setTimeout(() => { 
       closeAddContactSection(); 
@@ -188,8 +172,6 @@ async function saveNewContact() {
     console.error("Error saving new contact to Firebase:", error);
   }
 }
-
-
 
 /**
  * Validates contact information
@@ -202,18 +184,13 @@ function checkAllInputsValid() {
   const name = document.getElementById("contactName").value.trim();
   const email = document.getElementById("contactEmail").value.trim();
   const phone = document.getElementById("contactNumber").value.trim();
-
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[0-9\s]{10,15}$/;
-
   const nameValid = name.split(" ").filter(Boolean).length >= 2;
   const emailValid = emailRegex.test(email);
   const phoneValid = phoneRegex.test(phone);
-
   const button = document.querySelector(".create-button");
-
   const allValid = nameValid && emailValid && phoneValid;
-
   button.disabled = !allValid;
   button.style.backgroundColor = allValid ? "#2a3647" : "#5c5c5c";
   button.style.cursor = allValid ? "pointer" : "default";
@@ -222,18 +199,14 @@ function checkAllInputsValid() {
 function validateNewContact(name, email, phone) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[0-9\s]{10,15}$/;
-
   let isValid = true;
-
   if (!validateNameParts(name, "alertMessageTitle")) isValid = false;
   if (!validateEmail(email, emailRegex, "alertMessageEmail")) isValid = false;
   if (!validatePhone(phone, phoneRegex, "alertMessageNumber")) isValid = false;
-
   if (isEmailExisting(email)) {
     showEmailAlreadyExists("alertMessageEmail");
     isValid = false;
   }
-
   return isValid;
 }
 
@@ -260,18 +233,15 @@ function renderSpacerAndContactSection() {
   const container = document.getElementById("spacerAndContactsSection");
   if (!container) return;
   container.innerHTML = "";
-
   if (!currentUser.contacts || Object.keys(currentUser.contacts).length === 0) {
     container.innerHTML = "<div>No contacts available.</div>";
     return;
   }
-  
   const sortedKeys = Object.keys(currentUser.contacts).sort((a, b) => {
     const cA = currentUser.contacts[a].firstNameContact.toLowerCase();
     const cB = currentUser.contacts[b].firstNameContact.toLowerCase();
     return cA.localeCompare(cB);
   });
-
   let currentLetter = "";
   sortedKeys.forEach(key => {
     const contact = currentUser.contacts[key];
@@ -359,7 +329,6 @@ function closeEditContactSection() {
  * @param {boolean} isError - Whether message is an error
  */
 function showToastMessage(message, isError = false) {
-  // Create toast element
   let toast = document.getElementById("toast-message");
   if (!toast) {
     toast = document.createElement("div");
@@ -373,14 +342,10 @@ function showToastMessage(message, isError = false) {
     toast.style.zIndex = "1000";
     document.body.appendChild(toast);
   }
-
-  // Set style and content
   toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
   toast.style.color = "white";
   toast.textContent = message;
   toast.style.display = "block";
-
-  // Auto-hide after delay
   setTimeout(() => {
     toast.style.display = "none";
   }, 3000);
@@ -395,7 +360,6 @@ async function saveEditedContact(contactKey) {
   const email = document.getElementById("editContactEmail").value.trim();
   const phone = document.getElementById("editContactNumber").value.trim();
   if (!validateEditedContact(name, email, phone)) return;
-  
   const [fName, lName] = formatContactName(name);
   const updatedContact = { 
     firstNameContact: fName,
@@ -403,18 +367,11 @@ async function saveEditedContact(contactKey) {
     email: email,
     phone: phone 
   };
-  
   try {
-    // Firebase: Update contact
     await updateContactInDatabase(currentUser.id, contactKey, updatedContact);
-    
-    // Update local data
     currentUser.contacts[contactKey] = updatedContact;
-    
-    // Reload data from Firebase
     await getUsersData();
     currentUser = users[currentUser.id];
-    
     showToastMessage("Saved changes");
     renderSpacerAndContactSection();
     closeEditContactSection();
@@ -449,17 +406,10 @@ async function deleteContact(contactKey) {
     if (!currentUser.contacts || !currentUser.contacts[contactKey]) {
       throw new Error("Contact not found or invalid key.");
     }
-    
-    // Firebase: Delete contact
     await deleteContactFromDatabase(currentUser.id, contactKey);
-    
-    // Update local data
     delete currentUser.contacts[contactKey];
-    
-    // Reload data from Firebase
     await getUsersData();
     currentUser = users[currentUser.id];
-
     showToastMessage("Contact deleted");
     handlePostDeleteUI();
   } catch (error) {
