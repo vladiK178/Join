@@ -2,37 +2,6 @@ let currentUser;
 const contactColors = {};
 let currentlyOpenMenu = null; 
 let currentContactKey = null;
-
-/**
- * Initializes the contact page with data from Firebase
- */
-async function initContactPage() {
-  const userId = localStorage.getItem("currentUserId");
-  if (!userId) {
-    console.error("No user ID found in localStorage - login required");
-    window.location.href = "index.html";
-    return;
-  }
-  try {
-    await getUsersData();
-    currentUser = users[userId];
-    if (!currentUser) {
-      console.error("User not found in database");
-      localStorage.clear();
-      window.location.href = "index.html";
-      return;
-    }
-    localStorage.setItem("currentUserId", userId);
-    renderDesktopTemplate();
-    renderContactsContent();
-    changeToChosenContactsSection();
-    renderSpacerAndContactSection();
-  } catch (error) {
-    console.error("Error loading user data from Firebase:", error);
-    window.location.href = "index.html";
-  }
-}
-
 let userCircle;
 
 function renderCurrentUserCircle() {
@@ -76,47 +45,6 @@ function sortContactsByFirstName(contacts) {
     a.firstNameContact.toLowerCase().localeCompare(b.firstNameContact.toLowerCase())
   );
   return sorted.map(([key]) => key);
-}
-
-/**
- * Handles contact selection by its key
- * @param {string} key - Unique contact key
- */
-function chooseContact(key) {
-  currentContactKey = key;
-  const contactElement = getContactElement(key);
-  if (!contactElement) return;
-  if (isContactAlreadyChosen(contactElement)) return resetToDefaultState();
-  if (isMobileView()) return handleMobileContactSelection(key);
-  resetAllContacts();
-  contactElement.classList.add("contact-chosen");
-  renderContactDetails(key);
-}
-
-/**
- * Removes selection from all contacts
- */
-function resetAllContacts() {
-  document
-    .querySelectorAll(".contact-chosen")
-    .forEach(contact => contact.classList.remove("contact-chosen"));
-}
-
-/**
- * Resets contact view to default state
- */
-function resetToDefaultState() {
-  resetAllContacts();
-  const details = document.getElementById("contactDetails");
-  if (details) details.innerHTML = "";
-}
-
-/**
- * Slide-in animation for Add Contact overlay
- */
-function animateSlideInFromRight(element) {
-  element.classList.add("add-contact-slide-in");
-  setTimeout(() => element.classList.remove("add-contact-slide-in"), 500);
 }
 
 /**
@@ -321,34 +249,6 @@ function renderEditContactSection(contact, contactKey) {
 function closeEditContactSection() {
   const overlay = document.querySelector(".edit-contact-container-overlay");
   if (overlay) overlay.classList.add("d-none");
-}
-
-/**
- * Shows feedback message to user
- * @param {string} message - Text to display
- * @param {boolean} isError - Whether message is an error
- */
-function showToastMessage(message, isError = false) {
-  let toast = document.getElementById("toast-message");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "toast-message";
-    toast.style.position = "fixed";
-    toast.style.bottom = "100px";
-    toast.style.left = "50%";
-    toast.style.transform = "translateX(-50%)";
-    toast.style.padding = "10px 20px";
-    toast.style.borderRadius = "4px";
-    toast.style.zIndex = "1000";
-    document.body.appendChild(toast);
-  }
-  toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
-  toast.style.color = "white";
-  toast.textContent = message;
-  toast.style.display = "block";
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 3000);
 }
 
 /**
