@@ -163,6 +163,14 @@ function checkAllInputsValid() {
   button.style.cursor = allValid ? "pointer" : "default";
 }
 
+/**
+ * Validates the input data for creating a new contact.
+ * Checks if the name, email, and phone number are properly formatted and if the email already exists.
+ * @param {string} name - Full name of the contact
+ * @param {string} email - Email address of the contact
+ * @param {string} phone - Phone number of the contact
+ * @returns {boolean} True if all validations pass, otherwise false
+ */
 function validateNewContact(name, email, phone) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[0-9\s]{10,15}$/;
