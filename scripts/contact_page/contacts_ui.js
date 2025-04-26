@@ -1,5 +1,5 @@
 /**
- * Gets or creates color for contact
+ * Gets or creates color for contact.
  * @param {string} contactKey - Contact identifier
  * @returns {string} Color hex code
  */
@@ -22,7 +22,6 @@ function renderContactDetails(contactKey) {
     showContactNotFound(container, contactKey);
     return;
   }
-
   renderContactContent(container, contactKey, contact);
 }
 
@@ -70,6 +69,7 @@ function toggleMenuMobile(event) {
   event.stopPropagation();
   const menu = document.getElementById("menuSectionMobile");
   const icon = document.getElementById("noteMenuMobile");
+
   if (!menu || !icon) {
     handleMissingMenuElements();
     return;
@@ -135,9 +135,8 @@ function closePreviouslyOpenMenu() {
   }
 }
 
-
 /**
- * Gets contact element by its key
+ * Gets contact element by its key.
  * @param {string} key - Contact key
  * @returns {HTMLElement|null} Contact element or null
  */
@@ -148,7 +147,7 @@ function getContactElement(key) {
 }
 
 /**
- * Checks if contact is already selected
+ * Checks if contact is already selected.
  * @param {HTMLElement} element - Contact element
  * @returns {boolean} True if selected
  */
@@ -157,7 +156,7 @@ function isContactAlreadyChosen(element) {
 }
 
 /**
- * Checks if viewport is mobile size
+ * Checks if viewport is mobile size.
  * @returns {boolean} True if mobile width
  */
 function isMobileView() {
@@ -165,7 +164,7 @@ function isMobileView() {
 }
 
 /**
- * Handles contact selection on mobile
+ * Handles contact selection on mobile.
  * @param {string} key - Selected contact key
  */
 function handleMobileContactSelection(key) {
@@ -179,7 +178,7 @@ function handleMobileContactSelection(key) {
 }
 
 /**
- * Returns to contacts list from detail view
+ * Returns to contacts list from detail view.
  */
 function goBackToContacts() {
   const listSection = document.querySelector(".contact-section");
@@ -191,40 +190,7 @@ function goBackToContacts() {
 }
 
 /**
- * Toggles mobile menu visibility
- * @param {Event} event - Click event
- */
-function toggleMenuMobile(event) {
-  event.stopPropagation();
-  const menu = document.getElementById("menuSectionMobile");
-  const icon = document.getElementById("noteMenuMobile");
-  if (!menu || !icon) {
-    console.error("Menu elements not found");
-    return;
-  }
-  const isOpen = !menu.classList.contains("d-none");
-  if (isOpen) {
-    menu.classList.add("d-none");
-    icon.classList.remove("open-menu-mobile");
-    icon.classList.add("closed-menu-mobile");
-  } else {
-    if (currentlyOpenMenu && currentlyOpenMenu !== menu) {
-      currentlyOpenMenu.classList.add("d-none");
-      const prevIcon = document.getElementById("noteMenuMobile");
-      if (prevIcon) {
-        prevIcon.classList.remove("open-menu-mobile");
-        prevIcon.classList.add("closed-menu-mobile");
-      }
-    }
-    menu.classList.remove("d-none");
-    icon.classList.remove("closed-menu-mobile");
-    icon.classList.add("open-menu-mobile");
-    currentlyOpenMenu = menu;
-  }
-}
-
-/**
- * Shows success message temporarily
+ * Shows success message temporarily.
  */
 function showSuccessMessage() {
   const overlay = document.getElementById("successContactsOverlay");
