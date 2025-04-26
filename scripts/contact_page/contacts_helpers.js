@@ -17,17 +17,14 @@ function capitalizeFirstLetter(string) {
  */
 function validateEmail(email, regex, alertId) {
   const trimmedEmail = email.trim();
-
   if (trimmedEmail === "") {
     hideAlertMessage(alertId); // Kein Fehlertext bei leer
     return false;
   }
-
   if (!regex.test(trimmedEmail)) {
     showAlertMessage(alertId, "Please enter a valid email.");
     return false;
   }
-
   hideAlertMessage(alertId);
   return true;
 }
@@ -41,17 +38,14 @@ function validateEmail(email, regex, alertId) {
  */
 function validatePhone(phone, regex, alertId) {
   const trimmedPhone = phone.trim();
-
   if (trimmedPhone === "") {
     hideAlertMessage(alertId); // Kein Text wenn leer
     return false;
   }
-
   if (!regex.test(trimmedPhone)) {
     showAlertMessage(alertId, "Please enter a valid phone number.");
     return false;
   }
-
   hideAlertMessage(alertId);
   return true;
 }
@@ -65,17 +59,14 @@ function validatePhone(phone, regex, alertId) {
 function validateNameParts(name, alertId) {
   const trimmedName = name.trim();
   const parts = trimmedName.split(" ").filter(Boolean);
-
   if (trimmedName === "") {
-    hideAlertMessage(alertId); // Keine Meldung bei leerem Feld
+    hideAlertMessage(alertId); 
     return false;
   }
-
   if (parts.length < 2) {
     showAlertMessage(alertId, "Please enter both first and last names.");
     return false;
   }
-
   hideAlertMessage(alertId);
   return true;
 }
@@ -111,7 +102,6 @@ function hideAlertMessage(alertId) {
  */
 function isEmailExisting(email) {
   if (!currentUser.contacts) return false;
-
   const emailLower = email.toLowerCase();
   return Object.values(currentUser.contacts).some(
     (contact) => contact.email.toLowerCase() === emailLower
@@ -134,12 +124,10 @@ function showEmailAlreadyExists(alertId) {
 function formatContactName(contactName) {
   const nameParts = contactName.split(" ").filter(Boolean);
   const firstName = capitalizeFirstLetter(nameParts[0]);
-
   let lastName = "";
   if (nameParts.length > 1) {
     lastName = nameParts.slice(1).map(capitalizeFirstLetter).join(" ");
   }
-
   return [firstName, lastName];
 }
 
@@ -166,7 +154,6 @@ function getRandomColorFromPalette() {
     "#DAF7A6",
     "#C70039",
   ];
-
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
 }
