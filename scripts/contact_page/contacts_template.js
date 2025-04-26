@@ -102,6 +102,30 @@ function getContactsContentHtml() {
           <span class="headline-span">Better with a team</span>
         </div>
         <div id="contactDetails" class="contact-details"></div>
+        <div class="change-column-menu-mobile">
+          <img id="noteMenuMobile" 
+               onclick="toggleMenuMobile(event)" 
+               class="closed-menu-mobile" 
+               src="./assets/img/more_vert.svg" 
+               alt="More">
+        </div>
+        <div id="menuSectionMobile" class="menu-section-mobile d-none">
+          <div class="menu-mobile">
+            <div class="menu-mobile-container">
+              <img src="./assets/img/edit-icon.svg" alt="">
+              <a href="javascript:void(0);" class="menu-option" onclick="openEditContactSection(currentContactKey)">
+                Edit
+              </a>
+            </div>
+            <div class="seperator-edid-delete"></div>
+            <div class="menu-mobile-container">
+              <img src="./assets/img/trashImg.svg" alt="">
+              <a href="javascript:void(0);" class="menu-option" onclick="deleteContact(currentContactKey)">
+                Delete
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="back-arrow-section" onclick="goBackToContacts()">
         <img class="back-arrow" src="./assets/img/back_arrow.svg" alt="Back">
