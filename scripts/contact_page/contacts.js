@@ -514,6 +514,12 @@ function getOrAssignColorForContact(contactKey) {
   return contactColors[contactKey];
 }
 
+function closeMobileMenu(menuSection, menuIcon) {
+  menuSection.classList.add("d-none");
+  menuIcon.classList.remove("open-menu-mobile");
+  menuIcon.classList.add("closed-menu-mobile");
+}
+
 // Event listener for clicks outside the menu
 document.addEventListener("click", event => {
   const menuSection = document.getElementById("menuSectionMobile");
