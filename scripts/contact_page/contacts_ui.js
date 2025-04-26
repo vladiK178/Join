@@ -199,3 +199,54 @@ function showSuccessMessage() {
     overlay.classList.add("d-none");
   }, 2250);
 }
+
+/**
+ * Shows the add contact overlay
+ */
+function openAddContactSection() {
+  const overlay = document.getElementById("addContactContainerOverlay");
+  overlay.classList.remove("d-none");
+  overlay.classList.add("overlay-fade-in");
+  renderAddContactSection();
+  const card = document.getElementById("addContactCard");
+  animateSlideInFromRight(card);
+}
+
+/**
+ * Hides the add contact overlay
+ */
+function closeAddContactSection() {
+  const overlay = document.getElementById("addContactContainerOverlay");
+  const card = document.getElementById("addContactCard");
+  card.classList.add("add-contact-slide-out");
+  overlay.classList.remove("overlay-fade-in");
+  overlay.classList.add("overlay-fade-out");   
+  setTimeout(() => {
+    card.classList.remove("add-contact-slide-out");
+    overlay.classList.add("d-none");
+    overlay.classList.remove("overlay-fade-out");
+  }, 400);
+}
+
+/**
+ * Renders the add contact overlay content
+ */
+function renderAddContactSection() {
+  const overlay = document.getElementById("addContactContainerOverlay");
+  overlay.innerHTML = getAddContactSectionHtml();
+}
+
+/**
+ * Opens the edit contact overlay
+ * @param {string} contactKey - Contact key to edit
+ */
+function openEditContactSection(contactKey) {
+  const contactToEdit = currentUser.contacts[contactKey];
+  if (!contactToEdit) {
+    console.error("Contact not found:", contactKey);
+    return;
+  }
+  createEditOverlayIfMissing();
+  renderEditContactSection(contactToEdit, contactKey);
+  document.querySelector(".edit-contact-container-overlay").classList.remove("d-none");
+}
