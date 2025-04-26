@@ -55,29 +55,84 @@ function closeAddContactSection() {
 }
 
 /**
- * Creates a new contact after validation and adds to Firebase
+ * Saves a new contact to the database.
  */
 async function saveNewContact() {
-  let name = document.getElementById("contactName").value.trim();
-  let email = document.getElementById("contactEmail").value.trim();
-  let phone = document.getElementById("contactNumber").value.trim();
+  const { name, email, phone } = getNewContactInputValues();
   if (!validateNewContact(name, email, phone)) return;
-  let [fName, lName] = formatContactName(name);
+
   try {
-    initializeContactsObjectIfNeeded();
-    let newContact = { firstNameContact: fName, lastNameContact: lName, email, phone };
-    let newContactKey = await addContactToDatabase(currentUser.id, newContact);
-    currentUser.contacts[newContactKey] = newContact;
-    await getUsersData();
-    currentUser = users[currentUser.id];
-    showSuccessMessage();
-    setTimeout(() => { 
-      closeAddContactSection(); 
-      renderSpacerAndContactSection(); 
-    }, 2000);
+    const { fName, lName } = splitContactName(name);
+    const newContactKey = await createNewContactInDatabase(fName, lName, email, phone);
+    await refreshCurrentUser();
+    handleSuccessfulContactCreation(newContactKey);
   } catch (error) {
-    console.error("Error saving new contact to Firebase:", error);
+    handleContactCreationError(error);
   }
+}
+
+/**
+ * Retrieves input values for a new contact.
+ * @returns {{name: string, email: string, phone: string}} - Contact input values
+ */
+function getNewContactInputValues() {
+  return {
+    name: document.getElementById("contactName").value.trim(),
+    email: document.getElementById("contactEmail").value.trim(),
+    phone: document.getElementById("contactNumber").value.trim()
+  };
+}
+
+/**
+ * Splits full name into first and last name.
+ * @param {string} name - Full contact name
+ * @returns {{fName: string, lName: string}} - First and last name
+ */
+function splitContactName(name) {
+  const [fName, lName] = formatContactName(name);
+  return { fName, lName };
+}
+
+/**
+ * Adds a new contact to the database.
+ * @param {string} fName - First name
+ * @param {string} lName - Last name
+ * @param {string} email - Email address
+ * @param {string} phone - Phone number
+ * @returns {Promise<string>} - New contact key
+ */
+async function createNewContactInDatabase(fName, lName, email, phone) {
+  initializeContactsObjectIfNeeded();
+  const newContact = { firstNameContact: fName, lastNameContact: lName, email, phone };
+  return await addContactToDatabase(currentUser.id, newContact);
+}
+
+/**
+ * Refreshes the current user data after database update.
+ */
+async function refreshCurrentUser() {
+  await getUsersData();
+  currentUser = users[currentUser.id];
+}
+
+/**
+ * Handles UI changes after successfully saving a contact.
+ * @param {string} newContactKey - Key of the new contact
+ */
+function handleSuccessfulContactCreation(newContactKey) {
+  showSuccessMessage();
+  setTimeout(() => {
+    closeAddContactSection();
+    renderSpacerAndContactSection();
+  }, 2000);
+}
+
+/**
+ * Handles errors during new contact creation.
+ * @param {Error} error - Error object
+ */
+function handleContactCreationError(error) {
+  console.error("Error saving new contact to Firebase:", error);
 }
 
 /**
