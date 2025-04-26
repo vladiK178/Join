@@ -128,6 +128,7 @@ function getContactDetailsHtml(contactKey, contact, color) {
   const lastInitial = contact.lastNameContact.charAt(0);
   
   return `
+  <div id="contactDetailsContent" class="contact-details-content">
     <div class="big-name-circle-and-name">
       <div class="big-name-circle" style="background-color: ${color};">
         ${firstInitial}${lastInitial}
@@ -160,6 +161,7 @@ function getContactDetailsHtml(contactKey, contact, color) {
         <span class="phone-name-span">Phone</span>
         <span>${contact.phone || "No phone number"}</span>
       </div>
+    </div>
     </div>
     <div class="change-column-menu-mobile">
       <img id="noteMenuMobile" 
