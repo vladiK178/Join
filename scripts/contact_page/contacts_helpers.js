@@ -157,3 +157,26 @@ function getRandomColorFromPalette() {
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
 }
+
+/**
+ * Validates contact information
+ * @param {string} name - Full name
+ * @param {string} email - Email address
+ * @param {string} phone - Phone number
+ * @returns {boolean} Validity status
+ */
+function checkAllInputsValid() {
+  const name = document.getElementById("contactName").value.trim();
+  const email = document.getElementById("contactEmail").value.trim();
+  const phone = document.getElementById("contactNumber").value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\+?[0-9\s]{10,15}$/;
+  const nameValid = name.split(" ").filter(Boolean).length >= 2;
+  const emailValid = emailRegex.test(email);
+  const phoneValid = phoneRegex.test(phone);
+  const button = document.querySelector(".create-button");
+  const allValid = nameValid && emailValid && phoneValid;
+  button.disabled = !allValid;
+  button.style.backgroundColor = allValid ? "#2a3647" : "#5c5c5c";
+  button.style.cursor = allValid ? "pointer" : "default";
+}
