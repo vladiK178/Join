@@ -15,6 +15,8 @@ async function initAddTaskPage() {
   renderSubtasks();
   addSubtaskEnterListener();
   initOutsideClickListener();
+  initializeErrorHiding();
+  setMinDateToday();
 }
 
 /**
@@ -86,3 +88,55 @@ function showSuccessMessage() {
     overlay.classList.add("d-none");
   }, 2250);
 }
+
+function addInputListener(inputId, alertId, eventType = "input") {
+  const input = document.getElementById(inputId);
+  const alert = document.getElementById(alertId);
+  if (input && alert) {
+    input.addEventListener(eventType, () => {
+      alert.classList.add("d-none");
+      input.classList.remove("input-error");
+    });
+  }
+}
+
+function initializeErrorHiding() {
+  addInputListener("title", "alertMessageTitle");
+  addInputListener("description", "alertMessageTitle");
+  addInputListener("date", "alertMessageDate");
+  addInputListener("dropDownSection", "alertMessageAssignedTo", "click");
+  addInputListener("categoryDropDownSection", "alertMessageCategory", "click");
+}
+
+function hideAssignedContactsAlertOnChange() {
+  const contacts = currentUser.contacts;
+  const alert = document.getElementById("alertMessageAssignedTo");
+
+  if (!contacts || !alert) return;
+
+  for (const key in contacts) {
+    const checkbox = document.getElementById(`assignedToCheckbox${key}`);
+    if (checkbox) {
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+          alert.classList.add("d-none");
+        }
+      });
+    }
+  }
+}
+
+/**
+ * Sets minimum selectable date to today
+ */
+function setMinDateToday() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById("date").setAttribute("min", today);
+}
+
+/**
+ * Event listener when page is fully loaded
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  initAddTaskPage();
+});

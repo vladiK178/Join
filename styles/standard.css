@@ -16,6 +16,10 @@ label {
     margin-bottom: 7px;
 }
 
+.input-error {
+    border: 1px solid red !important;
+}
+
 *::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Edge */
 }

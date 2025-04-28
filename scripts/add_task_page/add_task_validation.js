@@ -9,11 +9,13 @@ function validateTitle() {
   // Check if title input is empty
   if (!titleInput || titleInput.value.trim() === "") {
     alert.classList.remove("d-none");
+    titleInput.classList.add("input-error");
     return false;
   }
   
   // Valid title
   alert.classList.add("d-none");
+  titleInput.classList.remove("input-error");
   return true;
 }
 
@@ -24,6 +26,7 @@ function validateTitle() {
 function validateAssignedContacts() {
   const contacts = currentUser.contacts || {};
   const assignedToId = document.getElementById("alertMessageAssignedTo");
+  const assignedToSection = document.getElementById("assignedToSection");
   let atLeastOneChecked = false;
   
   // Check if at least one contact is checked
@@ -38,11 +41,13 @@ function validateAssignedContacts() {
   // Show error if no contact is selected
   if (!atLeastOneChecked) {
     assignedToId.classList.remove("d-none");
+    assignedToSection.classList.add("input-error");
     return false;
   } 
   
   // Valid selection
   assignedToId.classList.add("d-none");
+  assignedToSection.classList.remove("input-error");
   return atLeastOneChecked;
 }
 
@@ -58,6 +63,7 @@ function validateEndDate() {
   if (!dateInput || !dateInput.value) {
     alert.textContent = "Please select a date.";
     alert.classList.remove("d-none");
+    dateInput.classList.add("input-error");
     return false;
   }
   
@@ -69,11 +75,13 @@ function validateEndDate() {
   if (selectedDate < today) {
     alert.textContent = "Date cannot be in the past.";
     alert.classList.remove("d-none");
+    dateInput.classList.add("input-error");
     return false;
   }
   
   // Valid date
   alert.classList.add("d-none");
+  dateInput.classList.remove("input-error");
   return true;
 }
 
@@ -111,17 +119,20 @@ function focusDateInput() {
  */
 function validateCategory() {
   const categorySpan = document.getElementById("selectTaskCategorySpan");
+  const categorySection = document.getElementById("categorySection");
   const validCategories = ["Technical Task", "User Story"];
   const categorySelectionId = document.getElementById("alertMessageCategory");
   
   // Check if a valid category is selected
   if (!categorySpan || !validCategories.some((cat) => categorySpan.innerText.includes(cat))) {
     categorySelectionId.classList.remove("d-none");
+    categorySection.classList.add("input-error");
     return false;
   }
   
   // Valid category
   categorySelectionId.classList.add("d-none");
+  categorySection.classList.remove("input-error");
   return true;
 }
 
