@@ -34,6 +34,11 @@ body {
     padding: 12px 21px;
     font-size: 17px;
     border: 1px solid lightgray;
+    width: 100%;
+}
+
+.checkbox-width-zero{
+    width: 0 !important;
 }
 
 .task-detail-section {
@@ -44,6 +49,10 @@ body {
 .input-order input:focus {
     border: 1px solid #5FC0E9;
     outline: none;
+}
+
+.subtask-edit-point-section input:focus {
+    border: none;
 }
 
 .task-details-left {
@@ -129,6 +138,7 @@ body {
 
 .transition-drop-down.open {
   max-height: 300px;
+  overflow-y: auto;
 }
 
 .drop-down-section::-webkit-scrollbar, 
@@ -351,15 +361,21 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
     width: 340px;
     background-color: white;
     border-radius: 10px;
     border: 1px solid lightgray;
 }
 
+.subtaskIconSection {
+    position: absolute;
+    right: 0;
+}
+
 .subtask-section input {
     border: none;
-    width: 271px;
+    width: 100%;
     cursor: pointer;
 }
 
@@ -403,7 +419,7 @@ body {
     border-bottom: transparent 1px solid;
     padding-left: 12px;
     padding-right: 12px;
-    height: 30px;
+    min-height: 30px;
 }
 
 .task-bullet-point:hover {
@@ -609,7 +625,7 @@ body {
 .subtask-edit-point-section {
     height: 30px;
     width: 340px;
-    background-color: white;
+    background-color: rgb(246, 247, 248);
 }
 
 .subtask-edit-point {
@@ -617,6 +633,7 @@ body {
     border-bottom: 1px solid #29ABE2;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 .subtask-edit-icons {
@@ -624,6 +641,8 @@ body {
     gap: 8px;
     align-items: center;
     margin-right: 15px;
+    position: absolute;
+    right: 0;
 }
 
 div .subtask-input-edit {

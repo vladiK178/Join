@@ -913,7 +913,7 @@
 
 .subtask-section input {
   border: none;
-  width: 271px;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -1328,7 +1328,7 @@
 
 .subtask-section input {
   border: none;
-  width: 271px;
+  width: 100%;
   cursor: pointer;
 }
 

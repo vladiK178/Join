@@ -83,7 +83,7 @@ function renderContactItem({
         <div class="name-circle" style="background-color: ${color}"><span>${initials}</span></div>
         <span>${contact.firstNameContact} ${contact.lastNameContact}</span>
       </div>
-      <input class="custom-checkbox" id="assignedToCheckbox${key}" type="checkbox" ${isChecked} style="pointer-events: none;">
+      <input class="custom-checkbox checkbox-width-zero" id="assignedToCheckbox${key}" type="checkbox" ${isChecked} style="pointer-events: none;">
     </div>`;
 
   if (isUser) {
