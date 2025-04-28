@@ -8,7 +8,7 @@ function getSummaryContent() {
         </div>
         <div class="main-summary-section">
             <div class="complete-quarter-section">
-                <div onclick="summaryToBoard()" class="to-do-and-done-section">
+                <div class="to-do-and-done-section">
                     <div onclick="changeWindowToBoardSection()" class="to-do-quarter">
                         <div class="circle-dark-blue"><img src="./assets/img/pencil.svg" alt=""></div>
                         <div class="to-do-quarter-details">
