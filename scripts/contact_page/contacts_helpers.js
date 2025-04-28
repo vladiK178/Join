@@ -177,6 +177,6 @@ function checkAllInputsValid() {
   const button = document.querySelector(".create-button");
   const allValid = nameValid && emailValid && phoneValid;
   button.disabled = !allValid;
-  button.style.backgroundColor = allValid ? "#2a3647" : "#5c5c5c";
+  button.style.backgroundColor = allValid ? "#29abe2" : "#5c5c5c";
   button.style.cursor = allValid ? "pointer" : "default";
 }
