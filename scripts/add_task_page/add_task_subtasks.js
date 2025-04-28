@@ -26,7 +26,14 @@ function saveSubtask(key) {
   if (!edited || !currentSubTask[key])
     return console.error(`Subtask ${key} nicht gefunden`);
 
-  currentSubTask[key].subTaskDescription = edited.value;
+  const value = edited.value.trim();
+
+  if (value.length < 2) {
+    console.error("Subtask muss mindestens 2 Zeichen lang sein.");
+    return;
+  }
+
+  currentSubTask[key].subTaskDescription = value;
   renderSubtasks();
 }
 
