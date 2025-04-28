@@ -230,11 +230,11 @@
 }
 
 .contact-details-edit:hover img {
-    content: url(/assets/img/edit-hover.svg); 
+    content: url("/assets/img/edit-hover.svg"); 
 }
 
 .contact-details-delete:hover img {
-    content: url(/assets/img/delete-hover.svg); 
+    content: url("/assets/img/delete-hover.svg"); 
 
 }
 
@@ -477,7 +477,7 @@
 }
 
 .cancel-button:hover img {
-    content: url(/assets/img/cancel-img-hover.svg); 
+    content: url("/assets/img/cancel-img-hover.svg"); 
 }
 
 .profile-placeholder-section {
