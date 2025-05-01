@@ -200,6 +200,7 @@ body {
     display: flex;
     gap: 15px;
     align-items: center;
+    font-size: 18px;
 }
 
 .name-circle {
@@ -407,7 +408,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     height: 80px;
 }
 
@@ -634,6 +636,7 @@ body {
     align-items: center;
     justify-content: space-between;
     position: relative;
+    background-color: white;
 }
 
 .subtask-edit-icons {
