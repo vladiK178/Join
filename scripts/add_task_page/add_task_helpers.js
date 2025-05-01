@@ -21,7 +21,7 @@ function getRandomColorFromPalette() {
       "#98FB98", "#00FA9A", "#32CD32", "#3CB371", "#2E8B57",
       "#90EE90", "#8FBC8F", "#66CDAA", "#7FFF00", "#7CFC00",
       "#FFDAB9", "#FFE4B5", "#F5DEB3", "#FFDEAD", "#F0E68C",
-      "#EEE8AA", "#BDB76B", "#FFEFD5", "#FFDAB9", "#FAFAD2"
+      "#EEE8AA", "#BDB76B",
     ];
     return colorPalette[Math.floor(Math.random() * colorPalette.length)];
   }
