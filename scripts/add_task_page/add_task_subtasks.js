@@ -23,13 +23,16 @@ function deleteSubTasks(key) {
 
 function saveSubtask(key) {
   const edited = document.getElementById(`editedTask${key}`);
+  const currentSubtaskContainer = document.getElementById(
+    `taskBulletPoint${key}`
+  );
   if (!edited || !currentSubTask[key])
     return console.error(`Subtask ${key} nicht gefunden`);
 
   const value = edited.value.trim();
 
   if (value.length < 2) {
-    console.error("Subtask muss mindestens 2 Zeichen lang sein.");
+    deleteSubTasks(key);
     return;
   }
 

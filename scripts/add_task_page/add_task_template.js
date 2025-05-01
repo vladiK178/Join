@@ -16,7 +16,7 @@ function getAddTaskContent() {
                 <form class="input-order" action="">
                     <label for="assigned-to">Assigned to<span class="red-star">*</span></label>
                     <div onclick="toggleAssignedToSection()" id="assignedToSection" class="assigned-to-section">
-                        <input type="text" id="assigned-to" placeholder="Select contacts to assign">
+                        <input type="text" id="assigned-to" placeholder="Select contacts to assign" readonly>
                         <div class="dropDown-img">
                             <img id="dropDownImg" src="./assets/img/dropDownArrowDown.svg" alt="">
                         </div>

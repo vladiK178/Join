@@ -60,14 +60,21 @@ function toggleDropdown(type) {
     type === "assignedTo" ? "assignedToSection" : "categorySection"
   );
 
-  dropdown.classList.toggle("open");
   const isOpen = dropdown.classList.contains("open");
 
-  icon.src = isOpen
-    ? "assets/img/dropDownArrowUp.svg"
-    : "assets/img/dropDownArrowDown.svg";
-  section.classList.toggle("blue-border", isOpen);
+  if (isOpen) {
+    dropdown.classList.remove("open");
+    dropdown.style.maxHeight = "0px";
+    icon.src = "assets/img/dropDownArrowDown.svg";
+    section.classList.remove("blue-border");
+  } else {
+    dropdown.classList.add("open");
+    dropdown.style.maxHeight = "300px";
+    icon.src = "assets/img/dropDownArrowUp.svg";
+    section.classList.add("blue-border");
+  }
 }
+
 
 function closeDropdownIfOpen(type) {
   const dropdown = document.getElementById(
