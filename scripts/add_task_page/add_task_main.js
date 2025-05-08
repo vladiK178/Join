@@ -43,12 +43,14 @@ function renderAddTaskContent() {
  */
 async function saveNewTask() {
   // Validate all form fields
+  const addTaskButton = document.getElementById("addtask-button");
   if (!validateForm()) return;
   
   const newTask = buildNewTask();
   try {
     await postTaskToDatabase(currentUser.id, newTask);
     showSuccessMessage();
+    addTaskButton.disabled = true;
     setTimeout(() => {
       window.location.href = "board.html";
     }, 2200);

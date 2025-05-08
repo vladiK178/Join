@@ -90,7 +90,7 @@ function getAddTaskContent() {
                 <span>Clear</span>
                 <span class="cancel-span">x</span>
             </div>
-            <div onclick="saveNewTask()" class="create-button">
+            <div onclick="saveNewTask()" id="addtask-button" class="create-button">
                 <span>Create task</span>
                 <img src="./assets/img/check.svg" alt="">
             </div>
