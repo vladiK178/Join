@@ -343,12 +343,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(184, 185, 186, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  z-index: 12;
+  z-index: 9999;
 }
 
 .task-card {
@@ -465,8 +465,11 @@
 }
 
 .circle-and-name-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 10px;
-  max-height: 87px;
+  max-height: 200px;
   overflow: auto;
 }
 
@@ -516,7 +519,7 @@
   width: 100%;
   justify-content: flex-end;
   position: absolute;
-  bottom: 25px;
+  bottom: 15px;
   right: 35px;
 }
 
@@ -561,7 +564,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(184, 185, 186, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -855,6 +858,7 @@
   justify-content: center;
   border: 3px solid white;
   color: white;
+  aspect-ratio: 1;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }
 
@@ -1033,7 +1037,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(184, 185, 186, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
