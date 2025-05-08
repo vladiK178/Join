@@ -92,7 +92,7 @@ body {
 
 .assigned-to-section input {
     border: none;
-    width: 300px;
+    width: 250px;
     cursor: pointer;
 }
 
@@ -388,7 +388,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 15px;
+    margin-right: 14px;
     width: 24px;
     height: 24px;
 }

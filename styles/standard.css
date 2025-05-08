@@ -33,3 +33,7 @@ a {
 .d-none {
     display: none !important;
 }
+
+.padding-right-16 {
+    padding-right: 16px !important;
+}

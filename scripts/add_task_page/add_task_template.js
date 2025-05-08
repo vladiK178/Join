@@ -30,7 +30,7 @@ function getAddTaskContent() {
             <div class="task-details-right">
                 <form class="input-order" action="">
                     <label for="date">Due Date<span class="red-star">*</span></label>
-                    <input type="date" id="date" min="" onclick="focusDateInput()" required placeholder="Enter a title">
+                    <input type="date" class="padding-right-16" id="date" min="" onclick="focusDateInput()" required placeholder="Enter a title">
                     <span id="alertMessageDate" class="alert-message d-none">This field is required</span>
                 </form>
                 <div class="prio-section">
