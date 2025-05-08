@@ -249,4 +249,7 @@ function openEditContactSection(contactKey) {
   createEditOverlayIfMissing();
   renderEditContactSection(contactToEdit, contactKey);
   document.querySelector(".edit-contact-container-overlay").classList.remove("d-none");
+  document
+    .querySelector(".edit-contact-container-overlay")
+    .classList.add("overlay-fade-in");
 }
