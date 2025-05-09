@@ -16,12 +16,15 @@ function startDragging(taskId, event) {
   currentDraggedElement = event.target;
   originalColumn = event.target.parentElement.id;
 
-  // Set data for HTML5 drag API
   event.dataTransfer.setData("text", taskId);
 
-  // Add slight delay for better visual effect
   setTimeout(() => {
     currentDraggedElement.classList.add("rotated-note");
+
+    // Add transparent drag image to avoid distortion
+    const img = new Image();
+    img.src = "./assets/img/transparent.png";
+    event.dataTransfer.setDragImage(img, 0, 0);
   }, 10);
 }
 
