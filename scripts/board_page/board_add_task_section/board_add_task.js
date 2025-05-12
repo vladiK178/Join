@@ -3,6 +3,9 @@
  * @returns {Promise<void>}
  */
 async function saveNewTask() {
+  // injects error spans if missing
+  ensureBoardValidationAlertsExist();
+  if (!validateBoardForm()) return;
   // Get assigned contacts and validate
   const assignedContacts = collectAssignedContacts();
   if (!Object.keys(assignedContacts).length) {
