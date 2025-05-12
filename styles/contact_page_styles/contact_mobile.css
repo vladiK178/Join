@@ -289,14 +289,6 @@
     padding: 20px 10px;
   }
 
-  .email-span {
-    display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   .contact-list-name {
     display: block;
     max-width: 180px;
@@ -305,6 +297,14 @@
     text-overflow: ellipsis;
     font-size: 16px;
     font-weight: 500;
+  }  
+
+  .contact-list-email {
+    display: inline-block;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }  
 }
 

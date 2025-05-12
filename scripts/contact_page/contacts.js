@@ -177,7 +177,7 @@ function getContactListItemHtml(key, contact) {
       <span class="name-circle" style="background-color: ${color};">${initials}</span>
       <div class="name-and-email">
         <span class="contact-list-name">${contact.firstNameContact} ${contact.lastNameContact}</span>
-        <span class="email-span">${email}</span>
+        <span class="contact-list-email">${email}</span>
       </div>
     </div>`;
 }
