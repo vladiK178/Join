@@ -176,7 +176,7 @@ function getContactListItemHtml(key, contact) {
     <div id="contact-${key}" class="contact" onclick="chooseContact('${key}')">
       <span class="name-circle" style="background-color: ${color};">${initials}</span>
       <div class="name-and-email">
-        <span>${contact.firstNameContact} ${contact.lastNameContact}</span>
+        <span class="contact-list-name">${contact.firstNameContact} ${contact.lastNameContact}</span>
         <span class="email-span">${email}</span>
       </div>
     </div>`;
