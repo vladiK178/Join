@@ -1661,3 +1661,8 @@ div .subtask-input-edit {
 .menu-mobile a:hover {
   background-color: #33445b;
 }
+
+.input-error {
+  border: 1px solid red !important;
+}
+
