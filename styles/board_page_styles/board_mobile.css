@@ -159,17 +159,9 @@
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    .task-zoom-section {
-        height: calc(100vh - 65px);
-    }
-
     .task-card {
         width: 300px;
         min-height: 470px;
-    }
-
-    .task-zoom-section-edit {
-        height: calc(100vh - 65px);
     }
 
     .task-card-edit {
@@ -388,6 +380,14 @@
     }
 }
 
+@media (max-width: 600px) {
+    .task-card {
+        overflow-y: auto;
+        max-height: 450px;
+        padding: 25px 25px;
+    }
+}
+
 @media (min-width: 600px) {
     .search-bar {
         width: 312px;
@@ -408,7 +408,8 @@
 
     .task-card {
         width: 400px;
-        min-height: 520px;
+        height: 520px;
+        overflow-y: auto;
     }
 
     .subtask-zoom-title {
@@ -533,6 +534,11 @@
 
     .subtask-zoom-title span {
         font-size: 30px;
+    }
+
+    .assigned-to-section-zoom {
+        overflow-y: auto;
+        max-height: 230px;
     }
 
     .task-description-zoom-section {

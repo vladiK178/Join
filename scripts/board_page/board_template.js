@@ -329,7 +329,7 @@ function getEditZoomSection(task, taskKey) {
  */
 function getZoomTaskSection(task, taskId) {
   return `
-      <div class="task-card">
+      <div class="task-card" id="task-card-element">
           <!-- Dynamic Category Section -->
           <div id="taskCategoryAndCloseSection" class="task-category-and-close-section"></div>
   

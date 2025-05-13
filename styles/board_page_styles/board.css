@@ -356,9 +356,10 @@
   width: 400px;
   min-height: 550px;
   border-radius: 30px;
-  padding: 48px 40px;
+  padding: 35px 40px;
   background-color: white;
   position: relative;
+  overflow-y: auto;
 }
 
 .task-category-and-close-section {
@@ -393,6 +394,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: sticky;
+  top: 0;
+  left: 300px;
 }
 
 .close-subtask-container:hover {
@@ -469,8 +473,6 @@
   flex-direction: column;
   gap: 10px;
   margin-top: 10px;
-  max-height: 200px;
-  overflow: auto;
 }
 
 .subtask-title {
@@ -486,8 +488,18 @@
 }
 
 .subtask-zoom-section {
-  max-height: 63px;
+  max-height: 100px;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+@media (max-width: 600px) {
+  .subtask-zoom-section {
+    max-height: none;
+    overflow: hidden;
+  }
 }
 
 .subtask-zoom span {
@@ -518,9 +530,7 @@
   gap: 8px;
   width: 100%;
   justify-content: flex-end;
-  position: absolute;
-  bottom: 15px;
-  right: 35px;
+  margin-top: 20px;
 }
 
 .delete-section {
@@ -569,7 +579,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  z-index: 12;
+  z-index: 9999;
 }
 
 .task-card-edit {

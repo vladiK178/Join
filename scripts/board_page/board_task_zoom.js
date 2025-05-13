@@ -31,6 +31,7 @@ function findTaskById(taskId) {
  */
 function renderTaskCategoryAndCloseSection(task) {
   let element = document.getElementById("taskCategoryAndCloseSection");
+  let taskCardElement = document.getElementById("task-card-element")
 
   // Handle case when category is missing
   if (!task.category) {
@@ -44,13 +45,18 @@ function renderTaskCategoryAndCloseSection(task) {
     : "technical-task-container-zoom";
 
   // Render the category badge and close button
-  element.innerHTML = `
+  element.innerHTML += `
     <div class="${categoryClassName}">
       <span>${task.category}</span>
-    </div>
-    <div onclick="closeTaskZoomSection()" class="close-subtask-container">
-      <img src="./assets/img/closeSubtask.svg" alt="">
     </div>`;
+
+    taskCardElement.insertAdjacentHTML(
+      "afterbegin",
+      `
+      <div onclick="closeTaskZoomSection()" class="close-subtask-container">
+        <img src="./assets/img/closeSubtask.svg" alt="">
+      </div>`
+    );
 }
 
 /**
