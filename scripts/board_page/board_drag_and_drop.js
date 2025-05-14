@@ -13,7 +13,7 @@ let originalColumn = null;
 function startDragging(taskId, event) {
   // Set task references
   draggedTaskId = taskId;
-  currentDraggedElement = event.target;
+  currentDraggedElement = event.target.closest("[data-task-id]");
   originalColumn = event.target.parentElement.id;
 
   event.dataTransfer.setData("text", taskId);
