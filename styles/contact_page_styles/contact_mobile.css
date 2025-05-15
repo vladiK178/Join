@@ -682,3 +682,13 @@
     padding-top: 0;
   }
 }
+
+@media (max-width: 400px) {
+  .email-section .email-span {
+    display: inline-block;
+    max-width: 305px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
