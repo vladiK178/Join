@@ -174,6 +174,10 @@ function closeInputSubtaskSectionEditZoom(evt) {
   evt.stopPropagation();
 }
 
+function shortenName(name) {
+  return name.length > 15 ? name.slice(0, 12) + "..." : name;
+}
+
 /**
  * Renders assignee dropdown and selected contacts
  * @param {string} taskKey - Task key
@@ -203,7 +207,7 @@ function renderAssignedToSectionEditZoom(taskKey) {
           <div class="name-circle-add-section" style="background-color: ${colorMap[key]}">
             <span>${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}</span>
           </div>
-          <span>${contact.firstNameContact} ${contact.lastNameContact}</span>
+          <span>${shortenName(`${contact.firstNameContact} ${contact.lastNameContact}`)}</span>
         </div>
         <input class="custom-checkbox" id="assignedToCheckboxEdit${key}" type="checkbox"
                ${checked} style="pointer-events: none;">

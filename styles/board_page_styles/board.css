@@ -587,8 +587,9 @@
   width: 500px;
   height: 650px;
   border-radius: 30px;
-  padding: 48px 40px;
+  padding: 40px 40px;
   background-color: white;
+  position: relative;
 }
 
 .edit-card-content-up {
@@ -632,6 +633,8 @@
   display: flex;
   justify-content: end;
   cursor: pointer;
+  position: sticky;
+  top: 0;
 }
 
 .alert-message {
@@ -794,7 +797,6 @@
 
 .drop-down-section {
   width: 340px;
-  max-height: 165px;
   background-color: white;
   overflow: auto;
   overflow-x: hidden;
@@ -958,9 +960,8 @@
   width: 340px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   overflow: auto;
-  height: 80px;
 }
 
 .task-bullet-point {
@@ -969,8 +970,7 @@
   align-items: center;
   gap: 2px;
   border-bottom: transparent 1px solid;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding: 12px;
   height: 30px;
 }
 
@@ -1168,7 +1168,6 @@
 
 .drop-down-section {
   width: 340px;
-  max-height: 165px;
   background-color: white;
   overflow: auto;
   overflow-x: hidden;
@@ -1373,9 +1372,8 @@
   width: 340px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   overflow: auto;
-  height: 80px;
 }
 
 .task-bullet-point {
@@ -1384,8 +1382,7 @@
   align-items: center;
   gap: 2px;
   border-bottom: transparent 1px solid;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding: 12px;
   height: 30px;
 }
 
