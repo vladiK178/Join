@@ -722,3 +722,24 @@
         gap: 150px;
     }
 }
+
+/* Universal img reset */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+  
+  .note img,
+  .task-card img,
+  .task-card-edit img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  .rotated-note img {
+    transform: none !important;
+  }
+  
