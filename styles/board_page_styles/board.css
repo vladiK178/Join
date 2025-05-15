@@ -295,6 +295,11 @@
   justify-content: space-between;
 }
 
+.assigned-profile-priority-section img {
+  height: 30px;
+  width: 30px;
+}
+
 .name-circle-section {
   display: flex;
   margin-left: 10px;
