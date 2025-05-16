@@ -1,5 +1,7 @@
 @media (min-width: 200px) {
-    html, body {
+
+    html,
+    body {
         margin: 0;
         padding: 0;
     }
@@ -41,8 +43,8 @@
         overflow: auto;
         padding-right: 20px;
         padding-left: 20px;
-        height: calc(100vh - 290px); 
-        min-height: 200px; 
+        height: calc(100vh - 290px);
+        min-height: 200px;
     }
 
     .to-do-notes {
@@ -78,7 +80,7 @@
         margin-top: 10px;
         margin-bottom: 10px;
     }
-    
+
     .technical-task-container {
         width: 125px;
         height: 20px;
@@ -168,7 +170,7 @@
         width: 300px;
         height: 500px;
         overflow: auto;
-    } 
+    }
 
     .edit-card-content-up {
         overflow: hidden;
@@ -185,7 +187,8 @@
         height: 35px;
         width: 65px;
     }
-    .prio-urgent span{
+
+    .prio-urgent span {
         display: none;
     }
 
@@ -194,7 +197,7 @@
         width: 65px;
     }
 
-    .prio-urgent-chosen span{
+    .prio-urgent-chosen span {
         display: none;
     }
 
@@ -203,12 +206,12 @@
         width: 65px;
     }
 
-    .prio-medium span{
+    .prio-medium span {
         display: none;
     }
 
 
-    .prio-medium-chosen span{
+    .prio-medium-chosen span {
         display: none;
     }
 
@@ -222,7 +225,7 @@
         width: 65px;
     }
 
-    .prio-low span{
+    .prio-low span {
         display: none;
     }
 
@@ -231,7 +234,7 @@
         width: 65px;
     }
 
-    .prio-low-chosen span{
+    .prio-low-chosen span {
         display: none;
     }
 
@@ -314,7 +317,7 @@
     #dateEdit {
         padding-right: 18px;
     }
-    
+
     .description-input {
         padding: 5px 5px;
         font-size: 16px;
@@ -351,7 +354,7 @@
         height: 145px;
         align-items: normal;
     }
-    
+
     .menu-mobile a {
         font-size: 16px;
         width: 117px;
@@ -414,7 +417,7 @@
 
     .task-card {
         width: 400px;
-        height: 520px;
+        height: 620px;
         overflow-y: auto;
     }
 
@@ -482,29 +485,29 @@
         height: 40px;
     }
 
-    .prio-urgent span{
+    .prio-urgent span {
         display: block;
     }
 
-    .prio-urgent-chosen span{
+    .prio-urgent-chosen span {
         display: block;
     }
 
-    .prio-medium span{
+    .prio-medium span {
         display: block;
     }
 
 
-    .prio-medium-chosen span{
+    .prio-medium-chosen span {
         display: block;
     }
 
-    .prio-low span{
+    .prio-low span {
         display: block;
 
     }
 
-    .prio-low-chosen span{
+    .prio-low-chosen span {
         display: block;
 
     }
@@ -514,6 +517,7 @@
     }
 
     .created-subtask {
+        max-height: 150px;
         margin-bottom: 0px;
     }
 
@@ -550,7 +554,7 @@
     }
 }
 
-@media  (min-width: 1200px) {
+@media (min-width: 1200px) {
     .note {
         width: 252px;
         height: 250px;
@@ -561,7 +565,7 @@
     }
 
     .task-card {
-        min-height: 580px;
+        min-height: 620px;
     }
 
     .change-column-menu-mobile {
@@ -665,7 +669,7 @@
     .empty-notification {
         width: 250px;
     }
-    
+
     .board-headline-search-add-task-section {
         padding-right: 0px;
         padding-left: 0px;
@@ -693,7 +697,7 @@
     .task-zoom-section {
         height: 100vh;
     }
-    
+
     .subtask-zoom-title span {
         font-size: 40px;
         font-weight: bold;
@@ -729,17 +733,16 @@ img {
     height: auto;
     display: block;
     object-fit: contain;
-  }
-  
-  .note img,
-  .task-card img,
-  .task-card-edit img {
+}
+
+.note img,
+.task-card img,
+.task-card-edit img {
     max-width: 100%;
     height: auto;
     object-fit: contain;
-  }
-  
-  .rotated-note img {
+}
+
+.rotated-note img {
     transform: none !important;
-  }
-  
+}
