@@ -358,10 +358,6 @@ header span {
     .help-profile-section {
         margin-right: 20px;
     }
-
-    .help-profile-section a {
-        display: none;
-    }
 }
 
 @media (min-width: 1200px) {
@@ -482,9 +478,5 @@ header span {
 
     .help-profile-section {
         margin-right: 30px;
-    }
-
-    .help-profile-section a {
-        display: flex;
     }
 }
