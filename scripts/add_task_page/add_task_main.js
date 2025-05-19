@@ -1,7 +1,7 @@
 let currentUser;
 
 /**
- * Initializes the Add Task page with user data and UI elements
+ * Initializes the Add Task page with user data and UI elements.
  */
 async function initAddTaskPage() {
   await getUsersData();
@@ -15,6 +15,9 @@ async function initAddTaskPage() {
   setMinDateToday();
 }
 
+/**
+ * Renders the entire Add Task page content including templates and UI elements.
+ */
 function renderPage() {
   renderDesktopTemplate();
   renderAddTaskContent();
@@ -24,7 +27,7 @@ function renderPage() {
 }
 
 /**
- * Gets current user from local storage
+ * Gets current user from local storage and redirects if not found.
  */
 function setCurrentUser() {
   const currentUserId = localStorage.getItem("currentUserId");
@@ -35,7 +38,7 @@ function setCurrentUser() {
 }
 
 /**
- * Renders the Add Task form in the content section
+ * Renders the Add Task form inside the content section.
  */
 function renderAddTaskContent() {
   const content = document.getElementById("newContentSection");
@@ -43,12 +46,13 @@ function renderAddTaskContent() {
 }
 
 /**
- * Saves a new task after validation
+ * Saves a new task after validating the form inputs.
+ * Disables the add task button and redirects to board on success.
  */
 async function saveNewTask() {
   const addTaskButton = document.getElementById("addtask-button");
   if (!validateForm()) return;
-  
+
   const newTask = buildNewTask();
   try {
     await postTaskToDatabase(currentUser.id, newTask);
@@ -63,8 +67,8 @@ async function saveNewTask() {
 }
 
 /**
- * Builds a task object from form values
- * @returns {Object} The task object
+ * Builds a task object from form input values.
+ * @returns {Object} The constructed task object.
  */
 function buildNewTask() {
   const title = document.getElementById("title").value.trim();
@@ -83,7 +87,8 @@ function buildNewTask() {
 }
 
 /**
- * Shows success message after saving task
+ * Shows a success message overlay after task is saved.
+ * Automatically hides the overlay after a delay.
  */
 function showSuccessMessage() {
   let overlay = document.getElementById("successAddTaskOverlay");
@@ -94,6 +99,12 @@ function showSuccessMessage() {
   }, 2250);
 }
 
+/**
+ * Adds an event listener to an input element to hide associated error alerts.
+ * @param {string} inputId - The ID of the input element.
+ * @param {string} alertId - The ID of the alert element.
+ * @param {string} [eventType="input"] - The type of event to listen for.
+ */
 function addInputListener(inputId, alertId, eventType = "input") {
   const input = document.getElementById(inputId);
   const alert = document.getElementById(alertId);
@@ -105,6 +116,9 @@ function addInputListener(inputId, alertId, eventType = "input") {
   }
 }
 
+/**
+ * Initializes error hiding behavior for inputs and dropdowns by adding listeners.
+ */
 function initializeErrorHiding() {
   addInputListener("title", "alertMessageTitle");
   addInputListener("description", "alertMessageTitle");
@@ -113,6 +127,9 @@ function initializeErrorHiding() {
   addInputListener("categoryDropDownSection", "alertMessageCategory", "click");
 }
 
+/**
+ * Hides the assigned contacts alert when any assigned contact checkbox is checked.
+ */
 function hideAssignedContactsAlertOnChange() {
   const contacts = currentUser.contacts;
   const alert = document.getElementById("alertMessageAssignedTo");
@@ -132,15 +149,16 @@ function hideAssignedContactsAlertOnChange() {
 }
 
 /**
- * Sets minimum selectable date to today
+ * Sets the minimum selectable due date in the date picker to today's date.
  */
 function setMinDateToday() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   document.getElementById("date").setAttribute("min", today);
 }
 
 /**
- * Event listener when page is fully loaded
+ * Event listener triggered when the DOM content is fully loaded.
+ * Starts the Add Task page initialization.
  */
 document.addEventListener("DOMContentLoaded", () => {
   initAddTaskPage();

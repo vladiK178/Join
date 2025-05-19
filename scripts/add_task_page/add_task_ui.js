@@ -1,5 +1,10 @@
+/** @type {string} */
 let userCircle;
 
+/**
+ * Renders the current user's initials based on their first and last name from localStorage.
+ * @returns {string} The uppercase initials.
+ */
 function renderCurrentUserCircle() {
   const currentUserFirstName = localStorage.getItem("firstName");
   const currentUserLastName = localStorage.getItem("lastName");
@@ -9,16 +14,28 @@ function renderCurrentUserCircle() {
   return userCircle;
 }
 
+/**
+ * Renders the desktop template with the user's initials.
+ */
 function renderDesktopTemplate() {
-  document.getElementById("templateSection").innerHTML =
-    getDesktopTemplate(renderCurrentUserCircle());
+  document.getElementById("templateSection").innerHTML = getDesktopTemplate(
+    renderCurrentUserCircle()
+  );
 }
 
+/**
+ * Highlights the "Add Task" section and removes highlight from "Summary".
+ */
 function highlightAddTaskSection() {
   toggleSectionHighlight("summary", false);
   toggleSectionHighlight("addTask", true);
 }
 
+/**
+ * Adds or removes highlight classes for a given section.
+ * @param {string} section - Section name.
+ * @param {boolean} isActive - Whether the section is active.
+ */
 function toggleSectionHighlight(section, isActive) {
   const sectionElem = document.getElementById(`${section}-section`);
   const img = document.getElementById(`${section}-img`);
@@ -28,6 +45,9 @@ function toggleSectionHighlight(section, isActive) {
   img.classList.toggle(`${section}-img`, !isActive);
 }
 
+/**
+ * Renders the list of assignable contacts and ensures the current user is included.
+ */
 function renderAssignedToSection() {
   contacts = currentUser.contacts || {};
   const dropDown = document.getElementById("dropDownSection");
@@ -39,6 +59,11 @@ function renderAssignedToSection() {
   renderContacts(contacts, dropDown, chosenSec);
 }
 
+/**
+ * Checks if a contact object represents the current user.
+ * @param {Object} contact
+ * @returns {boolean}
+ */
 function isCurrentUserContact(contact) {
   return (
     currentUser.firstName.toLowerCase() ===
@@ -47,6 +72,9 @@ function isCurrentUserContact(contact) {
   );
 }
 
+/**
+ * Adds the current user to the contacts list if not already present.
+ */
 function addSelfContact() {
   contacts[`self_${currentUser.id}`] = {
     firstNameContact: currentUser.firstName,
@@ -54,6 +82,12 @@ function addSelfContact() {
   };
 }
 
+/**
+ * Renders all contacts to the dropdown and the chosen list if already selected.
+ * @param {Object} contacts
+ * @param {HTMLElement} dropDown
+ * @param {HTMLElement} chosenSec
+ */
 function renderContacts(contacts, dropDown, chosenSec) {
   const colorMap = {};
   for (let key in contacts) {
@@ -65,6 +99,10 @@ function renderContacts(contacts, dropDown, chosenSec) {
   }
 }
 
+/**
+ * Renders a single contact item with selection state and initials.
+ * @param {Object} params
+ */
 function renderContactItem({
   key,
   contact,
@@ -77,13 +115,27 @@ function renderContactItem({
   const isChecked = isUser ? "checked" : "";
   const assignedClass = isUser ? "checked-assigned-to" : "assigned-to-name";
 
-  dropDown.innerHTML += assignedToBackgroundTemplate(key, color, assignedClass, initials, contact, isChecked);
+  dropDown.innerHTML += assignedToBackgroundTemplate(
+    key,
+    color,
+    assignedClass,
+    initials,
+    contact,
+    isChecked
+  );
 
   if (isUser) {
     chosenSec.innerHTML += chosenNameTemplate(key, color, initials);
   }
 }
 
+/**
+ * Returns the HTML template for a chosen name circle.
+ * @param {string} key
+ * @param {string} color
+ * @param {string} initials
+ * @returns {string}
+ */
 function chosenNameTemplate(key, color, initials) {
   return `
       <div id="chosenName${key}" class="name-circle" style="background-color: ${color}">
@@ -91,7 +143,24 @@ function chosenNameTemplate(key, color, initials) {
       </div>`;
 }
 
-function assignedToBackgroundTemplate(key, color, assignedClass, initials, contact, isChecked) {
+/**
+ * Returns the HTML for an assignable contact item.
+ * @param {string} key
+ * @param {string} color
+ * @param {string} assignedClass
+ * @param {string} initials
+ * @param {Object} contact
+ * @param {string} isChecked
+ * @returns {string}
+ */
+function assignedToBackgroundTemplate(
+  key,
+  color,
+  assignedClass,
+  initials,
+  contact,
+  isChecked
+) {
   return `
     <div onclick="toggleAssignedToBackground('${key}', '${color}')" id="assignedToName${key}" class="${assignedClass}">
       <div class="name-section">
@@ -102,6 +171,11 @@ function assignedToBackgroundTemplate(key, color, assignedClass, initials, conta
     </div>`;
 }
 
+/**
+ * Toggles selection of a contact and updates UI accordingly.
+ * @param {string} key
+ * @param {string} color
+ */
 function toggleAssignedToBackground(key, color) {
   const box = document.getElementById(`assignedToCheckbox${key}`);
   const div = document.getElementById(`assignedToName${key}`);
@@ -113,6 +187,11 @@ function toggleAssignedToBackground(key, color) {
   box.checked ? addChosenNameCircle(key, color) : removeChosenNameCircle(key);
 }
 
+/**
+ * Adds the selected contact's circle to the chosen section.
+ * @param {string} key
+ * @param {string} color
+ */
 function addChosenNameCircle(key, color) {
   if (!document.getElementById(`chosenName${key}`)) {
     const contact = contacts[key];
@@ -124,11 +203,18 @@ function addChosenNameCircle(key, color) {
   }
 }
 
+/**
+ * Removes the contact's circle from the chosen section.
+ * @param {string} key
+ */
 function removeChosenNameCircle(key) {
   const el = document.getElementById(`chosenName${key}`);
   if (el) el.remove();
 }
 
+/**
+ * Renders invisible name circles for all contacts (used elsewhere).
+ */
 function renderNameCircles() {
   const chosenSec = document.getElementById("choosenNamesSection");
   chosenSec.innerHTML = "";
@@ -142,6 +228,9 @@ function renderNameCircles() {
   });
 }
 
+/**
+ * Renders the list of current subtasks.
+ */
 function renderSubtasks() {
   const section = document.getElementById("subtaskSection");
   section.innerHTML = "";
@@ -152,6 +241,12 @@ function renderSubtasks() {
   }
 }
 
+/**
+ * Returns the HTML for a single subtask.
+ * @param {string} key
+ * @param {string} subTaskDescription
+ * @returns {string}
+ */
 function subtaskTemplate(key, subTaskDescription) {
   return `
       <div id="taskBulletPoint${key}" class="task-bullet-point">
@@ -164,6 +259,9 @@ function subtaskTemplate(key, subTaskDescription) {
       </div>`;
 }
 
+/**
+ * Adds an "Enter" key listener to the subtask input to trigger subtask creation.
+ */
 function addSubtaskEnterListener() {
   document.getElementById("subtask").addEventListener("keydown", (evt) => {
     if (evt.key === "Enter") {
@@ -173,6 +271,9 @@ function addSubtaskEnterListener() {
   });
 }
 
+/**
+ * Initializes outside click listener to close various dropdowns when clicked outside.
+ */
 function initOutsideClickListener() {
   document.addEventListener("click", (evt) => {
     closeAssignedToOnOutsideClick(evt);
@@ -181,14 +282,23 @@ function initOutsideClickListener() {
   });
 }
 
+/**
+ * Pre-selects the "Technical Task" category.
+ */
 function choseTechnicalTask() {
   selectCategory("Technical Task");
 }
 
+/**
+ * Pre-selects the "User Story" category.
+ */
 function choseUserStory() {
   selectCategory("User Story");
 }
 
+/**
+ * Closes the category dropdown if it is currently open.
+ */
 function closeCategoryDropdownIfOpen() {
   const catDrop = document.getElementById("categoryDropDownSection");
   const catSec = document.getElementById("categorySection");

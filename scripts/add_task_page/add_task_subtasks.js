@@ -1,3 +1,7 @@
+/**
+ * Adds a new subtask if the input field is not empty.
+ * Generates a unique ID and renders the updated subtask list.
+ */
 function addSubtask() {
   const input = document.getElementById("subtask");
   const value = input.value.trim();
@@ -14,35 +18,52 @@ function addSubtask() {
   closeInputSubtaskSection(event);
 }
 
+/**
+ * Deletes a subtask by its key if it exists.
+ * @param {string} key - The ID of the subtask.
+ */
 function deleteSubTasks(key) {
   if (!currentSubTask[key])
-    return console.error(`Subtask mit ID ${key} existiert nicht`);
+    return console.error(`Subtask with ID ${key} does not exist`);
   delete currentSubTask[key];
   renderSubtasks();
 }
 
+/**
+ * Saves the edited subtask. Deletes it if the new text is too short.
+ * @param {string} key - The ID of the subtask.
+ */
 function saveSubtask(key) {
   const edited = document.getElementById(`editedTask${key}`);
   if (!edited || !currentSubTask[key])
-    return console.error(`Subtask ${key} nicht gefunden`);
+    return console.error(`Subtask ${key} not found`);
 
   const value = edited.value.trim();
-
   if (value.length < 2) return deleteSubTasks(key);
 
   currentSubTask[key].subTaskDescription = value;
   renderSubtasks();
 }
 
+/**
+ * Opens the input field to edit an existing subtask.
+ * @param {string} key - The ID of the subtask.
+ */
 function subtaskEdit(key) {
   const task = currentSubTask[key];
-  if (!task) return console.error(`Subtask ${key} nicht vorhanden`);
+  if (!task) return console.error(`Subtask ${key} not found`);
 
   const container = document.getElementById(`taskBulletPoint${key}`);
   container.classList.remove("task-bullet-point");
   container.innerHTML = subtaskEditTemplate(key, task);
 }
 
+/**
+ * Returns the HTML template for the editable subtask field.
+ * @param {string} key - The ID of the subtask.
+ * @param {Object} task - The subtask object with description and status.
+ * @returns {string} - The HTML string for the editable subtask.
+ */
 function subtaskEditTemplate(key, task) {
   return `
     <div class="subtask-edit-point-section">
@@ -57,7 +78,10 @@ function subtaskEditTemplate(key, task) {
     </div>`;
 }
 
-
+/**
+ * Shows the input section for adding a new subtask.
+ * @param {MouseEvent} evt - The click event.
+ */
 function showInputSubtaskSection(evt) {
   evt.stopPropagation();
 
@@ -69,6 +93,10 @@ function showInputSubtaskSection(evt) {
   iconSec.innerHTML = showInputTemplate();
 }
 
+/**
+ * Returns the HTML template for the visible subtask input section.
+ * @returns {string} - The HTML string for the input section.
+ */
 function showInputTemplate() {
   return `
     <div class="show-subtask-input-icons">
@@ -82,6 +110,10 @@ function showInputTemplate() {
     </div>`;
 }
 
+/**
+ * Closes the subtask input section and resets the input field.
+ * @param {MouseEvent} evt - The click event.
+ */
 function closeInputSubtaskSection(evt) {
   evt.stopPropagation();
 

@@ -1,3 +1,9 @@
+/**
+ * Sets the selected priority visually by updating styles and icons.
+ * Highlights the chosen priority and resets the others.
+ *
+ * @param {string} priority - The selected priority ("Urgent", "Medium", or "Low").
+ */
 function setPriority(priority) {
   const priorities = ["Urgent", "Medium", "Low"];
 
@@ -15,6 +21,12 @@ function setPriority(priority) {
   });
 }
 
+/**
+ * Returns the path to the white icon for a given priority.
+ *
+ * @param {string} priority - The priority level.
+ * @returns {string} Path to the corresponding white icon.
+ */
 function getWhiteIcon(priority) {
   const icons = {
     Urgent: "./assets/img/urgentArrowWhite.svg",
@@ -24,11 +36,17 @@ function getWhiteIcon(priority) {
   return icons[priority];
 }
 
+/**
+ * Returns the path to the colored icon for a given priority.
+ *
+ * @param {string} priority - The priority level.
+ * @returns {string} Path to the corresponding colored icon.
+ */
 function getColoredIcon(priority) {
   const icons = {
     Urgent: "./assets/img/urgentArrowRed.svg",
     Medium: "./assets/img/mediumLinesOrange.svg",
-    Low: "./assets/img/lowArrowGreeen.svg",
+    Low: "./assets/img/lowArrowGreeen.svg"
   };
   return icons[priority];
 }
