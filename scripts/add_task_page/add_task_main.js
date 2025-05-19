@@ -7,16 +7,20 @@ async function initAddTaskPage() {
   await getUsersData();
   currentSubTask = {};
   setCurrentUser();
-  renderDesktopTemplate();
+  renderPage();
   highlightAddTaskSection();
-  renderAddTaskContent();
-  renderNameCircles();
-  renderAssignedToSection();
-  renderSubtasks();
   addSubtaskEnterListener();
   initOutsideClickListener();
   initializeErrorHiding();
   setMinDateToday();
+}
+
+function renderPage() {
+  renderDesktopTemplate();
+  renderAddTaskContent();
+  renderNameCircles();
+  renderAssignedToSection();
+  renderSubtasks();
 }
 
 /**
@@ -42,7 +46,6 @@ function renderAddTaskContent() {
  * Saves a new task after validation
  */
 async function saveNewTask() {
-  // Validate all form fields
   const addTaskButton = document.getElementById("addtask-button");
   if (!validateForm()) return;
   

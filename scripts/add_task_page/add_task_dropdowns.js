@@ -62,6 +62,10 @@ function toggleDropdown(type) {
 
   const isOpen = dropdown.classList.contains("open");
 
+  isDropdownOpen(dropdown, icon, section, isOpen);
+}
+
+function isDropdownOpen(dropdown, icon, section, isOpen) {
   if (isOpen) {
     dropdown.classList.remove("open");
     dropdown.style.maxHeight = "0px";
@@ -75,7 +79,6 @@ function toggleDropdown(type) {
   }
 }
 
-
 function closeDropdownIfOpen(type) {
   const dropdown = document.getElementById(
     type === "assignedTo" ? "dropDownSection" : "categoryDropDownSection"
@@ -87,6 +90,10 @@ function closeDropdownIfOpen(type) {
     type === "assignedTo" ? "assignedToSection" : "categorySection"
   );
 
+  dropdownContainsOpen(dropdown, icon, section);
+}
+
+function dropdownContainsOpen(dropdown, icon, section) {
   if (dropdown.classList.contains("open")) {
     dropdown.classList.remove("open");
     dropdown.style.maxHeight = "0px";
