@@ -127,7 +127,6 @@
 }
 
 .span-section {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -267,7 +266,6 @@ header span {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: auto;
         cursor: pointer;
         margin-left: 0px;
         color: #A8A8A8;
@@ -295,7 +293,7 @@ header span {
     .div-link {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: start;
         flex-direction: column;
         width: auto;
         gap: 3px;
