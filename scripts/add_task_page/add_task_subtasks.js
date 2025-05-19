@@ -23,18 +23,12 @@ function deleteSubTasks(key) {
 
 function saveSubtask(key) {
   const edited = document.getElementById(`editedTask${key}`);
-  const currentSubtaskContainer = document.getElementById(
-    `taskBulletPoint${key}`
-  );
   if (!edited || !currentSubTask[key])
     return console.error(`Subtask ${key} nicht gefunden`);
 
   const value = edited.value.trim();
 
-  if (value.length < 2) {
-    deleteSubTasks(key);
-    return;
-  }
+  if (value.length < 2) return deleteSubTasks(key);
 
   currentSubTask[key].subTaskDescription = value;
   renderSubtasks();
@@ -46,7 +40,11 @@ function subtaskEdit(key) {
 
   const container = document.getElementById(`taskBulletPoint${key}`);
   container.classList.remove("task-bullet-point");
-  container.innerHTML = `
+  container.innerHTML = subtaskEditTemplate(key, task);
+}
+
+function subtaskEditTemplate(key, task) {
+  return `
     <div class="subtask-edit-point-section">
       <div class="subtask-edit-point">
         <input id="editedTask${key}" class="subtask-input-edit" value="${task.subTaskDescription}" type="text">
@@ -59,6 +57,7 @@ function subtaskEdit(key) {
     </div>`;
 }
 
+
 function showInputSubtaskSection(evt) {
   evt.stopPropagation();
 
@@ -67,7 +66,11 @@ function showInputSubtaskSection(evt) {
 
   subSec.classList.add("blue-border");
   iconSec.classList.remove("add-subtask-img");
-  iconSec.innerHTML = `
+  iconSec.innerHTML = showInputTemplate();
+}
+
+function showInputTemplate() {
+  return `
     <div class="show-subtask-input-icons">
       <div onclick="closeInputSubtaskSection(event)" class="subtask-close-container">
         <img class="subtask-close-icon" src="./assets/img/close.svg" alt="Close">
