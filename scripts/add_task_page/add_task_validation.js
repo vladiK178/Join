@@ -6,84 +6,68 @@ function validateTitle() {
   const titleInput = document.getElementById("title");
   const alert = document.getElementById("alertMessageTitle");
   
-  // Check if title input is empty
   if (!titleInput || titleInput.value.trim() === "") {
     alert.classList.remove("d-none");
     titleInput.classList.add("input-error");
     return false;
   }
   
-  // Valid title
   alert.classList.add("d-none");
   titleInput.classList.remove("input-error");
   return true;
 }
 
-/**
- * Validates if at least one contact is assigned to the task
- * @returns {boolean} True if at least one contact is assigned
- */
+function isAnyContactChecked(contacts) {
+  for (const key in contacts) {
+    const checkbox = document.getElementById(`assignedToCheckbox${key}`);
+    if (checkbox?.checked) return true;
+  }
+  return false;
+}
+
 function validateAssignedContacts() {
   const contacts = currentUser.contacts || {};
   const assignedToId = document.getElementById("alertMessageAssignedTo");
   const assignedToSection = document.getElementById("assignedToSection");
-  let atLeastOneChecked = false;
-  
-  // Check if at least one contact is checked
-  for (const key in contacts) {
-    const checkbox = document.getElementById(`assignedToCheckbox${key}`);
-    if (checkbox?.checked) {
-      atLeastOneChecked = true;
-      break;
-    }
-  }
-  
-  // Show error if no contact is selected
+  const atLeastOneChecked = isAnyContactChecked(contacts);
+
   if (!atLeastOneChecked) {
     assignedToId.classList.remove("d-none");
     assignedToSection.classList.add("input-error");
     return false;
-  } 
-  
-  // Valid selection
+  }
+
   assignedToId.classList.add("d-none");
   assignedToSection.classList.remove("input-error");
-  return atLeastOneChecked;
+  return true;
 }
 
-/**
- * Validates if a date is selected and not in the past
- * @returns {boolean} True if date is valid
- */
+function isDateInvalid(dateValue) {
+  if (!dateValue) return "Please select a date.";
+  const selected = new Date(dateValue);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (selected < today) return "Date cannot be in the past.";
+  return "";
+}
+
 function validateEndDate() {
   const dateInput = document.getElementById("date");
   const alert = document.getElementById("alertMessageDate");
-  
-  // Check if date field is empty
-  if (!dateInput || !dateInput.value) {
-    alert.textContent = "Please select a date.";
+  const errorMessage = isDateInvalid(dateInput?.value);
+
+  if (errorMessage) {
+    alert.textContent = errorMessage;
     alert.classList.remove("d-none");
     dateInput.classList.add("input-error");
     return false;
   }
-  
-  // Check if date is not in the past
-  const selectedDate = new Date(dateInput.value);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  
-  if (selectedDate < today) {
-    alert.textContent = "Date cannot be in the past.";
-    alert.classList.remove("d-none");
-    dateInput.classList.add("input-error");
-    return false;
-  }
-  
-  // Valid date
+
   alert.classList.add("d-none");
   dateInput.classList.remove("input-error");
   return true;
 }
+
 
 /**
  * Gets today's date in YYYY-MM-DD format for the min attribute
@@ -123,14 +107,12 @@ function validateCategory() {
   const validCategories = ["Technical Task", "User Story"];
   const categorySelectionId = document.getElementById("alertMessageCategory");
   
-  // Check if a valid category is selected
   if (!categorySpan || !validCategories.some((cat) => categorySpan.innerText.includes(cat))) {
     categorySelectionId.classList.remove("d-none");
     categorySection.classList.add("input-error");
     return false;
   }
   
-  // Valid category
   categorySelectionId.classList.add("d-none");
   categorySection.classList.remove("input-error");
   return true;
@@ -144,7 +126,6 @@ function collectAssignedContacts() {
   const contacts = currentUser.contacts || {};
   const selectedContacts = {};
   
-  // Collect all checked contacts
   for (const key in contacts) {
     const checkbox = document.getElementById(`assignedToCheckbox${key}`);
     if (checkbox?.checked) {
@@ -186,17 +167,14 @@ function getSelectedPriority() {
  * @returns {boolean} True if all validations pass 
  */
 function validateForm() {
-  // Run all validations and collect results
   const titleValid = validateTitle();
   const assignedValid = validateAssignedContacts();
   const dateValid = validateEndDate();
   const categoryValid = validateCategory();
   
-  // Show animation for errors
   if (!titleValid || !assignedValid || !dateValid || !categoryValid) {
     rotateMessage();
   }
   
-  // Return true only if all validations pass
   return titleValid && assignedValid && dateValid && categoryValid;
 }
