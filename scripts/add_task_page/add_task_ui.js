@@ -77,7 +77,22 @@ function renderContactItem({
   const isChecked = isUser ? "checked" : "";
   const assignedClass = isUser ? "checked-assigned-to" : "assigned-to-name";
 
-  dropDown.innerHTML += `
+  dropDown.innerHTML += assignedToBackgroundTemplate(key, color, assignedClass, initials, contact, isChecked);
+
+  if (isUser) {
+    chosenSec.innerHTML += chosenNameTemplate(key, color, initials);
+  }
+}
+
+function chosenNameTemplate(key, color, initials) {
+  return `
+      <div id="chosenName${key}" class="name-circle" style="background-color: ${color}">
+        <span>${initials}</span>
+      </div>`;
+}
+
+function assignedToBackgroundTemplate(key, color, assignedClass, initials, contact, isChecked) {
+  return `
     <div onclick="toggleAssignedToBackground('${key}', '${color}')" id="assignedToName${key}" class="${assignedClass}">
       <div class="name-section">
         <div class="name-circle" style="background-color: ${color}"><span>${initials}</span></div>
@@ -85,13 +100,6 @@ function renderContactItem({
       </div>
       <input class="custom-checkbox checkbox-width-zero" id="assignedToCheckbox${key}" type="checkbox" ${isChecked} style="pointer-events: none;">
     </div>`;
-
-  if (isUser) {
-    chosenSec.innerHTML += `
-      <div id="chosenName${key}" class="name-circle" style="background-color: ${color}">
-        <span>${initials}</span>
-      </div>`;
-  }
 }
 
 function toggleAssignedToBackground(key, color) {
@@ -140,7 +148,12 @@ function renderSubtasks() {
 
   for (let key in currentSubTask) {
     const { subTaskDescription } = currentSubTask[key];
-    section.innerHTML += `
+    section.innerHTML += subtaskTemplate(key, subTaskDescription);
+  }
+}
+
+function subtaskTemplate(key, subTaskDescription) {
+  return `
       <div id="taskBulletPoint${key}" class="task-bullet-point">
         <li>${subTaskDescription}</li>
         <div class="edit-trash-section">
@@ -149,7 +162,6 @@ function renderSubtasks() {
           <img onclick="deleteSubTasks('${key}')" src="./assets/img/trashImg.svg" alt="">
         </div>
       </div>`;
-  }
 }
 
 function addSubtaskEnterListener() {
