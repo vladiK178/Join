@@ -75,10 +75,10 @@ function toggleMenuMobile(event) {
     return;
   }
   if (isMenuOpen(menu)) {
-    closeMenu(menu, icon);
+    closeMobileMenu(menu, icon);
   } else {
     closePreviouslyOpenMenu();
-    openMenu(menu, icon);
+    openMobileMenu(menu, icon);
     currentlyOpenMenu = menu;
   }
 }
@@ -104,7 +104,7 @@ function isMenuOpen(menu) {
  * @param {HTMLElement} menu - Menu element to close
  * @param {HTMLElement} icon - Menu icon element to update
  */
-function closeMenu(menu, icon) {
+function closeMobileMenu(menu, icon) {
   menu.classList.add("d-none");
   icon.classList.remove("open-menu-mobile");
   icon.classList.add("closed-menu-mobile");
@@ -115,7 +115,7 @@ function closeMenu(menu, icon) {
  * @param {HTMLElement} menu - Menu element to open
  * @param {HTMLElement} icon - Menu icon element to update
  */
-function openMenu(menu, icon) {
+function openMobileMenu(menu, icon) {
   menu.classList.remove("d-none");
   icon.classList.remove("closed-menu-mobile");
   icon.classList.add("open-menu-mobile");
