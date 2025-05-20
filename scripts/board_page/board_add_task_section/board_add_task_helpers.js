@@ -103,60 +103,56 @@ function resetPriorityButtons() {
 }
 
 /**
- * Shows a shake animation for the error message.
+ * Fügt die angegebene Klasse hinzu und entfernt die andere.
+ * @param {HTMLElement} element - Das Ziel-Element
+ * @param {string} addClass - Die Klasse, die hinzugefügt wird
+ * @param {string} removeClass - Die Klasse, die entfernt wird
+ */
+function toggleClass(element, addClass, removeClass) {
+  element.classList.add(addClass);
+  element.classList.remove(removeClass);
+}
+
+/**
+ * Führt einen einzelnen Animationsschritt aus, indem zwischen "mar-right" und "mar-left" gewechselt wird.
+ * @param {HTMLElement} element - Das Ziel-Element
+ * @param {boolean} toggleRight - Ob "mar-right" gesetzt werden soll
+ */
+function animationStep(element, toggleRight) {
+  if (toggleRight) {
+    toggleClass(element, "mar-right", "mar-left");
+  } else {
+    toggleClass(element, "mar-left", "mar-right");
+  }
+}
+
+/**
+ * Entfernt die Animation-Klassen vom Element.
+ * @param {HTMLElement} element - Das Ziel-Element
+ */
+function clearAnimationClasses(element) {
+  element.classList.remove("mar-right", "mar-left");
+}
+
+/**
+ * Startet die Shake-Animation.
  */
 function showShakeAnimation() {
-  // Get error message container
-  let errorMsg = document.getElementById("fieldRequiredSection");
-  
-  // Start right animation
-  errorMsg.classList.add("mar-right");
-  
-  // Perform animation with delays
+  const errorMsg = document.getElementById("fieldRequiredSection");
+  if (!errorMsg) return;
+
+  const interval = 50;
+  const repetitions = 8;
+
+  for (let i = 0; i < repetitions; i++) {
+    setTimeout(() => {
+      animationStep(errorMsg, i % 2 === 0);
+    }, i * interval);
+  }
+
   setTimeout(() => {
-    errorMsg.classList.remove("mar-right");
-    errorMsg.classList.add("mar-left");
-  }, 50);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-left");
-    errorMsg.classList.add("mar-right");
-  }, 100);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-right");
-    errorMsg.classList.add("mar-left");
-  }, 150);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-left");
-    errorMsg.classList.add("mar-right");
-  }, 200);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-right");
-    errorMsg.classList.add("mar-left");
-  }, 250);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-left");
-    errorMsg.classList.add("mar-right");
-  }, 300);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-right");
-    errorMsg.classList.add("mar-left");
-  }, 350);
-  
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-left");
-    errorMsg.classList.add("mar-right");
-  }, 400);
-  
-  // End animation
-  setTimeout(() => {
-    errorMsg.classList.remove("mar-right");
-  }, 450);
+    clearAnimationClasses(errorMsg);
+  }, repetitions * interval);
 }
 
 /**

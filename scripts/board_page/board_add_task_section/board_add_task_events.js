@@ -10,37 +10,60 @@ function initOutsideClickListener() {
 }
 
 /**
- * Handles clicks outside of dropdowns and inputs
- * @param {MouseEvent} event - Click event
+ * Prüft, ob Klick außerhalb von assignedTo-Bereich und Dropdown war und schließt Dropdown.
+ * @param {EventTarget} target - Das angeklickte Element
  */
-function outsideClickHandler(event) {
+function handleAssignedToOutsideClick(target) {
   const assignedToSection = document.getElementById("assignedToSection");
   const assignedDropDown = document.getElementById("dropDownSection");
-  const categorySection = document.getElementById("categorySection");
-  const categoryDropDown = document.getElementById("categoryDropDownSection");
-  const subtaskDiv = document.getElementById("subtaskSectionInput");
-
-  // improved Check for Assigned-to Dropdown
-  if (assignedToSection && assignedDropDown && 
-      !assignedToSection.contains(event.target) && 
-      !assignedDropDown.contains(event.target)) {
+  if (
+    assignedToSection &&
+    assignedDropDown &&
+    !assignedToSection.contains(target) &&
+    !assignedDropDown.contains(target)
+  ) {
     closeAssignedToDropdown();
   }
+}
 
-  // improved Check for Category Dropdown
-  if (categorySection && categoryDropDown && 
-      !categorySection.contains(event.target) &&
-      !categoryDropDown.classList.contains("d-none") &&
-      !categoryDropDown.contains(event.target)) {
+/**
+ * Prüft, ob Klick außerhalb von Kategorie-Bereich und Dropdown war und schließt Dropdown.
+ * @param {EventTarget} target - Das angeklickte Element
+ */
+function handleCategoryOutsideClick(target) {
+  const categorySection = document.getElementById("categorySection");
+  const categoryDropDown = document.getElementById("categoryDropDownSection");
+  if (
+    categorySection &&
+    categoryDropDown &&
+    !categorySection.contains(target) &&
+    !categoryDropDown.classList.contains("d-none") &&
+    !categoryDropDown.contains(target)
+  ) {
     closeCategoryDropdown();
   }
+}
 
-  // Check for Subtask Input
+/**
+ * Prüft, ob Klick außerhalb des Subtask-Input-Bereichs war und schließt diesen.
+ * @param {Event} event - Das Klick-Event
+ */
+function handleSubtaskOutsideClick(event) {
+  const subtaskDiv = document.getElementById("subtaskSectionInput");
   if (subtaskDiv && !subtaskDiv.contains(event.target)) {
     closeInputSubtaskSection(event);
   }
 }
 
+/**
+ * Handhabt Klicks außerhalb von Dropdowns und Eingabefeldern.
+ * @param {MouseEvent} event - Das Klick-Event
+ */
+function outsideClickHandler(event) {
+  handleAssignedToOutsideClick(event.target);
+  handleCategoryOutsideClick(event.target);
+  handleSubtaskOutsideClick(event);
+}
 
 /**
  * Closes assigned-to dropdown on outside clicks
@@ -231,32 +254,52 @@ function isCurrentUserContact(contact) {
 }
 
 /**
- * Renders current user contact as selected
- * @param {string} key - Contact key
- * @param {Object} contact - Contact data
- * @param {string} color - Circle color
+ * Erstellt den HTML-Code für den ausgewählten Kontakt im Dropdown.
+ * @param {string} key - Schlüssel des Kontakts
+ * @param {Object} contact - Kontaktdaten
+ * @param {string} color - Farbe des Kreises
+ * @returns {string} HTML-String für Dropdown-Eintrag
  */
-function renderCurrentUserAssigned(key, contact, color) {
-  document.getElementById("dropDownSection").innerHTML += `
+function createAssignedToDropdownItem(key, contact, color) {
+  return `
     <div onclick="toggleAssignedToBackground('${key}', '${color}')"
          id="assignedToName${key}" class="checked-assigned-to">
       <div class="name-section">
         <div class="name-circle-add-section" style="background-color: ${color}">
-          <span>${contact.firstNameContact.charAt(
-            0
-          )}${contact.lastNameContact.charAt(0)}</span>
+          <span>${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}</span>
         </div>
         <span>${contact.firstNameContact} ${contact.lastNameContact}</span>
       </div>
       <input class="custom-checkbox" id="assignedToCheckbox${key}" type="checkbox" checked style="pointer-events: none;">
     </div>`;
+}
 
-  document.getElementById("choosenNamesSection").innerHTML += `
+/**
+ * Erstellt den HTML-Code für den ausgewählten Kontakt als Kreis in der Auswahl.
+ * @param {string} key - Schlüssel des Kontakts
+ * @param {Object} contact - Kontaktdaten
+ * @param {string} color - Farbe des Kreises
+ * @returns {string} HTML-String für ausgewählten Kontakt-Kreis
+ */
+function createChosenNameCircle(key, contact, color) {
+  return `
     <div id="chosenName${key}" class="name-circle-add-section" style="background-color: ${color}">
-      <span>${contact.firstNameContact.charAt(
-        0
-      )}${contact.lastNameContact.charAt(0)}</span>
+      <span>${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}</span>
     </div>`;
+}
+
+/**
+ * Rendert den aktuellen Benutzer als ausgewählten Kontakt.
+ * @param {string} key - Schlüssel des Kontakts
+ * @param {Object} contact - Kontaktdaten
+ * @param {string} color - Farbe des Kreises
+ */
+function renderCurrentUserAssigned(key, contact, color) {
+  const dropdownHTML = createAssignedToDropdownItem(key, contact, color);
+  const chosenCircleHTML = createChosenNameCircle(key, contact, color);
+
+  document.getElementById("dropDownSection").innerHTML += dropdownHTML;
+  document.getElementById("choosenNamesSection").innerHTML += chosenCircleHTML;
 }
 
 /**

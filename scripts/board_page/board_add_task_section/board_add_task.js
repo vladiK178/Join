@@ -383,7 +383,11 @@ function showInputSubtaskSection() {
   iconSection.classList.remove("add-subtask-img");
 
   // Change to input mode with close and submit icons
-  iconSection.innerHTML = `
+  iconSection.innerHTML = inputSubtaskIconTemplate();
+}
+
+function inputSubtaskIconTemplate() {
+  return `
     <div class="show-subtask-input-icons">
       <div onclick="closeInputSubtaskSection(event)" class="subtask-close-container">
         <img class="subtask-close-icon" src="./assets/img/close.svg" alt="Close">
@@ -420,7 +424,12 @@ function renderSubtasks() {
 
   // Add each subtask
   Object.entries(currentSubTask).forEach(([id, subtask]) => {
-    container.innerHTML += `
+    container.innerHTML += renderSubtasksTemplate(id, subtask);
+  });
+}
+
+function renderSubtasksTemplate(id, subtask) {
+  return `
         <div id="taskBulletPoint${id}" class="task-bullet-point">
             <li>${subtask.subTaskDescription}</li>
             <div id="edit-trash-section" class="edit-trash-section">
@@ -429,7 +438,6 @@ function renderSubtasks() {
                 <img onclick="deleteSubtask('${id}')" src="./assets/img/trashImg.svg" alt="">
             </div>
         </div>`;
-  });
 }
 
 /**
@@ -452,7 +460,11 @@ function editSubtask(subtaskId) {
   bulletPoint.classList.remove("task-bullet-point");
 
   // Replace with edit form
-  bulletPoint.innerHTML = `
+  bulletPoint.innerHTML = editSubtaskTemplate(subtaskId, currentSubTask);
+}
+
+function editSubtaskTemplate(subtaskId, currentSubTask) {
+  return `
     <div class="subtask-edit-point-section">
         <div class="subtask-edit-point">
             <input id="editedTask${subtaskId}" class="subtask-input-edit"
