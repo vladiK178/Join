@@ -64,7 +64,12 @@ function renderSubtasksEditZoom() {
   container.innerHTML = "";
   
   Object.entries(currentSubTaskEdit || {}).forEach(([id, st]) => {
-    container.innerHTML += `
+    container.innerHTML += subtaskEditZoomTemplate(id, st);
+  });
+}
+
+function subtaskEditZoomTemplate(id, st) {
+  return `
       <div id="taskBulletPoint${id}" class="task-bullet-point">
         <li>${st.subTaskDescription}</li>
         <div id="edit-trash-section" class="edit-trash-section">
@@ -73,7 +78,6 @@ function renderSubtasksEditZoom() {
           <img onclick="deleteSubtaskZoom('${id}')" src="./assets/img/trashImg.svg" alt="">
         </div>
       </div>`;
-  });
 }
 
 /**
@@ -120,7 +124,11 @@ function deleteSubtaskZoom(subtaskId) {
 function editSubtaskZoom(id) {
   let bulletPoint = document.getElementById(`taskBulletPoint${id}`);
   bulletPoint.classList.remove("task-bullet-point");
-  bulletPoint.innerHTML = `
+  bulletPoint.innerHTML = editSubtaskZoomTemplate(id, currentSubTaskEdit);
+}
+
+function editSubtaskZoomTemplate(id, currentSubTaskEdit) {
+  return `
     <div class="subtask-edit-point-section">
       <div class="subtask-edit-point">
         <input id="editedTask${id}" class="subtask-input-edit" value="${currentSubTaskEdit[id].subTaskDescription}" type="text">
@@ -151,7 +159,11 @@ function saveSubtaskZoom(id) {
 function showInputSubtaskSectionEditZoom() {
   let iconSection = document.getElementById("subtaskIconSectionEdit");
   iconSection.classList.remove("add-subtask-img");
-  iconSection.innerHTML = `
+  iconSection.innerHTML = showInputSubtaskSectionEditZoomTemplate();
+}
+
+function showInputSubtaskSectionEditZoomTemplate() {
+  return `
     <div class="show-subtask-input-icons">
       <div onclick="closeInputSubtaskSectionEditZoom(event)" class="subtask-close-container">
         <img class="subtask-close-icon" src="./assets/img/close.svg" alt="Close">
@@ -179,48 +191,87 @@ function shortenName(name) {
 }
 
 /**
- * Renders assignee dropdown and selected contacts
- * @param {string} taskKey - Task key
+ * Rendert die Zuweisungssektion (Dropdown + ausgewählte Kontakte) im Edit-Zoom.
+ * @param {string} taskKey - Schlüssel der zu bearbeitenden Aufgabe
  */
 function renderAssignedToSectionEditZoom(taskKey) {
-  let task = currentUser.tasks[taskKey];
-  let dropdownSection = document.getElementById("dropDownSectionEdit");
-  let chosenSection = document.getElementById("choosenNamesSectionEdit");
-  
+  const task = currentUser.tasks[taskKey];
+  const dropdownSection = document.getElementById("dropDownSectionEdit");
+  const chosenSection = document.getElementById("choosenNamesSectionEdit");
   dropdownSection.innerHTML = "";
   chosenSection.innerHTML = "";
-  
+
+  renderAssignedContactsEditZoom(task, dropdownSection, chosenSection);
+}
+
+/**
+ * Rendert alle Kontakte im Dropdown und zeigt die Auswahl an, falls zugewiesen.
+ * @param {Object} task - Die aktuelle Aufgabe
+ * @param {HTMLElement} dropdownSection - DOM-Element für das Dropdown
+ * @param {HTMLElement} chosenSection - DOM-Element für die ausgewählten Namen
+ */
+function renderAssignedContactsEditZoom(task, dropdownSection, chosenSection) {
   const colorMap = {};
+
   Object.entries(currentUser.contacts || {}).forEach(([key, contact]) => {
     if (!colorMap[key]) colorMap[key] = getRandomColorFromPalette();
-    
-    // Check if contact is already assigned
-    let isAssigned = isContactAssigned(task, contact);
-    let className = isAssigned ? "checked-assigned-to" : "assigned-to-name";
-    let checked = isAssigned ? "checked" : "";
-    
-    // Add to dropdown
-    dropdownSection.innerHTML += `
-      <div onclick="toggleAssignedToEditZoom('${task.id}','${key}','${colorMap[key]}')"
-           id="assignedToNameEdit${key}" class="${className}">
-        <div class="name-section">
-          <div class="name-circle-add-section" style="background-color: ${colorMap[key]}">
-            <span>${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}</span>
-          </div>
-          <span>${shortenName(`${contact.firstNameContact} ${contact.lastNameContact}`)}</span>
-        </div>
-        <input class="custom-checkbox" id="assignedToCheckboxEdit${key}" type="checkbox"
-               ${checked} style="pointer-events: none;">
-      </div>`;
-    
-    // Add circle if assigned
+
+    const isAssigned = isContactAssigned(task, contact);
+    renderContactDropdownEntry(task, key, contact, colorMap[key], isAssigned, dropdownSection);
+
     if (isAssigned) {
-      chosenSection.innerHTML += `
-        <div id="chosenNameEdit${key}" class="name-circle-add-section" style="background-color: ${colorMap[key]}">
-          <span>${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}</span>
-        </div>`;
+      renderAssignedCircleEditZoom(key, contact, colorMap[key], chosenSection);
     }
   });
+}
+
+/**
+ * Fügt einen Kontakt dem Dropdown hinzu.
+ * @param {Object} task - Die aktuelle Aufgabe
+ * @param {string} key - Schlüssel des Kontakts
+ * @param {Object} contact - Kontaktdaten
+ * @param {string} color - Farbcodierung für Kontaktkreis
+ * @param {boolean} isAssigned - Ob der Kontakt zugewiesen ist
+ * @param {HTMLElement} container - DOM-Container für das Dropdown
+ */
+function renderContactDropdownEntry(task, key, contact, color, isAssigned, container) {
+  const className = isAssigned ? "checked-assigned-to" : "assigned-to-name";
+  const checked = isAssigned ? "checked" : "";
+
+  container.innerHTML += renderContactDropdownEntryTemplate(task, key, color, className, contact, checked);
+}
+
+function renderContactDropdownEntryTemplate(task, key, color, className, contact, checked) {
+  return `
+    <div onclick="toggleAssignedToEditZoom('${task.id}','${key}','${color}')"
+         id="assignedToNameEdit${key}" class="${className}">
+      <div class="name-section">
+        <div class="name-circle-add-section" style="background-color: ${color}">
+          <span>${contact.firstNameContact.charAt(
+            0
+          )}${contact.lastNameContact.charAt(0)}</span>
+        </div>
+        <span>${shortenName(
+          `${contact.firstNameContact} ${contact.lastNameContact}`
+        )}</span>
+      </div>
+      <input class="custom-checkbox" id="assignedToCheckboxEdit${key}" type="checkbox" ${checked}
+             style="pointer-events: none;">
+    </div>`;
+}
+
+/**
+ * Rendert den farbigen Kreis für einen bereits zugewiesenen Kontakt.
+ * @param {string} key - Schlüssel des Kontakts
+ * @param {Object} contact - Kontaktdaten
+ * @param {string} color - Farbcode
+ * @param {HTMLElement} container - DOM-Container für zugewiesene Kontakte
+ */
+function renderAssignedCircleEditZoom(key, contact, color, container) {
+  container.innerHTML += `
+    <div id="chosenNameEdit${key}" class="name-circle-add-section" style="background-color: ${color}">
+      <span>${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}</span>
+    </div>`;
 }
 
 /**
@@ -236,45 +287,64 @@ function isContactAssigned(task, contact) {
 }
 
 /**
- * Toggles contact assignment
- * @param {string} taskId - Task ID
- * @param {string} key - Contact key
- * @param {string} color - Circle color
+ * Schaltet die Zuweisung eines Kontakts für eine Aufgabe um.
+ * @param {string} taskId - ID der Aufgabe
+ * @param {string} key - Schlüssel des Kontakts
+ * @param {string} color - Farbe für den Kontaktkreis
  */
 function toggleAssignedToEditZoom(taskId, key, color) {
-  let taskKey = findTaskKey(taskId);
+  const taskKey = findTaskKey(taskId);
   if (!taskKey) return;
-  
-  let task = currentUser.tasks[taskKey];
-  let checkbox = document.getElementById(`assignedToCheckboxEdit${key}`);
-  let div = document.getElementById(`assignedToNameEdit${key}`);
-  let chosenSection = document.getElementById("choosenNamesSectionEdit");
+
+  const task = currentUser.tasks[taskKey];
+  const checkbox = document.getElementById(`assignedToCheckboxEdit${key}`);
+  const div = document.getElementById(`assignedToNameEdit${key}`);
+  const chosenSection = document.getElementById("choosenNamesSectionEdit");
 
   checkbox.checked = !checkbox.checked;
-  if (checkbox.checked) {
-    // Assign contact
-    div.classList.replace("assigned-to-name", "checked-assigned-to");
-    if (!task.assignedTo) task.assignedTo = {};
-    task.assignedTo[`contact_${key}`] = {
-      firstName: currentUser.contacts[key].firstNameContact,
-      lastName: currentUser.contacts[key].lastNameContact
-    };
-    
-    // Add circle if not present
-    if (!document.getElementById(`chosenNameEdit${key}`)) {
-      chosenSection.innerHTML += `
-        <div id="chosenNameEdit${key}" class="name-circle-add-section" style="background-color: ${color}">
-          <span>${currentUser.contacts[key].firstNameContact.charAt(0)}${currentUser.contacts[key].lastNameContact.charAt(0)}</span>
-        </div>`;
-    }
-  } else {
-    // Unassign contact
-    div.classList.replace("checked-assigned-to", "assigned-to-name");
-    delete task.assignedTo[`contact_${key}`];
-    
-    let circle = document.getElementById(`chosenNameEdit${key}`);
-    if (circle) circle.remove();
+
+  checkbox.checked
+    ? assignContactToTask(task, key, div, color, chosenSection)
+    : unassignContactFromTask(task, key, div);
+}
+
+/**
+ * Weist einen Kontakt der Aufgabe zu und zeigt Kreis an.
+ * @param {Object} task - Aufgabenobjekt
+ * @param {string} key - Kontakt-Schlüssel
+ * @param {HTMLElement} div - Element mit Kontaktanzeige
+ * @param {string} color - Farbe für den Kreis
+ * @param {HTMLElement} chosenSection - DOM-Element für die ausgewählten Kontakte
+ */
+function assignContactToTask(task, key, div, color, chosenSection) {
+  div.classList.replace("assigned-to-name", "checked-assigned-to");
+
+  if (!task.assignedTo) task.assignedTo = {};
+  task.assignedTo[`contact_${key}`] = {
+    firstName: currentUser.contacts[key].firstNameContact,
+    lastName: currentUser.contacts[key].lastNameContact
+  };
+
+  if (!document.getElementById(`chosenNameEdit${key}`)) {
+    chosenSection.innerHTML += `
+      <div id="chosenNameEdit${key}" class="name-circle-add-section" style="background-color: ${color}">
+        <span>${currentUser.contacts[key].firstNameContact.charAt(0)}${currentUser.contacts[key].lastNameContact.charAt(0)}</span>
+      </div>`;
   }
+}
+
+/**
+ * Entfernt einen Kontakt von der Aufgabe und entfernt Kreis.
+ * @param {Object} task - Aufgabenobjekt
+ * @param {string} key - Kontakt-Schlüssel
+ * @param {HTMLElement} div - DOM-Element für den Kontakt
+ */
+function unassignContactFromTask(task, key, div) {
+  div.classList.replace("checked-assigned-to", "assigned-to-name");
+  delete task.assignedTo[`contact_${key}`];
+
+  const circle = document.getElementById(`chosenNameEdit${key}`);
+  if (circle) circle.remove();
 }
 
 /**

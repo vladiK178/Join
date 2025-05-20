@@ -1,29 +1,41 @@
 /**
- * Checks if title and date inputs are valid
- * @returns {boolean} True if all inputs valid
+ * Prüft die Eingabe des Titels und zeigt bei Fehlern die Warnung an.
+ * @returns {boolean} True, wenn Titel gültig ist
+ */
+function validateTitleEdit() {
+  const title = document.getElementById("titleEdit");
+  const alert = document.getElementById("alertMessageTitleEdit");
+  if (!title.value.trim()) {
+    alert.classList.remove("d-none");
+    return false;
+  }
+  alert.classList.add("d-none");
+  return true;
+}
+
+/**
+ * Prüft die Eingabe des Datums und zeigt bei Fehlern die Warnung an.
+ * @returns {boolean} True, wenn Datum gültig ist
+ */
+function validateDateEdit() {
+  const date = document.getElementById("dateEdit");
+  const alert = document.getElementById("alertMessageDateEdit");
+  if (!date.value) {
+    alert.classList.remove("d-none");
+    return false;
+  }
+  alert.classList.add("d-none");
+  return true;
+}
+
+/**
+ * Validiert Titel und Datum und gibt true zurück, wenn beide gültig sind.
+ * @returns {boolean} True, wenn alle Eingaben gültig sind
  */
 function validateTitleAndDate() {
-  let title = document.getElementById("titleEdit");
-  let date = document.getElementById("dateEdit");
-  let valid = true;
-  
-  // Check title field
-  if (!title.value.trim()) {
-    document.getElementById("alertMessageTitleEdit").classList.remove("d-none");
-    valid = false;
-  } else {
-    document.getElementById("alertMessageTitleEdit").classList.add("d-none");
-  }
-  
-  // Check date field
-  if (!date.value) {
-    document.getElementById("alertMessageDateEdit").classList.remove("d-none");
-    valid = false;
-  } else {
-    document.getElementById("alertMessageDateEdit").classList.add("d-none");
-  }
-  
-  return valid;
+  const isTitleValid = validateTitleEdit();
+  const isDateValid = validateDateEdit();
+  return isTitleValid && isDateValid;
 }
 
 /**
@@ -33,12 +45,12 @@ function validateTitleAndDate() {
  */
 function validateAssignedContacts(taskKey) {
   let task = currentUser.tasks[taskKey];
-  
+
   if (!task.assignedTo || Object.keys(task.assignedTo).length === 0) {
     alert("Please assign at least one contact before saving changes.");
     return false;
   }
-  
+
   return true;
 }
 
@@ -49,13 +61,13 @@ function validateAssignedContacts(taskKey) {
 function getCurrentEditPriority() {
   const urgentBtn = document.getElementById("prioUrgentEdit");
   const mediumBtn = document.getElementById("prioMediumEdit");
-  
+
   if (urgentBtn.classList.contains("prio-urgent-chosen")) {
     return "Urgent";
   } else if (mediumBtn.classList.contains("prio-medium-chosen")) {
     return "Medium";
   }
-  
+
   return "Low";
 }
 
@@ -66,7 +78,7 @@ function getCurrentEditPriority() {
  */
 function updateTaskDataInMemory(taskKey, priority) {
   const task = currentUser.tasks[taskKey];
-  
+
   // Update task with current form values
   currentUser.tasks[taskKey] = {
     ...task,
@@ -74,6 +86,6 @@ function updateTaskDataInMemory(taskKey, priority) {
     taskDescription: document.getElementById("descriptionEdit").value,
     dueDate: document.getElementById("dateEdit").value,
     priority,
-    subtasks: currentSubTaskEdit
+    subtasks: currentSubTaskEdit,
   };
 }
