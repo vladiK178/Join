@@ -84,36 +84,54 @@ function allowDrop(event) {
 }
 
 /**
- * Handles task dropping to update status
- * @param {Event} event - The drop event
- * @param {string} targetStatus - New status for the task
+ * Handles task dropping to update its status.
+ * 
+ * @param {DragEvent} event - The drop event.
+ * @param {string} targetStatus - The new status to assign to the task.
  */
 function drop(event, targetStatus) {
   event.preventDefault();
-
-  // Get task ID from data transfer
   const taskId = event.dataTransfer.getData("text");
   if (!taskId) return;
 
-  // Find task element
-  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
-  if (!taskElement) return;
-
-  // Find task in user data
   const taskKey = findTaskKeyById(taskId);
-  if (!taskKey) {
-    console.error(`Task not found: ${taskId}`);
-    return;
-  }
+  if (!isValidDrop(taskId, taskKey, targetStatus)) return;
 
-  // Skip if status not changed
   const originalStatus = currentUser.tasks[taskKey].currentStatus;
-  if (originalStatus === targetStatus) return;
-
-  // Update task status in memory
   currentUser.tasks[taskKey].currentStatus = targetStatus;
 
-  // Save to database and update UI
+  updateTaskStatus(taskKey, originalStatus, targetStatus);
+}
+
+/**
+ * Checks whether the drop is valid (task exists, taskKey is valid, status is different).
+ * 
+ * @param {string} taskId - The ID of the dropped task.
+ * @param {string|null} taskKey - The key of the task in the user's task object.
+ * @param {string} targetStatus - The status the task is being moved to.
+ * @returns {boolean} True if drop is valid.
+ */
+function isValidDrop(taskId, taskKey, targetStatus) {
+  if (!taskKey) {
+    console.error(`Task not found: ${taskId}`);
+    return false;
+  }
+
+  const originalStatus = currentUser.tasks[taskKey].currentStatus;
+  if (originalStatus === targetStatus) return false;
+
+  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+  return !!taskElement;
+}
+
+/**
+ * Updates the task's status in the database and handles UI refresh or error recovery.
+ * 
+ * @param {string} taskKey - The key of the task to update.
+ * @param {string} originalStatus - The original status of the task before drop.
+ * @param {string} targetStatus - The new status after drop.
+ */
+function updateTaskStatus(taskKey, originalStatus, targetStatus) {
   updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
     .then(() => {
       refreshAllColumns();
@@ -121,8 +139,6 @@ function drop(event, targetStatus) {
     })
     .catch((error) => {
       console.error("Failed to update task:", error);
-
-      // Revert change on error
       currentUser.tasks[taskKey].currentStatus = originalStatus;
       refreshAllColumns();
       showToastMessage("Failed to move task. Please try again.", true);
@@ -151,8 +167,9 @@ function refreshAllColumns() {
 }
 
 /**
- * Handles column selection for task movement
- * @param {string} targetStatus - Column to move task to
+ * Handles column selection for task movement.
+ * 
+ * @param {string} targetStatus - Column to move task to.
  */
 function moveTo(targetStatus) {
   if (!draggedTaskId) return;
@@ -160,13 +177,33 @@ function moveTo(targetStatus) {
   const taskKey = findTaskKeyById(draggedTaskId);
   if (!taskKey) return;
 
-  const originalStatus = currentUser.tasks[taskKey].currentStatus;
-  if (originalStatus === targetStatus) return;
+  if (!shouldUpdateStatus(taskKey, targetStatus)) return;
 
-  // Update status in memory
+  updateTaskStatusWithUI(taskKey, targetStatus);
+}
+
+/**
+ * Checks if the task status needs to be updated.
+ * 
+ * @param {string} taskKey - The key of the task.
+ * @param {string} targetStatus - The target status to move the task to.
+ * @returns {boolean} True if status update is needed.
+ */
+function shouldUpdateStatus(taskKey, targetStatus) {
+  const originalStatus = currentUser.tasks[taskKey].currentStatus;
+  return originalStatus !== targetStatus;
+}
+
+/**
+ * Updates task status in memory, saves to database, and updates UI with error handling.
+ * 
+ * @param {string} taskKey - The key of the task to update.
+ * @param {string} targetStatus - The new status for the task.
+ */
+function updateTaskStatusWithUI(taskKey, targetStatus) {
+  const originalStatus = currentUser.tasks[taskKey].currentStatus;
   currentUser.tasks[taskKey].currentStatus = targetStatus;
 
-  // Save to database
   updateTaskColumnInDatabase(currentUser.id, taskKey, targetStatus)
     .then(() => {
       refreshAllColumns();
@@ -174,8 +211,6 @@ function moveTo(targetStatus) {
     })
     .catch((error) => {
       console.error("Failed to update task:", error);
-
-      // Revert on error
       currentUser.tasks[taskKey].currentStatus = originalStatus;
       refreshAllColumns();
       showToastMessage("Failed to move task. Please try again.", true);
@@ -183,34 +218,71 @@ function moveTo(targetStatus) {
 }
 
 /**
- * Shows feedback message to user
- * @param {string} message - Text to display
- * @param {boolean} isError - Whether message is an error
+ * Shows feedback message to user.
+ * 
+ * @param {string} message - Text to display.
+ * @param {boolean} [isError=false] - Whether message is an error.
  */
 function showToastMessage(message, isError = false) {
-  // Create toast element
+  const toast = getOrCreateToastElement();
+  styleAndShowToast(toast, message, isError);
+  autoHideToast(toast, 3000);
+}
+
+/**
+ * Gets the toast element or creates it if it doesn't exist.
+ * 
+ * @returns {HTMLDivElement} The toast element.
+ */
+function getOrCreateToastElement() {
   let toast = document.getElementById("toast-message");
   if (!toast) {
     toast = document.createElement("div");
     toast.id = "toast-message";
-    toast.style.position = "fixed";
-    toast.style.bottom = "100px";
-    toast.style.left = "50%";
-    toast.style.transform = "translateX(-50%)";
-    toast.style.padding = "10px 20px";
-    toast.style.borderRadius = "4px";
-    toast.style.zIndex = "1000";
+    applyToastBaseStyles(toast);
     document.body.appendChild(toast);
   }
+  return toast;
+}
 
-  // Set style and content
+/**
+ * Applies the base styles to the toast element.
+ * 
+ * @param {HTMLDivElement} toast - The toast element.
+ */
+function applyToastBaseStyles(toast) {
+  toast.style.position = "fixed";
+  toast.style.bottom = "100px";
+  toast.style.left = "50%";
+  toast.style.transform = "translateX(-50%)";
+  toast.style.padding = "10px 20px";
+  toast.style.borderRadius = "4px";
+  toast.style.zIndex = "1000";
+}
+
+/**
+ * Styles the toast according to message type and shows it.
+ * 
+ * @param {HTMLDivElement} toast - The toast element.
+ * @param {string} message - Message to display.
+ * @param {boolean} isError - Whether the message is an error.
+ */
+function styleAndShowToast(toast, message, isError) {
   toast.style.backgroundColor = isError ? "#FF3D00" : "#2A3647";
   toast.style.color = "white";
   toast.textContent = message;
   toast.style.display = "block";
+}
 
-  // Auto-hide after delay
+/**
+ * Hides the toast element after a delay.
+ * 
+ * @param {HTMLDivElement} toast - The toast element.
+ * @param {number} delay - Delay in milliseconds before hiding.
+ */
+function autoHideToast(toast, delay) {
   setTimeout(() => {
     toast.style.display = "none";
-  }, 3000);
+  }, delay);
 }
+

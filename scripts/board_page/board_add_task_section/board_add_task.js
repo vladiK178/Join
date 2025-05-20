@@ -3,146 +3,208 @@
  * @returns {Promise<void>}
  */
 async function saveNewTask() {
-  // injects error spans if missing
   ensureBoardValidationAlertsExist();
+
   if (!validateBoardForm()) return;
-  // Get assigned contacts and validate
+  if (!validateAssignedContactsBoard()) return;
+
+  const titleElement = document.getElementById("title");
+  const dateElement = document.getElementById("date");
+  const categoryElement = document.getElementById("selectTaskCategorySpan");
+
+  if (!validateRequiredFields(titleElement, dateElement, categoryElement))
+    return;
+
   const assignedContacts = collectAssignedContacts();
-  if (!Object.keys(assignedContacts).length) {
-      rotateMessage(); // Show error animation for no contacts
-      return;
-  }
+  const taskData = buildNewTaskObject(
+    titleElement,
+    dateElement,
+    categoryElement,
+    assignedContacts
+  );
 
-  // Get main form elements
-  const titleElement = document.getElementById('title');
-  const dateElement = document.getElementById('date');
-  const categoryElement = document.getElementById('selectTaskCategorySpan');
-
-  // Validate required fields
-  if (!validateTitle(titleElement) || !validateDate(dateElement) || !validateCategory(categoryElement)) {
-      return;
-  }
-
-  // Build and save the task
-  const taskData = buildNewTaskObject(titleElement, dateElement, categoryElement, assignedContacts);
   await saveTaskToDatabase(taskData);
 }
 
+/**
+ * Validates that assigned contacts are present, otherwise triggers error animation
+ * @returns {boolean} True if valid contacts exist
+ */
+function validateAssignedContactsBoard() {
+  const assignedContacts = collectAssignedContacts();
+  if (!Object.keys(assignedContacts).length) {
+    rotateMessage(); // Show error animation for no contacts
+    return false;
+  }
+  return true;
+}
 
 /**
-* Builds a task object from form data
-* @param {HTMLElement} titleElement - Title input
-* @param {HTMLElement} dateElement - Date input
-* @param {HTMLElement} categoryElement - Category span
-* @param {Object} assignedContacts - Selected contacts
-* @returns {Object} The complete task object
-*/
-function buildNewTaskObject(titleElement, dateElement, categoryElement, assignedContacts) {
-  // Get task priority
-  const priority = getPriority();
-  
-  // Format title with capitalization
-  const formattedTitle = capitalizeFirstLetter(titleElement.value.trim());
-  
-  // Get and format description
-  const descriptionElement = document.getElementById('description');
-  let formattedDescription = "";
-  if (descriptionElement.value.trim()) {
-      formattedDescription = capitalizeFirstLetter(descriptionElement.value.trim());
-  }
+ * Validates title, date and category fields
+ * @param {HTMLElement} titleElement
+ * @param {HTMLElement} dateElement
+ * @param {HTMLElement} categoryElement
+ * @returns {boolean} True if all fields are valid
+ */
+function validateRequiredFields(titleElement, dateElement, categoryElement) {
+  return (
+    validateTitle(titleElement) &&
+    validateDate(dateElement) &&
+    validateCategory(categoryElement)
+  );
+}
 
-  // Create the task object
+/**
+ * Builds a task object from form data
+ * @param {HTMLElement} titleElement - Title input element
+ * @param {HTMLElement} dateElement - Date input element
+ * @param {HTMLElement} categoryElement - Category span element
+ * @param {Object} assignedContacts - Selected contacts object
+ * @returns {Object} The constructed task object
+ */
+function buildNewTaskObject(titleElement, dateElement, categoryElement, assignedContacts) {
   return {
-      id: `task_${Date.now()}`,
-      assignedTo: assignedContacts,
-      category: categoryElement.innerText.includes("Technical") ? "Technical Task" : "User Story",
-      currentStatus: "toDo",
-      dueDate: dateElement.value,
-      priority: priority,
-      subtasks: currentSubTask || {},
-      taskDescription: formattedDescription,
-      title: formattedTitle,
+    id: generateTaskId(),
+    assignedTo: assignedContacts,
+    category: getCategoryFromElement(categoryElement),
+    currentStatus: "toDo",
+    dueDate: dateElement.value,
+    priority: getPriority(),
+    subtasks: getCurrentSubtasks(),
+    taskDescription: getFormattedDescription(),
+    title: getFormattedTitle(titleElement),
   };
 }
 
+/**
+ * Generates a unique task ID based on the current timestamp.
+ * @returns {string} The generated task ID.
+ */
+function generateTaskId() {
+  return `task_${Date.now()}`;
+}
 
 /**
-* Collects all checked contacts
-* @returns {Object} Selected contacts
-*/
+ * Determines the task category based on the category element's inner text.
+ * @param {HTMLElement} categoryElement - The DOM element containing the category text.
+ * @returns {string} The category as "Technical Task" or "User Story".
+ */
+function getCategoryFromElement(categoryElement) {
+  return categoryElement.innerText.includes("Technical")
+    ? "Technical Task"
+    : "User Story";
+}
+
+/**
+ * Formats the task title by trimming and capitalizing the first letter.
+ * @param {HTMLElement} titleElement - The input element containing the title.
+ * @returns {string} The formatted title string.
+ */
+function getFormattedTitle(titleElement) {
+  return capitalizeFirstLetter(titleElement.value.trim());
+}
+
+/**
+ * Retrieves and formats the task description from the description input.
+ * @returns {string} The formatted description or empty string if none.
+ */
+function getFormattedDescription() {
+  const descriptionElement = document.getElementById("description");
+  if (descriptionElement && descriptionElement.value.trim()) {
+    return capitalizeFirstLetter(descriptionElement.value.trim());
+  }
+  return "";
+}
+
+/**
+ * Retrieves the current subtasks object or returns an empty object if none.
+ * @returns {Object} The current subtasks.
+ */
+function getCurrentSubtasks() {
+  return currentSubTask || {};
+}
+
+/**
+ * Collects all checked contacts
+ * @returns {Object} Selected contacts
+ */
 function collectAssignedContacts() {
   const contacts = currentUser.contacts || {};
   const selected = {};
 
   // Loop through all contacts
   for (let key in contacts) {
-      const checkbox = document.getElementById(`assignedToCheckbox${key}`);
-      // If checkbox exists and is checked
-      if (checkbox && checkbox.checked) {
-          selected[`contact_${key}`] = {
-              firstName: contacts[key].firstNameContact,
-              lastName: contacts[key].lastNameContact
-          };
-      }
+    const checkbox = document.getElementById(`assignedToCheckbox${key}`);
+    // If checkbox exists and is checked
+    if (checkbox && checkbox.checked) {
+      selected[`contact_${key}`] = {
+        firstName: contacts[key].firstNameContact,
+        lastName: contacts[key].lastNameContact,
+      };
+    }
   }
   return selected;
 }
 
-
 /**
-* Closes the add task panel and resets form
-*/
+ * Closes the add task panel and resets form
+ */
 function closeAddTaskBoard() {
   // Hide the add task section
   const taskSection = document.getElementById("addTaskBoardSection");
   taskSection.classList.add("d-none");
-  
+
   // Enable scrolling on body
   const bodyElement = document.getElementById("body");
   bodyElement.classList.remove("overflow-hidden");
-  
+
   // Reset the form to default state
   resetForm();
 }
 
-
 /**
-* Gets the selected priority
-* @returns {string} Priority level
-*/
+ * Gets the selected priority
+ * @returns {string} Priority level
+ */
 function getPriority() {
   // Check which priority button is active
-  if (document.getElementById('prioUrgent').classList.contains('prio-urgent-chosen')) {
-      return 'Urgent';
+  if (
+    document
+      .getElementById("prioUrgent")
+      .classList.contains("prio-urgent-chosen")
+  ) {
+    return "Urgent";
   }
-  if (document.getElementById('prioMedium').classList.contains('prio-medium-chosen')) {
-      return 'Medium';
+  if (
+    document
+      .getElementById("prioMedium")
+      .classList.contains("prio-medium-chosen")
+  ) {
+    return "Medium";
   }
-  return 'Low';
+  return "Low";
 }
 
-
 /**
-* Saves task to database and handles UI updates
-* @param {Object} taskData - The task to save
-*/
+ * Saves task to database and handles UI updates
+ * @param {Object} taskData - The task to save
+ */
 async function saveTaskToDatabase(taskData) {
   try {
-      // Send to database
-      await postTaskToDatabase(currentUser.id, taskData);
-      
-      // Close panel and refresh board
-      closeAddTaskBoard();
-      initBoardPage();
+    // Send to database
+    await postTaskToDatabase(currentUser.id, taskData);
+
+    // Close panel and refresh board
+    closeAddTaskBoard();
+    initBoardPage();
   } catch (error) {
-      console.error("Failed to save task:", error);
+    console.error("Failed to save task:", error);
   }
 }
 
-
 /**
-* Resets all form elements to default state
-*/
+ * Resets all form elements to default state
+ */
 function resetForm() {
   resetInputFields();
   resetCategoryField();
@@ -155,197 +217,171 @@ function resetForm() {
   closeCategoryDropdown();
 }
 
-
 /**
-* Clears all current subtasks
-*/
+ * Clears all current subtasks
+ */
 function clearSubtasks() {
   currentSubTask = {};
 }
 
-
 /**
-* Removes a subtask by its ID
-* @param {string} subtaskId - ID of the subtask
-*/
+ * Removes a subtask by its ID
+ * @param {string} subtaskId - ID of the subtask
+ */
 function deleteSubtask(subtaskId) {
   delete currentSubTask[subtaskId];
   renderSubtasks();
 }
 
-
 /**
-* Creates a new subtask from input field
-*/
+ * Adds a new subtask from the input field to currentSubTask and updates UI
+ */
 function addSubtask() {
   const inputField = document.getElementById("subtask");
   const inputValue = inputField.value.trim();
-  
-  // Skip if input is empty
-  if (!inputValue) {
-      return;
-  }
-  
-  // Create unique ID and add subtask
-  const newSubtaskId = `subtask_${Date.now()}`;
-  currentSubTask[newSubtaskId] = { 
-      subTaskDescription: inputValue, 
-      checked: false 
-  };
-  
-  // Clear input field
-  inputField.value = "";
-  
-  // Fix for focus issues in some browsers
-  inputField.disabled = true;
-  inputField.disabled = false;
-  
-  // Update UI
+  if (!inputValue) return;
+
+  addNewSubtask(inputValue);
+  resetSubtaskInput(inputField);
   renderSubtasks();
   closeInputSubtaskSection(event);
 }
 
+/**
+ * Adds the subtask to currentSubTask object
+ * @param {string} description - Description of the new subtask
+ */
+function addNewSubtask(description) {
+  const newSubtaskId = `subtask_${Date.now()}`;
+  currentSubTask[newSubtaskId] = {
+    subTaskDescription: description,
+    checked: false,
+  };
+}
 
 /**
-* Updates a subtask's description after editing
-* @param {string} subtaskId - ID of the subtask
-*/
+ * Clears and resets the input field
+ * @param {HTMLElement} inputField - The subtask input element
+ */
+function resetSubtaskInput(inputField) {
+  inputField.value = "";
+  inputField.disabled = true;  // fix focus issue
+  inputField.disabled = false;
+}
+
+/**
+ * Updates a subtask's description after editing
+ * @param {string} subtaskId - ID of the subtask
+ */
 function saveSubtask(subtaskId) {
   const editedInput = document.getElementById(`editedTask${subtaskId}`);
   if (!editedInput) return;
-  
+
   // Update the subtask text
   currentSubTask[subtaskId].subTaskDescription = editedInput.value;
   renderSubtasks();
 }
 
-
 /**
-* Sets priority to Urgent and updates button styles
-*/
-function pressUrgentButton() {
-  // Reset other buttons
-  document.getElementById("prioMedium").classList.remove("prio-medium-chosen");
-  document.getElementById("prioMedium").classList.add("prio-medium");
-  document.getElementById("prioLow").classList.remove("prio-low-chosen");
-  document.getElementById("prioLow").classList.add("prio-low");
-  
-  // Set this button as chosen
-  document.getElementById("prioUrgent").classList.remove("prio-urgent");
-  document.getElementById("prioUrgent").classList.add("prio-urgent-chosen");
-  
-  // Update icons
-  document.getElementById("urgent-button-icon").src = "./assets/img/urgentArrowWhite.svg";
-  document.getElementById("medium-button-icon").src = "./assets/img/mediumLinesOrange.svg";
-  document.getElementById("low-button-icon").src = "./assets/img/lowArrowGreeen.svg";
+ * Sets the priority button styles and icons based on selected priority
+ * @param {string} priority - The priority to select ('urgent', 'medium', or 'low')
+ */
+function pressPriorityButton(priority) {
+  ['urgent', 'medium', 'low'].forEach((p) => {
+    const btn = document.getElementById(`prio${capitalizeFirstLetter(p)}`);
+    const icon = document.getElementById(`${p}-button-icon`);
+    const selected = p === priority;
+
+    btn.classList.toggle(`prio-${p}-chosen`, selected);
+    btn.classList.toggle(`prio-${p}`, !selected);
+    icon.src = getIconSrc(p, selected);
+  });
 }
 
-
 /**
-* Sets priority to Medium and updates button styles
-*/
-function pressMediumButton() {
-  // Reset other buttons
-  document.getElementById("prioUrgent").classList.remove("prio-urgent-chosen");
-  document.getElementById("prioUrgent").classList.add("prio-urgent");
-  document.getElementById("prioLow").classList.remove("prio-low-chosen");
-  document.getElementById("prioLow").classList.add("prio-low");
-  
-  // Set this button as chosen
-  document.getElementById("prioMedium").classList.remove("prio-medium");
-  document.getElementById("prioMedium").classList.add("prio-medium-chosen");
-  
-  // Update icons
-  document.getElementById("urgent-button-icon").src = "./assets/img/urgentArrowRed.svg";
-  document.getElementById("medium-button-icon").src = "./assets/img/mediumLinesWhite.svg";
-  document.getElementById("low-button-icon").src = "./assets/img/lowArrowGreeen.svg";
+ * Returns the icon source path based on priority and selection state
+ * @param {string} priority - The priority type ('urgent', 'medium', 'low')
+ * @param {boolean} isSelected - Whether this priority is currently selected
+ * @returns {string} The path to the appropriate icon image
+ */
+function getIconSrc(priority, isSelected) {
+  const icons = {
+    urgent: ["./assets/img/urgentArrowRed.svg", "./assets/img/urgentArrowWhite.svg"],
+    medium: ["./assets/img/mediumLinesOrange.svg", "./assets/img/mediumLinesWhite.svg"],
+    low: ["./assets/img/lowArrowGreeen.svg", "./assets/img/lowArrowGreenWhite.svg"],
+  };
+  return isSelected ? icons[priority][1] : icons[priority][0];
 }
 
-
 /**
-* Sets priority to Low and updates button styles
-*/
-function pressLowButton() {
-  // Reset other buttons
-  document.getElementById("prioUrgent").classList.remove("prio-urgent-chosen");
-  document.getElementById("prioUrgent").classList.add("prio-urgent");
-  document.getElementById("prioMedium").classList.remove("prio-medium-chosen");
-  document.getElementById("prioMedium").classList.add("prio-medium");
-  
-  // Set this button as chosen
-  document.getElementById("prioLow").classList.remove("prio-low");
-  document.getElementById("prioLow").classList.add("prio-low-chosen");
-  
-  // Update icons
-  document.getElementById("urgent-button-icon").src = "./assets/img/urgentArrowRed.svg";
-  document.getElementById("medium-button-icon").src = "./assets/img/mediumLinesOrange.svg";
-  document.getElementById("low-button-icon").src = "./assets/img/lowArrowGreenWhite.svg";
+ * Capitalizes the first letter of a string
+ * @param {string} str - The string to capitalize
+ * @returns {string} The capitalized string
+ */
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-
 /**
-* Shows no contacts error animation
-*/
+ * Shows no contacts error animation
+ */
 function showErrorNoContacts() {
   rotateMessage();
 }
 
-
 /**
-* Toggles dropdown visibility and arrow icon
-* @param {HTMLElement} dropdownSection - The dropdown container
-* @param {HTMLElement} arrowImage - The arrow icon
-*/
+ * Toggles dropdown visibility and arrow icon
+ * @param {HTMLElement} dropdownSection - The dropdown container
+ * @param {HTMLElement} arrowImage - The arrow icon
+ */
 function toggleCategory(dropdownSection, arrowImage) {
   // Toggle visibility
-  dropdownSection.classList.toggle('d-none');
-  
+  dropdownSection.classList.toggle("d-none");
+
   // Change arrow direction
   if (arrowImage.src.includes("dropDownArrowDown.svg")) {
-      arrowImage.src = "assets/img/dropDownArrowUp.svg";
+    arrowImage.src = "assets/img/dropDownArrowUp.svg";
   } else {
-      arrowImage.src = "assets/img/dropDownArrowDown.svg";
+    arrowImage.src = "assets/img/dropDownArrowDown.svg";
   }
 }
 
-
 /**
-* Closes the subtask input form
-* @param {Event} event - The click event
-*/
+ * Closes the subtask input form
+ * @param {Event} event - The click event
+ */
 function closeInputSubtaskSection(event) {
-  const iconSection = document.getElementById('subtaskIconSection');
-  const inputSection = document.getElementById('subtaskSectionInput');
-  const inputField = document.getElementById('subtask');
+  const iconSection = document.getElementById("subtaskIconSection");
+  const inputSection = document.getElementById("subtaskSectionInput");
+  const inputField = document.getElementById("subtask");
 
   // Remove blue border
-  inputSection.classList.remove('blue-border');
-  
+  inputSection.classList.remove("blue-border");
+
   // Reset to default state
   iconSection.innerHTML = `
     <div onclick="showInputSubtaskSection()" id="subtaskIconSection" class="add-subtask-img">
       <img src="./assets/img/addCross.svg" alt="">
     </div>`;
-    
+
   // Prevent event bubbling
   event.stopPropagation();
-  
+
   // Clear input
   inputField.value = "";
 }
 
-
 /**
-* Shows the subtask input form
-*/
+ * Shows the subtask input form
+ */
 function showInputSubtaskSection() {
-  const iconSection = document.getElementById('subtaskIconSection');
-  const inputSection = document.getElementById('subtaskSectionInput');
+  const iconSection = document.getElementById("subtaskIconSection");
+  const inputSection = document.getElementById("subtaskSectionInput");
 
   // Add blue border
-  inputSection.classList.add('blue-border');
-  iconSection.classList.remove('add-subtask-img');
-  
+  inputSection.classList.add("blue-border");
+  iconSection.classList.remove("add-subtask-img");
+
   // Change to input mode with close and submit icons
   iconSection.innerHTML = `
     <div class="show-subtask-input-icons">
@@ -359,34 +395,32 @@ function showInputSubtaskSection() {
     </div>`;
 }
 
-
 /**
-* Resets subtask input section to default state
-*/
+ * Resets subtask input section to default state
+ */
 function resetSubtaskInputSection() {
   const iconSection = document.getElementById("subtaskIconSection");
   if (iconSection) {
-      iconSection.innerHTML = `
+    iconSection.innerHTML = `
         <div onclick="showInputSubtaskSection()" id="subtaskIconSection" class="add-subtask-img">
             <img src="./assets/img/addCross.svg" alt="">
         </div>`;
   }
 }
 
-
 /**
-* Renders all current subtasks in the list
-*/
+ * Renders all current subtasks in the list
+ */
 function renderSubtasks() {
   const container = document.getElementById("subtaskSection");
   if (!container) return;
-  
+
   // Clear current content
   container.innerHTML = "";
 
   // Add each subtask
   Object.entries(currentSubTask).forEach(([id, subtask]) => {
-      container.innerHTML += `
+    container.innerHTML += `
         <div id="taskBulletPoint${id}" class="task-bullet-point">
             <li>${subtask.subTaskDescription}</li>
             <div id="edit-trash-section" class="edit-trash-section">
@@ -398,24 +432,22 @@ function renderSubtasks() {
   });
 }
 
-
 /**
-* Renders the add task panel content
-*/
+ * Renders the add task panel content
+ */
 function renderAddTaskContent() {
-  const taskPanel = document.getElementById('addTaskBoardSection');
+  const taskPanel = document.getElementById("addTaskBoardSection");
   taskPanel.innerHTML = getAddTaskSectionContent();
 }
 
-
 /**
-* Changes a subtask to edit mode
-* @param {string} subtaskId - ID of the subtask to edit
-*/
+ * Changes a subtask to edit mode
+ * @param {string} subtaskId - ID of the subtask to edit
+ */
 function editSubtask(subtaskId) {
   const bulletPoint = document.getElementById(`taskBulletPoint${subtaskId}`);
   if (!bulletPoint) return;
-  
+
   // Remove regular styling
   bulletPoint.classList.remove("task-bullet-point");
 

@@ -26,69 +26,151 @@ function findTaskById(taskId) {
 }
 
 /**
- * Renders the category and close button in the task zoom view
- * @param {Object} task - The task object to display
+ * Renders the category badge and close button in the task zoom view.
+ * 
+ * @param {Object} task - The task object to display. Must contain a `category` property.
  */
 function renderTaskCategoryAndCloseSection(task) {
-  let element = document.getElementById("taskCategoryAndCloseSection");
-  let taskCardElement = document.getElementById("task-card-element")
+  const container = document.getElementById("taskCategoryAndCloseSection");
+  const card = document.getElementById("task-card-element");
 
-  // Handle case when category is missing
+  if (!container || !card) return;
+
   if (!task.category) {
-    element.innerHTML = `<div class="error-message"><span>No category found</span></div>`;
+    renderMissingCategory(container);
     return;
   }
 
-  // Determine the correct CSS class based on category
-  let categoryClassName = task.category.includes("User Story")
-    ? "user-story-container-zoom"
-    : "technical-task-container-zoom";
-
-  // Render the category badge and close button
-  element.innerHTML += `
-    <div class="${categoryClassName}">
-      <span>${task.category}</span>
-    </div>`;
-
-    taskCardElement.insertAdjacentHTML(
-      "afterbegin",
-      `
-      <div onclick="closeTaskZoomSection()" class="close-subtask-container">
-        <img src="./assets/img/closeSubtask.svg" alt="">
-      </div>`
-    );
+  const categoryClass = getCategoryClass(task.category);
+  renderCategoryBadge(container, task.category, categoryClass);
+  renderCloseButton(card);
 }
 
 /**
- * Renders the subtasks section in the task zoom view
- * @param {Object} task - The task object containing subtasks
+ * Displays an error message if no category is found.
+ * 
+ * @param {HTMLElement} container - The DOM element to render the message in.
+ */
+function renderMissingCategory(container) {
+  container.innerHTML = `<div class="error-message"><span>No category found</span></div>`;
+}
+
+/**
+ * Returns the appropriate CSS class based on the task category.
+ * 
+ * @param {string} category - The category name.
+ * @returns {string} The corresponding CSS class name.
+ */
+function getCategoryClass(category) {
+  return category.includes("User Story")
+    ? "user-story-container-zoom"
+    : "technical-task-container-zoom";
+}
+
+/**
+ * Renders the category badge inside the given container.
+ * 
+ * @param {HTMLElement} container - The element where the badge will be rendered.
+ * @param {string} category - The name of the category.
+ * @param {string} className - The CSS class to apply.
+ */
+function renderCategoryBadge(container, category, className) {
+  container.innerHTML += `
+    <div class="${className}">
+      <span>${category}</span>
+    </div>`;
+}
+
+/**
+ * Inserts the close button at the beginning of the task card.
+ * 
+ * @param {HTMLElement} card - The card element to insert the button into.
+ */
+function renderCloseButton(card) {
+  card.insertAdjacentHTML(
+    "afterbegin",
+    `
+    <div onclick="closeTaskZoomSection()" class="close-subtask-container">
+      <img src="./assets/img/closeSubtask.svg" alt="">
+    </div>`
+  );
+}
+
+/**
+ * Renders the subtasks section in the task zoom view.
+ * 
+ * @param {Object} task - The task object containing subtasks.
  */
 function renderSubtaskZoomSection(task) {
-  let subtaskSection = document.getElementById("subtaskZoomSection");
+  const subtaskSection = document.getElementById("subtaskZoomSection");
+  if (!subtaskSection) return;
 
-  // Clear existing content first to prevent duplication
-  subtaskSection.innerHTML = "";
+  clearSubtaskSection(subtaskSection);
 
-  // Check if subtasks exist and are in the correct format
-  if (
-    !task.subtasks ||
-    typeof task.subtasks !== "object" ||
-    Object.keys(task.subtasks).length === 0
-  ) {
-    subtaskSection.innerHTML = `<span>No subtasks</span>`;
+  if (!hasValidSubtasks(task.subtasks)) {
+    renderNoSubtasksMessage(subtaskSection);
     return;
   }
 
-  // Render each subtask with its checkbox
+  renderAllSubtasks(task, subtaskSection);
+}
+
+/**
+ * Clears the subtask section to avoid duplicate entries.
+ * 
+ * @param {HTMLElement} container - The DOM element for the subtask section.
+ */
+function clearSubtaskSection(container) {
+  container.innerHTML = "";
+}
+
+/**
+ * Checks if the task has valid subtasks.
+ * 
+ * @param {Object} subtasks - The subtasks object to validate.
+ * @returns {boolean} True if subtasks are valid and not empty.
+ */
+function hasValidSubtasks(subtasks) {
+  return subtasks && typeof subtasks === "object" && Object.keys(subtasks).length > 0;
+}
+
+/**
+ * Renders a message indicating there are no subtasks.
+ * 
+ * @param {HTMLElement} container - The DOM element for the subtask section.
+ */
+function renderNoSubtasksMessage(container) {
+  container.innerHTML = `<span>No subtasks</span>`;
+}
+
+/**
+ * Renders all subtasks with checkboxes into the subtask section.
+ * 
+ * @param {Object} task - The task object containing subtasks and ID.
+ * @param {HTMLElement} container - The DOM element for the subtask section.
+ */
+function renderAllSubtasks(task, container) {
   Object.entries(task.subtasks).forEach(([subtaskId, subtask]) => {
-    let checkboxImage = subtask.checked ? "checkboxChecked" : "checkboxEmpty";
-    subtaskSection.innerHTML += `
-      <div class="subtask-zoom">
-        <img onclick="checkOrUncheckSubtask('${task.id}','${subtaskId}')"
-             src="./assets/img/${checkboxImage}.svg" alt="checkbox">
-        <span>${subtask.subTaskDescription}</span>
-      </div>`;
+    renderSingleSubtask(container, task.id, subtaskId, subtask);
   });
+}
+
+/**
+ * Renders a single subtask with checkbox and description.
+ * 
+ * @param {HTMLElement} container - The DOM element to append to.
+ * @param {string} taskId - ID of the task the subtask belongs to.
+ * @param {string} subtaskId - ID of the subtask.
+ * @param {Object} subtask - The subtask object containing `subTaskDescription` and `checked`.
+ */
+function renderSingleSubtask(container, taskId, subtaskId, subtask) {
+  const checkboxImage = subtask.checked ? "checkboxChecked" : "checkboxEmpty";
+  container.innerHTML += `
+    <div class="subtask-zoom">
+      <img onclick="checkOrUncheckSubtask('${taskId}','${subtaskId}')"
+           src="./assets/img/${checkboxImage}.svg" alt="checkbox">
+      <span>${subtask.subTaskDescription}</span>
+    </div>`;
 }
 
 /**

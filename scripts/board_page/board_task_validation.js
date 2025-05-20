@@ -18,34 +18,75 @@ function validateBoardTitle() {
 }
 
 /**
- * Validates if a valid due date is selected and not in the past
- * @returns {boolean} True if due date is valid
+ * Validates if a valid due date is selected and not in the past.
+ * 
+ * @returns {boolean} True if the due date is valid.
  */
 function validateBoardDueDate() {
   const dateInput = document.getElementById("date");
   const alert = document.getElementById("alertMessageDate");
 
-  if (!dateInput || !dateInput.value) {
-    alert.textContent = "Please select a date.";
-    alert.classList.remove("d-none");
-    dateInput.classList.add("input-error");
+  if (!dateInput || !alert) return false;
+
+  if (!isDateSelected(dateInput)) {
+    showDateValidationError(alert, dateInput, "Please select a date.");
     return false;
   }
 
-  const selectedDate = new Date(dateInput.value);
+  if (isDateInPast(dateInput.value)) {
+    showDateValidationError(alert, dateInput, "Date cannot be in the past.");
+    return false;
+  }
+
+  clearDateValidationError(alert, dateInput);
+  return true;
+}
+
+/**
+ * Checks if a date value is selected in the input.
+ * 
+ * @param {HTMLInputElement} input - The date input element.
+ * @returns {boolean} True if a date is selected.
+ */
+function isDateSelected(input) {
+  return Boolean(input.value);
+}
+
+/**
+ * Checks if the selected date is in the past.
+ * 
+ * @param {string} dateValue - The selected date string (YYYY-MM-DD).
+ * @returns {boolean} True if the date is before today.
+ */
+function isDateInPast(dateValue) {
+  const selectedDate = new Date(dateValue);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  return selectedDate < today;
+}
 
-  if (selectedDate < today) {
-    alert.textContent = "Date cannot be in the past.";
-    alert.classList.remove("d-none");
-    dateInput.classList.add("input-error");
-    return false;
-  }
+/**
+ * Displays a validation error message and styles the input.
+ * 
+ * @param {HTMLElement} alert - The alert message container.
+ * @param {HTMLElement} input - The input element to mark as invalid.
+ * @param {string} message - The validation error message.
+ */
+function showDateValidationError(alert, input, message) {
+  alert.textContent = message;
+  alert.classList.remove("d-none");
+  input.classList.add("input-error");
+}
 
+/**
+ * Clears the date validation error and resets input styling.
+ * 
+ * @param {HTMLElement} alert - The alert message container.
+ * @param {HTMLElement} input - The input element to reset.
+ */
+function clearDateValidationError(alert, input) {
   alert.classList.add("d-none");
-  dateInput.classList.remove("input-error");
-  return true;
+  input.classList.remove("input-error");
 }
 
 /**
@@ -85,33 +126,49 @@ function validateBoardForm() {
 }
 
 /**
- * Injects the required alert messages into the DOM if not present yet
+ * Injects the required alert messages into the DOM if not present yet.
  */
 function ensureBoardValidationAlertsExist() {
-  if (!document.getElementById("alertMessageTitle")) {
-    const title = document.getElementById("title");
-    const msg = document.createElement("span");
-    msg.id = "alertMessageTitle";
-    msg.className = "alert-message d-none";
-    msg.textContent = "This field is required";
-    title.insertAdjacentElement("afterend", msg);
-  }
+  insertAlertIfMissing("alertMessageTitle", "title", "This field is required", "afterend");
+  insertAlertIfMissing("alertMessageDate", "date", "Please select a valid date", "afterend");
+  insertAlertIfMissing("alertMessageCategory", "categorySection", "Please select a category", "append");
+}
 
-  if (!document.getElementById("alertMessageDate")) {
-    const date = document.getElementById("date");
-    const msg = document.createElement("span");
-    msg.id = "alertMessageDate";
-    msg.className = "alert-message d-none";
-    msg.textContent = "Please select a valid date";
-    date.insertAdjacentElement("afterend", msg);
-  }
+/**
+ * Inserts an alert message element if it doesn't already exist in the DOM.
+ * 
+ * @param {string} alertId - The ID to assign to the alert element.
+ * @param {string} targetId - The ID of the DOM element to attach the alert to.
+ * @param {string} message - The message to display inside the alert.
+ * @param {"afterend" | "append"} position - How to insert the alert: afterend for siblings, append for children.
+ */
+function insertAlertIfMissing(alertId, targetId, message, position) {
+  if (document.getElementById(alertId)) return;
 
-  if (!document.getElementById("alertMessageCategory")) {
-    const section = document.getElementById("categorySection");
-    const msg = document.createElement("span");
-    msg.id = "alertMessageCategory";
-    msg.className = "alert-message d-none";
-    msg.textContent = "Please select a category";
-    section.appendChild(msg);
+  const targetElement = document.getElementById(targetId);
+  if (!targetElement) return;
+
+  const alertElement = createAlertElement(alertId, message);
+
+  if (position === "append") {
+    targetElement.appendChild(alertElement);
+  } else {
+    targetElement.insertAdjacentElement("afterend", alertElement);
   }
 }
+
+/**
+ * Creates a span element to be used as an alert message.
+ * 
+ * @param {string} id - The ID to assign to the alert element.
+ * @param {string} message - The message to display inside the alert.
+ * @returns {HTMLSpanElement} The configured alert span element.
+ */
+function createAlertElement(id, message) {
+  const span = document.createElement("span");
+  span.id = id;
+  span.className = "alert-message d-none";
+  span.textContent = message;
+  return span;
+}
+

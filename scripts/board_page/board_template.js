@@ -472,15 +472,15 @@ function getAddTaskSectionContent() {
               <div class="prio-section">
                   <span>Prio</span>
                   <div class="prio-levels">
-                      <div onclick="pressUrgentButton()" id="prioUrgent" class="prio-urgent">
+                      <div onclick="pressPriorityButton('urgent')" id="prioUrgent" class="prio-urgent">
                           <span>Urgent</span>
                           <img id="urgent-button-icon" src="./assets/img/urgentArrowRed.svg" alt="">
                       </div>
-                      <div onclick="pressMediumButton()" id="prioMedium" class="prio-medium-chosen">
+                      <div onclick="pressPriorityButton('medium')" id="prioMedium" class="prio-medium-chosen">
                           <span>Medium</span>
                           <img id="medium-button-icon" src="./assets/img/mediumLinesWhite.svg" alt="">
                       </div>
-                      <div onclick="pressLowButton()" id="prioLow" class="prio-low">
+                      <div onclick="pressPriorityButton('low')" id="prioLow" class="prio-low">
                           <span>Low</span>
                           <img id="low-button-icon" src="./assets/img/lowArrowGreeen.svg" alt="">
                       </div>

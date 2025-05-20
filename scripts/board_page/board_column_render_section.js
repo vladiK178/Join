@@ -20,26 +20,98 @@ function renderTaskCategory(taskId, task, column) {
 }
 
 /**
- * Renders subtask progress bar if subtasks exist
+ * Renders subtask progress bar if subtasks exist.
+ * 
+ * @param {string} taskId - The ID of the task.
+ * @param {Object} task - The task object containing subtasks.
+ * @param {string} column - The column identifier (used for DOM element ID).
  */
 function renderSubtaskProgress(taskId, task, column) {
-  const container = document.getElementById(
-    `subtaskBarAndSubtaskSpan${column}${taskId}`
-  );
+  const container = getSubtaskProgressContainer(taskId, column);
   if (!container) return;
 
-  const subtasks = Object.values(task.subtasks || {});
-  const totalCount = subtasks.length;
-
-  // Hide the progress bar if no subtasks exist
-  if (totalCount === 0) {
-    container.innerHTML = "";
+  const subtasks = getSubtasksArray(task);
+  if (!hasSubtasks(subtasks)) {
+    clearSubtaskProgress(container);
     return;
   }
 
-  const completedCount = subtasks.filter((st) => st.checked).length;
-  const progressPercent = (completedCount / totalCount) * 100;
+  const completedCount = countCompletedSubtasks(subtasks);
+  const progressPercent = calculateProgressPercent(completedCount, subtasks.length);
 
+  renderProgressBar(container, completedCount, subtasks.length, progressPercent);
+}
+
+/**
+ * Gets the container element for the subtask progress bar.
+ * 
+ * @param {string} taskId - The ID of the task.
+ * @param {string} column - The column identifier.
+ * @returns {HTMLElement|null} The container element or null if not found.
+ */
+function getSubtaskProgressContainer(taskId, column) {
+  return document.getElementById(`subtaskBarAndSubtaskSpan${column}${taskId}`);
+}
+
+/**
+ * Converts subtasks object to an array.
+ * 
+ * @param {Object} task - The task object.
+ * @returns {Array} Array of subtasks or empty array.
+ */
+function getSubtasksArray(task) {
+  return Object.values(task.subtasks || {});
+}
+
+/**
+ * Checks if there are any subtasks.
+ * 
+ * @param {Array} subtasks - Array of subtasks.
+ * @returns {boolean} True if there is at least one subtask.
+ */
+function hasSubtasks(subtasks) {
+  return subtasks.length > 0;
+}
+
+/**
+ * Clears the subtask progress container.
+ * 
+ * @param {HTMLElement} container - The container element.
+ */
+function clearSubtaskProgress(container) {
+  container.innerHTML = "";
+}
+
+/**
+ * Counts the number of completed subtasks.
+ * 
+ * @param {Array} subtasks - Array of subtasks.
+ * @returns {number} Number of completed subtasks.
+ */
+function countCompletedSubtasks(subtasks) {
+  return subtasks.filter(st => st.checked).length;
+}
+
+/**
+ * Calculates progress percentage.
+ * 
+ * @param {number} completed - Number of completed subtasks.
+ * @param {number} total - Total number of subtasks.
+ * @returns {number} Progress percentage (0-100).
+ */
+function calculateProgressPercent(completed, total) {
+  return (completed / total) * 100;
+}
+
+/**
+ * Renders the progress bar and subtask count.
+ * 
+ * @param {HTMLElement} container - The container element.
+ * @param {number} completedCount - Completed subtasks count.
+ * @param {number} totalCount - Total subtasks count.
+ * @param {number} progressPercent - Progress bar width percentage.
+ */
+function renderProgressBar(container, completedCount, totalCount, progressPercent) {
   container.innerHTML = `
     <div class="subtask-bar">
       <div class="progress" style="width: ${progressPercent}%"></div>
@@ -57,33 +129,91 @@ function handleTaskClick(taskId) {
 }
 
 /**
- * Renders contact circles for task
+ * Renders contact circles for a task.
+ * 
+ * @param {string} taskId - The ID of the task.
+ * @param {Object} task - The task object containing assigned contacts.
+ * @param {string} column - The column identifier (used in element ID).
  */
 function renderNameCircleSection(taskId, task, column) {
-  const container = document.getElementById(
-    `nameCircleSection${column}${taskId}`
-  );
+  const container = getNameCircleContainer(taskId, column);
   if (!container) return;
 
-  const contacts = task.assignedTo || {};
-  const contactList = Object.entries(contacts);
+  const contactList = getContactList(task);
+  clearContainer(container);
 
+  renderVisibleContacts(container, taskId, contactList);
+  renderExtraContacts(container, contactList);
+}
+
+/**
+ * Gets the container element for name circles.
+ * 
+ * @param {string} taskId - The task ID.
+ * @param {string} column - The column identifier.
+ * @returns {HTMLElement|null} The container element or null.
+ */
+function getNameCircleContainer(taskId, column) {
+  return document.getElementById(`nameCircleSection${column}${taskId}`);
+}
+
+/**
+ * Converts assigned contacts object into an array of entries.
+ * 
+ * @param {Object} task - The task object.
+ * @returns {Array} Array of [key, contact] entries.
+ */
+function getContactList(task) {
+  return Object.entries(task.assignedTo || {});
+}
+
+/**
+ * Clears the content of a container element.
+ * 
+ * @param {HTMLElement} container - The container to clear.
+ */
+function clearContainer(container) {
   container.innerHTML = "";
+}
 
-  // Show first 3 contacts
+/**
+ * Renders up to the first 3 contact circles.
+ * 
+ * @param {HTMLElement} container - The container element.
+ * @param {string} taskId - The task ID.
+ * @param {Array} contactList - Array of contact entries.
+ */
+function renderVisibleContacts(container, taskId, contactList) {
   const visibleContacts = contactList.slice(0, 3);
   visibleContacts.forEach(([contactKey, contact]) => {
-    const firstInitial = (contact.firstName || "U").charAt(0);
-    const lastInitial = (contact.lastName || "U").charAt(0);
+    const initials = getContactInitials(contact);
     const color = getOrAssignColorForTask(taskId, contactKey);
-
     container.innerHTML += `
       <div class="name-circle-add-section-note" style="background-color: ${color}">
-        <span>${firstInitial}${lastInitial}</span>
+        <span>${initials}</span>
       </div>`;
   });
+}
 
-  // Show +X indicator if more contacts
+/**
+ * Gets the initials of a contact.
+ * 
+ * @param {Object} contact - The contact object.
+ * @returns {string} Initials (first letter of first and last name).
+ */
+function getContactInitials(contact) {
+  const firstInitial = (contact.firstName || "U").charAt(0);
+  const lastInitial = (contact.lastName || "U").charAt(0);
+  return `${firstInitial}${lastInitial}`;
+}
+
+/**
+ * Renders the "+X" indicator for additional contacts.
+ * 
+ * @param {HTMLElement} container - The container element.
+ * @param {Array} contactList - Array of contact entries.
+ */
+function renderExtraContacts(container, contactList) {
   const extraCount = contactList.length - 3;
   if (extraCount > 0) {
     container.innerHTML += `
@@ -115,43 +245,106 @@ function renderPrioImg(taskId, task, column) {
 }
 
 /**
- * Toggles mobile menu visibility
+ * Toggles the visibility of the mobile menu for a task.
+ * 
+ * @param {Event} event - The click event triggering the toggle.
  */
 function toggleMenuMobile(event) {
   event.stopPropagation();
 
   const menuBtn = event.currentTarget;
-  const taskId = menuBtn.getAttribute("data-task-id");
-  const menuContainer = document.getElementById(`menuSectionMobile${taskId}`);
-
+  const taskId = getTaskIdFromButton(menuBtn);
+  const menuContainer = getMenuContainer(taskId);
   if (!menuContainer) return;
 
-  // Close previously open menu
-  if (currentlyOpenMenu && currentlyOpenMenu !== menuContainer) {
+  closePreviouslyOpenMenu(menuContainer);
+  toggleMenuState(menuContainer, menuBtn);
+}
+
+/**
+ * Retrieves the task ID from the clicked menu button.
+ * 
+ * @param {HTMLElement} menuBtn - The menu button element.
+ * @returns {string|null} The task ID or null if not found.
+ */
+function getTaskIdFromButton(menuBtn) {
+  return menuBtn.getAttribute("data-task-id");
+}
+
+/**
+ * Gets the menu container element for a given task ID.
+ * 
+ * @param {string} taskId - The task ID.
+ * @returns {HTMLElement|null} The menu container element or null.
+ */
+function getMenuContainer(taskId) {
+  return document.getElementById(`menuSectionMobile${taskId}`);
+}
+
+/**
+ * Closes the previously open menu if it is different from the current one.
+ * 
+ * @param {HTMLElement} currentMenu - The menu container to keep open.
+ */
+function closePreviouslyOpenMenu(currentMenu) {
+  if (currentlyOpenMenu && currentlyOpenMenu !== currentMenu) {
     currentlyOpenMenu.classList.add("d-none");
-
-    const prevBtn = document.querySelector(".open-menu-mobile");
-    if (prevBtn) {
-      prevBtn.classList.remove("open-menu-mobile");
-      prevBtn.classList.add("closed-menu-mobile");
-    }
-  }
-
-  const isMenuOpen = !menuContainer.classList.contains("d-none");
-
-  if (isMenuOpen) {
-    // Close menu
-    menuContainer.classList.add("d-none");
-    menuBtn.classList.remove("open-menu-mobile");
-    menuBtn.classList.add("closed-menu-mobile");
+    resetPreviousMenuButton();
     currentlyOpenMenu = null;
-  } else {
-    // Open menu
-    menuContainer.classList.remove("d-none");
-    menuBtn.classList.remove("closed-menu-mobile");
-    menuBtn.classList.add("open-menu-mobile");
-    currentlyOpenMenu = menuContainer;
   }
+}
+
+/**
+ * Resets the CSS classes of the previously open menu button.
+ */
+function resetPreviousMenuButton() {
+  const prevBtn = document.querySelector(".open-menu-mobile");
+  if (prevBtn) {
+    prevBtn.classList.remove("open-menu-mobile");
+    prevBtn.classList.add("closed-menu-mobile");
+  }
+}
+
+/**
+ * Toggles the menu open or closed and updates button styles accordingly.
+ * 
+ * @param {HTMLElement} menuContainer - The menu container element.
+ * @param {HTMLElement} menuBtn - The button that toggles the menu.
+ */
+function toggleMenuState(menuContainer, menuBtn) {
+  const isOpen = !menuContainer.classList.contains("d-none");
+
+  if (isOpen) {
+    closeBoardMenu(menuContainer, menuBtn);
+  } else {
+    openBoardMenu(menuContainer, menuBtn);
+  }
+}
+
+/**
+ * Closes the menu and updates the button style.
+ * 
+ * @param {HTMLElement} menuContainer - The menu container element.
+ * @param {HTMLElement} menuBtn - The button that toggles the menu.
+ */
+function closeBoardMenu(menuContainer, menuBtn) {
+  menuContainer.classList.add("d-none");
+  menuBtn.classList.remove("open-menu-mobile");
+  menuBtn.classList.add("closed-menu-mobile");
+  currentlyOpenMenu = null;
+}
+
+/**
+ * Opens the menu and updates the button style.
+ * 
+ * @param {HTMLElement} menuContainer - The menu container element.
+ * @param {HTMLElement} menuBtn - The button that toggles the menu.
+ */
+function openBoardMenu(menuContainer, menuBtn) {
+  menuContainer.classList.remove("d-none");
+  menuBtn.classList.remove("closed-menu-mobile");
+  menuBtn.classList.add("open-menu-mobile");
+  currentlyOpenMenu = menuContainer;
 }
 
 /**

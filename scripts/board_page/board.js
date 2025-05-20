@@ -294,30 +294,58 @@ function clearAllColumns() {
 }
 
 /**
- * Renders filtered tasks by status
- * @param {Array} tasks - Filtered tasks
+ * Renders tasks filtered by their status. If no tasks match, shows an empty message.
+ * 
+ * @param {Array<Object>} tasks - Array of task objects to render.
+ * Each task should have a `currentStatus` property (e.g., "toDo", "inProgress", etc.).
  */
 function renderFilteredTasks(tasks) {
-  const byStatus = {
+  const byStatus = groupTasksByStatus(tasks);
+  const totalTasks = Object.values(byStatus).flat().length;
+
+  if (totalTasks === 0) {
+    showEmptyMessages();
+    return;
+  }
+
+  renderAllFilteredColumns(byStatus);
+}
+
+/**
+ * Groups tasks by their current status into an object with status keys.
+ * 
+ * @param {Array<Object>} tasks - Array of task objects with a `currentStatus` property.
+ * @returns {Object} An object with keys for each status and arrays of corresponding tasks.
+ */
+function groupTasksByStatus(tasks) {
+  return {
     toDo: tasks.filter(t => t.currentStatus === "toDo"),
     inProgress: tasks.filter(t => t.currentStatus === "inProgress"),
     awaitFeedback: tasks.filter(t => t.currentStatus === "awaitFeedback"),
     done: tasks.filter(t => t.currentStatus === "done")
   };
+}
 
-  // If no tasks match search, show empty message
-  const totalTasks = Object.values(byStatus).flat().length;
-  if (totalTasks === 0) {
-    ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"]
-      .forEach(id => {
-        const column = document.getElementById(id);
-        if (column) {
-          column.innerHTML = `<div class="empty-notification"><span>No tasks found</span></div>`;
-        }
-      });
-    return;
-  }
+/**
+ * Displays an empty message in each task column if no tasks are found.
+ * Assumes that HTML elements with IDs for each column ("toDoNotes", etc.) exist.
+ */
+function showEmptyMessages() {
+  const ids = ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"];
+  ids.forEach(id => {
+    const column = document.getElementById(id);
+    if (column) {
+      column.innerHTML = `<div class="empty-notification"><span>No tasks found</span></div>`;
+    }
+  });
+}
 
+/**
+ * Renders all columns with their corresponding filtered tasks.
+ * 
+ * @param {Object} byStatus - Object containing arrays of tasks keyed by their status.
+ */
+function renderAllFilteredColumns(byStatus) {
   renderFilteredColumn(byStatus.toDo, "toDo", "toDoNotes");
   renderFilteredColumn(byStatus.inProgress, "inProgress", "inProgressNotes");
   renderFilteredColumn(byStatus.awaitFeedback, "awaitFeedback", "awaitFeedbackNotes");
@@ -355,48 +383,80 @@ function attachMobileMenuEventListeners() {
 }
 
 /**
- * Moves task to new column from mobile menu
- * @param {string} taskId - Task to move
- * @param {string} newColumn - Target column
+ * Moves a task to a new column and updates data and UI accordingly.
+ * 
+ * @param {string} taskId - The ID of the task to move.
+ * @param {string} newColumn - The target column status.
  */
 async function moveTaskToNewColumn(taskId, newColumn) {
-  // Find mobile menu
-  const menu = document.getElementById(`menuSectionMobile${taskId}`);
+  const menu = getMobileMenu(taskId);
   if (!menu) return;
 
-  // Find task in data
-  const taskKey = Object.keys(currentUser.tasks).find(
-    key => currentUser.tasks[key].id === taskId
-  );
-  
+  const taskKey = findTaskKey(taskId);
   if (!taskKey) return;
 
   try {
-    const oldColumn = currentUser.tasks[taskKey].currentStatus;
-    
-    // Skip if column unchanged
-    if (oldColumn === newColumn) {
-      menu.classList.add("d-none");
-      return;
-    }
-    
-    // Update data
-    currentUser.tasks[taskKey].currentStatus = newColumn;
-    await updateTaskColumnInDatabase(currentUser.id, taskKey, newColumn);
-    
-    // Update UI
-    renderAllColumns();
-    menu.classList.add("d-none");
-    showSuccessToast('Task moved successfully');
-    
+    await processTaskMove(taskKey, taskId, newColumn, menu);
   } catch (error) {
-    console.error("Error moving task:", error);
-    
-    // Reload data on error
-    await getUsersData();
-    currentUser = users[currentUser.id];
-    renderAllColumns();
+    handleTaskMoveError(error);
   }
+}
+
+/**
+ * Gets the mobile menu element for the given task ID.
+ * 
+ * @param {string} taskId - The ID of the task.
+ * @returns {HTMLElement|null} The menu element or null if not found.
+ */
+function getMobileMenu(taskId) {
+  return document.getElementById(`menuSectionMobile${taskId}`);
+}
+
+/**
+ * Finds the task key in the current user's tasks based on the task ID.
+ * 
+ * @param {string} taskId - The ID of the task to find.
+ * @returns {string|undefined} The key of the task or undefined if not found.
+ */
+function findTaskKey(taskId) {
+  return Object.keys(currentUser.tasks).find(
+    key => currentUser.tasks[key].id === taskId
+  );
+}
+
+/**
+ * Handles the logic for updating task status, UI, and persistence.
+ * 
+ * @param {string} taskKey - The key of the task.
+ * @param {string} taskId - The ID of the task.
+ * @param {string} newColumn - The new column/status.
+ * @param {HTMLElement} menu - The mobile menu element.
+ */
+async function processTaskMove(taskKey, taskId, newColumn, menu) {
+  const oldColumn = currentUser.tasks[taskKey].currentStatus;
+
+  if (oldColumn === newColumn) {
+    menu.classList.add("d-none");
+    return;
+  }
+
+  currentUser.tasks[taskKey].currentStatus = newColumn;
+  await updateTaskColumnInDatabase(currentUser.id, taskKey, newColumn);
+  renderAllColumns();
+  menu.classList.add("d-none");
+  showSuccessToast('Task moved successfully');
+}
+
+/**
+ * Handles errors during the task move process.
+ * 
+ * @param {Error} error - The caught error.
+ */
+async function handleTaskMoveError(error) {
+  console.error("Error moving task:", error);
+  await getUsersData();
+  currentUser = users[currentUser.id];
+  renderAllColumns();
 }
 
 /**
