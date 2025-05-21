@@ -91,8 +91,7 @@ function checkForTaskAddSuccess() {
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('tasksuccess') === 'true') {
     showSuccessToast('Task successfully added');
-    
-    // Clean URL without page reload
+
     const newUrl = window.location.pathname;
     window.history.replaceState({}, document.title, newUrl);
   }
@@ -239,7 +238,6 @@ function renderBoardContent() {
  * Highlights board section in menu
  */
 function changeToChosenBoardSection() {
-  // Reset summary section
   const summarySection = document.getElementById("summary-section");
   const summaryImg = document.getElementById("summary-img");
   
@@ -249,7 +247,6 @@ function changeToChosenBoardSection() {
     summaryImg.classList.add("summary-img");
   }
 
-  // Highlight board section
   const boardSection = document.getElementById("board-section");
   const boardImg = document.getElementById("board-img");
   
@@ -464,10 +461,8 @@ async function handleTaskMoveError(error) {
  */
 function handleAddTaskButtonClick() {
   if (window.matchMedia("(max-width: 1200px)").matches) {
-    // Mobile - navigate to add task page
     window.location.href = "add_task.html";
   } else {
-    // Desktop - open overlay
     openAddTaskBoard();
   }
 }
