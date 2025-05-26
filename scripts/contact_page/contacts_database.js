@@ -1,4 +1,4 @@
-const CONTACTS_BASE_URL = "https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app";
+const CONTACTS_BASE_URL = "https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app";
 
 /**
  * Adds a new contact to Firebase under the given user
