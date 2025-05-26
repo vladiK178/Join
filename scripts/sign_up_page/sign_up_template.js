@@ -78,6 +78,7 @@ function getSignUpContent() {
                     <!-- Sign Up Button -->
                     <div class="Log-In-and-Guest-Log-In">
                         <button onclick="registerUser()" class="Log-In-Button">Sign up</button>
+                        <button onclick="loginAsGuest()" class="Guest-Login-Button">Login as Guest</button>
                     </div>
                 </div>
 
