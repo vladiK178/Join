@@ -131,7 +131,7 @@ async function loadUserAndSetCurrent() {
   }
   
   await getUsersData();
-  currentUser = users[userId];
+  currentUser = users[userId] || users["guest_user"];
   
   if (!currentUser) {
     localStorage.clear();
