@@ -90,4 +90,3 @@ async function updateTaskColumnInDatabase(userId, taskKey, newColumn) {
     console.error("Error updating the task column:", error);
   }
 }
-

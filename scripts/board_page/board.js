@@ -135,6 +135,10 @@ function showSuccessToast(message) {
  * Loads user data from storage
  */
 async function loadUserAndSetCurrent() {
+  console.log(
+    "👉 currentUserId im LocalStorage:",
+    localStorage.getItem("currentUserId")
+  );
   const userId = localStorage.getItem("currentUserId");
   console.log("currentUserId from localStorage:", userId); // DEBUG
 
