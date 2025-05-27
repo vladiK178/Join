@@ -124,23 +124,30 @@ function showSuccessToast(message) {
  */
 async function loadUserAndSetCurrent() {
   const userId = localStorage.getItem("currentUserId");
-  
+  console.log("currentUserId from localStorage:", userId); // NEU
+
   if (!userId) {
+    alert("NO USER ID FOUND");
     redirectToLogin("No user ID found");
     return;
   }
-  
+
   await getUsersData();
-  currentUser = users[userId] || users["guest_user"];
-  
+  console.log("All users from Firebase:", users); // NEU
+
+  currentUser = users[userId];
+  console.log("Loaded currentUser object:", currentUser); // NEU
+
   if (!currentUser) {
+    alert("USER NOT FOUND IN DATABASE");
     localStorage.clear();
     redirectToLogin("User data not found");
     return;
   }
-  
+
   localStorage.setItem("currentUserId", userId);
 }
+
 
 /**
  * Redirects to login page
