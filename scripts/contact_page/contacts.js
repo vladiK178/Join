@@ -1,8 +1,26 @@
 let currentUser;
 const contactColors = {};
-let currentlyOpenMenu = null; 
+let currentlyOpenMenu = null;
 let currentContactKey = null;
 let userCircle;
+
+async function initContactsPage() {
+  const userId = localStorage.getItem("currentUserId");
+  if (!userId) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  await getUsersData();
+  currentUser = users[userId];
+
+  if (!currentUser) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  renderSpacerAndContactSection(); // deine bestehende Logik
+}
 
 /**
  * Creates the initials for the current user based on their first and last name.
@@ -26,7 +44,9 @@ function renderCurrentUserCircle() {
 function sortContactsByFirstName(contacts) {
   const entries = Object.entries(contacts);
   const sorted = entries.sort(([_, a], [__, b]) =>
-    a.firstNameContact.toLowerCase().localeCompare(b.firstNameContact.toLowerCase())
+    a.firstNameContact
+      .toLowerCase()
+      .localeCompare(b.firstNameContact.toLowerCase())
   );
   return sorted.map(([key]) => key);
 }
@@ -40,7 +60,12 @@ async function saveNewContact() {
 
   try {
     const { fName, lName } = splitContactName(name);
-    const newContactKey = await createNewContactInDatabase(fName, lName, email, phone);
+    const newContactKey = await createNewContactInDatabase(
+      fName,
+      lName,
+      email,
+      phone
+    );
     await refreshCurrentUser();
     handleSuccessfulContactCreation(newContactKey);
   } catch (error) {
@@ -56,7 +81,7 @@ function getNewContactInputValues() {
   return {
     name: document.getElementById("contactName").value.trim(),
     email: document.getElementById("contactEmail").value.trim(),
-    phone: document.getElementById("contactNumber").value.trim()
+    phone: document.getElementById("contactNumber").value.trim(),
   };
 }
 
@@ -80,7 +105,12 @@ function splitContactName(name) {
  */
 async function createNewContactInDatabase(fName, lName, email, phone) {
   initializeContactsObjectIfNeeded();
-  const newContact = { firstNameContact: fName, lastNameContact: lName, email, phone };
+  const newContact = {
+    firstNameContact: fName,
+    lastNameContact: lName,
+    email,
+    phone,
+  };
   return await addContactToDatabase(currentUser.id, newContact);
 }
 
@@ -151,7 +181,7 @@ function renderSpacerAndContactSection() {
     return cA.localeCompare(cB);
   });
   let currentLetter = "";
-  sortedKeys.forEach(key => {
+  sortedKeys.forEach((key) => {
     const contact = currentUser.contacts[key];
     const firstLetter = contact.firstNameContact.charAt(0).toUpperCase();
     if (firstLetter !== currentLetter) {
@@ -170,8 +200,10 @@ function renderSpacerAndContactSection() {
  */
 function getContactListItemHtml(key, contact) {
   const color = getOrAssignColorForContact(key);
-  const initials = `${contact.firstNameContact.charAt(0)}${contact.lastNameContact.charAt(0)}`;
-  const email = contact.email || 'No email';
+  const initials = `${contact.firstNameContact.charAt(
+    0
+  )}${contact.lastNameContact.charAt(0)}`;
+  const email = contact.email || "No email";
   return `
     <div id="contact-${key}" class="contact" onclick="chooseContact('${key}')">
       <span class="name-circle" style="background-color: ${color};">${initials}</span>
@@ -189,7 +221,10 @@ function createEditOverlayIfMissing() {
   const overlay = document.querySelector(".edit-contact-container-overlay");
   if (!overlay) {
     const body = document.querySelector("body");
-    body.insertAdjacentHTML('beforeend', '<div class="edit-contact-container-overlay d-none"></div>');
+    body.insertAdjacentHTML(
+      "beforeend",
+      '<div class="edit-contact-container-overlay d-none"></div>'
+    );
   }
 }
 
@@ -226,7 +261,12 @@ async function saveEditedContact(contactKey) {
 
   try {
     const { fName, lName } = splitContactName(name);
-    const updatedContact = createUpdatedContactObject(fName, lName, email, phone);
+    const updatedContact = createUpdatedContactObject(
+      fName,
+      lName,
+      email,
+      phone
+    );
     await updateContactInDatabase(currentUser.id, contactKey, updatedContact);
     await refreshCurrentUser();
     handleSuccessfulContactEdit(contactKey);
@@ -243,7 +283,7 @@ function getEditContactInputValues() {
   return {
     name: document.getElementById("editContactName").value.trim(),
     email: document.getElementById("editContactEmail").value.trim(),
-    phone: document.getElementById("editContactPhone").value.trim()
+    phone: document.getElementById("editContactPhone").value.trim(),
   };
 }
 
@@ -260,7 +300,7 @@ function createUpdatedContactObject(fName, lName, email, phone) {
     firstNameContact: fName,
     lastNameContact: lName,
     email,
-    phone
+    phone,
   };
 }
 
@@ -293,9 +333,9 @@ function handleContactEditError(error) {
 function validateEditedContact(name, email, phone) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[0-9\s]{10,15}$/;
-  if (!validateNameParts(name, 'editAlertMessageTitle')) return false;
-  if (!validateEmail(email, emailRegex, 'editAlertMessageEmail')) return false;
-  if (!validatePhone(phone, phoneRegex, 'editAlertMessageNumber')) return false;
+  if (!validateNameParts(name, "editAlertMessageTitle")) return false;
+  if (!validateEmail(email, emailRegex, "editAlertMessageEmail")) return false;
+  if (!validatePhone(phone, phoneRegex, "editAlertMessageNumber")) return false;
   return true;
 }
 
@@ -379,7 +419,7 @@ function closeMobileMenu(menuSection, menuIcon) {
 }
 
 // Event listener for clicks outside the menu
-document.addEventListener("click", event => {
+document.addEventListener("click", (event) => {
   const menuSection = document.getElementById("menuSectionMobile");
   const menuIcon = document.getElementById("noteMenuMobile");
   if (

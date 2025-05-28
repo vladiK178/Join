@@ -159,6 +159,9 @@ async function loadUserAndSetCurrent() {
     return;
   }
 
+  localStorage.setItem("firstName", currentUser.firstName || "");
+  localStorage.setItem("lastName", currentUser.lastName || "");
+
   console.log("Aktueller User:", currentUser); // ✅
 }
 
@@ -236,11 +239,13 @@ function renderDesktopTemplate() {
 }
 
 function renderCurrentUserCircle() {
-  const currentUserFirstName = localStorage.getItem("firstName");
-  const currentUserLastName = localStorage.getItem("lastName");
+  const firstName = localStorage.getItem("firstName") || "";
+  const lastName = localStorage.getItem("lastName") || "";
+
   const userCircle =
-    currentUserFirstName[0].toUpperCase() +
-    currentUserLastName[0].toUpperCase();
+    (firstName.charAt(0) || "?").toUpperCase() +
+    (lastName.charAt(0) || "?").toUpperCase();
+
   return userCircle;
 }
 
