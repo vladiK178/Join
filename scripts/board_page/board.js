@@ -135,33 +135,31 @@ function showSuccessToast(message) {
  * Loads user data from storage
  */
 async function loadUserAndSetCurrent() {
-  console.log(
-    "👉 currentUserId im LocalStorage:",
-    localStorage.getItem("currentUserId")
-  );
   const userId = localStorage.getItem("currentUserId");
-  console.log("currentUserId from localStorage:", userId); // DEBUG
+  console.log("userId aus localStorage:", userId); // ✅ Kontrollausgabe
 
   if (!userId) {
-    alert("NO USER ID FOUND");
-    redirectToLogin("No user ID found");
+    // redirectToLogin("No user ID found");
     return;
   }
 
   await getUsersData();
-  console.log("All users from Firebase:", users); // DEBUG
+
+  console.log("Alle geladenen User:", users); // ✅ Kontrollausgabe
+  console.log("Gesuchter User:", users[userId]); // ✅ Kontrollausgabe
 
   currentUser = users[userId];
-  console.log("Loaded currentUser object:", currentUser); // DEBUG
 
   if (!currentUser) {
-    alert("USER NOT FOUND IN DATABASE");
-    localStorage.clear();
-    redirectToLogin("User data not found");
+    console.warn("🚨 currentUser nicht gefunden – wird sonst weitergeleitet.");
+    console.log("Aktueller users-Objekt:", users);
+    console.log("currentUserId:", userId);
+    // localStorage.clear();
+    // redirectToLogin("User data not found");
     return;
   }
 
-  localStorage.setItem("currentUserId", userId);
+  console.log("Aktueller User:", currentUser); // ✅
 }
 
 /**
@@ -170,7 +168,7 @@ async function loadUserAndSetCurrent() {
  */
 function redirectToLogin(reason) {
   console.error(reason + " - redirecting to login");
-  window.location.href = "index.html";
+  // window.location.href = "index.html";
 }
 
 /**
@@ -179,7 +177,7 @@ function redirectToLogin(reason) {
  */
 function checkCurrentUser() {
   if (!currentUser) {
-    redirectToLogin("User not found");
+    // redirectToLogin("User not found");
     return false;
   }
   return true;
@@ -508,5 +506,5 @@ function handleAddTaskButtonClick() {
  */
 function handleInitError() {
   console.error("Could not initialize board");
-  window.location.href = "index.html";
+  // window.location.href = "index.html";
 }
