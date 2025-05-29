@@ -15,8 +15,6 @@ async function getUsersData() {
   const response = await fetch(`${BASE_URL}/users.json`);
   const responseAsJson = await response.json();
   users = responseAsJson;
-
-  console.log("Daten geladen:", users); // ✅ Kontrollausgabe!
 }
 
 
