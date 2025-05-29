@@ -1,16 +1,3 @@
-
-(function syncUserIdFromUrl() {
-  const fromUrl = getQueryParam("user");
-  if (fromUrl) {
-    localStorage.setItem("currentUserId", fromUrl);
-  }
-})();
-
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
-
 /** 
  * Global state variables
  */
