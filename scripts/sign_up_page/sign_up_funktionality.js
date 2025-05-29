@@ -357,12 +357,3 @@ function isEmailValid(email) {
   return emailRegex.test(email);
 }
 
-/**
- * Allows guest login by setting the guest user ID
- * and redirecting to the board.
- */
-function loginAsGuest() {
-  localStorage.setItem("currentUserId", "guest_user");
-  window.location.href = "board.html";
-}
-

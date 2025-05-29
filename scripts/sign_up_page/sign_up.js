@@ -47,12 +47,3 @@ function togglePasswordVisibility(inputId, imgId) {
     input.type = isPassword ? "text" : "password";
     img.src = isPassword ? "./assets/img/visibility.svg" : "./assets/img/visibility_off.svg";
 }
-
-/**
- * Allows guest login by setting a predefined user ID.
- * Used for demo/portfolio mode without registration.
- */
-function loginAsGuest() {
-    localStorage.setItem("userId", "guest_user");
-    window.location.href = "board.html";
-  }
