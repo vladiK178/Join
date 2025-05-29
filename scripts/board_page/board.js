@@ -4,13 +4,15 @@ function getQueryParam(param) {
 }
 
 let userId = localStorage.getItem("currentUserId");
+
 if (!userId) {
   const fromUrl = getQueryParam("user");
   if (fromUrl) {
     userId = fromUrl;
-    localStorage.setItem("currentUserId", userId);
+    localStorage.setItem("currentUserId", userId); // <-- das ist entscheidend!
   }
 }
+
 if (!userId) {
   window.location.href = "index.html";
 }
