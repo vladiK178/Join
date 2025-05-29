@@ -3,8 +3,7 @@
 ---------------------------------- */
 
 let users = {};
-const BASE_URL =
-  "https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/"
+const BASE_URL = "https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/.json";
 
 /**
  * Fetches all user data from the Firebase base URL and stores it in the global 'users' object.
