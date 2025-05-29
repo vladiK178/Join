@@ -71,9 +71,10 @@ function findUser(usersData, email, password) {
  * @param {Object} user - The user object containing id, firstName, and lastName
  */
 function storeUserData(user) {
+  const userId = 'user_' + user.email.replaceAll('.', '_').replaceAll('@', '_');
   localStorage.setItem("firstName", user.firstName);
   localStorage.setItem("lastName", user.lastName);
-  localStorage.setItem("currentUserId", user.id);
+  localStorage.setItem("currentUserId", userId);  
 }
 
 /**
@@ -91,9 +92,10 @@ async function guestLogin() {
       return;
     }
 
+    const userId = 'user_' + guestData.email.replaceAll('.', '_').replaceAll('@', '_');
     localStorage.setItem("firstName", guestData.firstName);
     localStorage.setItem("lastName", guestData.lastName);
-    localStorage.setItem("currentUserId", guestData.id);
+    localStorage.setItem("currentUserId", userId);    
 
     window.location.href = "summary.html";
   } catch (error) {
