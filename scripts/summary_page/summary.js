@@ -47,6 +47,7 @@ function renderDesktopTemplate() {
 function renderSummaryContent() {
   const summaryContainer = document.getElementById("newContentSection");
   summaryContainer.innerHTML = getSummaryContent();
+  updateSidebarLinksWithUserId()
 }
 
 /**
