@@ -1,4 +1,4 @@
-/**
+/** 
  * Global state variables
  */
 let currentUser;
@@ -41,21 +41,9 @@ function getOrAssignColorForTask(taskId, contactKey) {
  */
 function getRandomColorFromPalette() {
   const palette = [
-    "#FF5733",
-    "#33FF57",
-    "#3357FF",
-    "#FF33A8",
-    "#A833FF",
-    "#33FFF5",
-    "#FF8C33",
-    "#FFD433",
-    "#A8FF33",
-    "#8C33FF",
-    "#FFB6C1",
-    "#FF69B4",
-    "#FF1493",
-    "#C71585",
-    "#DB7093",
+    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", 
+    "#33FFF5", "#FF8C33", "#FFD433", "#A8FF33", "#8C33FF",
+    "#FFB6C1", "#FF69B4", "#FF1493", "#C71585", "#DB7093"
   ];
   return palette[Math.floor(Math.random() * palette.length)];
 }
@@ -66,9 +54,9 @@ function getRandomColorFromPalette() {
 async function initBoardPage() {
   try {
     await loadUserAndSetCurrent();
-
+    
     if (!checkCurrentUser()) return;
-
+    
     setupUIComponents();
     setupBoardFunctionality();
     checkForTaskAddSuccess();
@@ -101,8 +89,8 @@ function setupBoardFunctionality() {
  */
 function checkForTaskAddSuccess() {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get("tasksuccess") === "true") {
-    showSuccessToast("Task successfully added");
+  if (urlParams.get('tasksuccess') === 'true') {
+    showSuccessToast('Task successfully added');
 
     const newUrl = window.location.pathname;
     window.history.replaceState({}, document.title, newUrl);
@@ -114,20 +102,20 @@ function checkForTaskAddSuccess() {
  * @param {string} message - Message to display
  */
 function showSuccessToast(message) {
-  if (document.getElementById("successToast")) return;
-
-  const toast = document.createElement("div");
-  toast.id = "successToast";
-  toast.className = "success-toast";
+  if (document.getElementById('successToast')) return;
+  
+  const toast = document.createElement('div');
+  toast.id = 'successToast';
+  toast.className = 'success-toast';
   toast.innerHTML = `
     <div class="success-icon-section">
       <span>${message}</span>
       <img src="./assets/img/check.svg" alt="">
     </div>
   `;
-
+  
   document.body.appendChild(toast);
-
+  
   setTimeout(() => toast.remove(), 2250);
 }
 
@@ -136,33 +124,22 @@ function showSuccessToast(message) {
  */
 async function loadUserAndSetCurrent() {
   const userId = localStorage.getItem("currentUserId");
-  console.log("userId aus localStorage:", userId); // ✅ Kontrollausgabe
-
+  
   if (!userId) {
-    // redirectToLogin("No user ID found");
+    redirectToLogin("No user ID found");
     return;
   }
-
+  
   await getUsersData();
-
-  console.log("Alle geladenen User:", users); // ✅ Kontrollausgabe
-  console.log("Gesuchter User:", users[userId]); // ✅ Kontrollausgabe
-
   currentUser = users[userId];
-
+  
   if (!currentUser) {
-    console.warn("🚨 currentUser nicht gefunden – wird sonst weitergeleitet.");
-    console.log("Aktueller users-Objekt:", users);
-    console.log("currentUserId:", userId);
-    // localStorage.clear();
-    // redirectToLogin("User data not found");
+    localStorage.clear();
+    redirectToLogin("User data not found");
     return;
   }
-
-  localStorage.setItem("firstName", currentUser.firstName || "");
-  localStorage.setItem("lastName", currentUser.lastName || "");
-
-  console.log("Aktueller User:", currentUser); // ✅
+  
+  localStorage.setItem("currentUserId", userId);
 }
 
 /**
@@ -171,7 +148,7 @@ async function loadUserAndSetCurrent() {
  */
 function redirectToLogin(reason) {
   console.error(reason + " - redirecting to login");
-  // window.location.href = "index.html";
+  window.location.href = "index.html";
 }
 
 /**
@@ -180,7 +157,7 @@ function redirectToLogin(reason) {
  */
 function checkCurrentUser() {
   if (!currentUser) {
-    // redirectToLogin("User not found");
+    redirectToLogin("User not found");
     return false;
   }
   return true;
@@ -202,23 +179,23 @@ function renderBoardUI() {
  */
 function setUpBoardColumns() {
   const columns = [
-    { status: "toDo", id: "toDoNotes" },
-    { status: "inProgress", id: "inProgressNotes" },
-    { status: "awaitFeedback", id: "awaitFeedbackNotes" },
-    { status: "done", id: "doneNotes" },
+    {status: "toDo", id: "toDoNotes"},
+    {status: "inProgress", id: "inProgressNotes"},
+    {status: "awaitFeedback", id: "awaitFeedbackNotes"},
+    {status: "done", id: "doneNotes"}
   ];
-
-  columns.forEach((col) => renderColumn(col.status, col.id));
+  
+  columns.forEach(col => renderColumn(col.status, col.id));
 }
 
 /**
  * Sets up subtask keyboard events
  */
 function addSubtaskEnterListener() {
-  const subtaskInput = document.getElementById("subtask");
+  const subtaskInput = document.getElementById('subtask');
   if (subtaskInput) {
-    subtaskInput.addEventListener("keydown", (evt) => {
-      if (evt.key === "Enter") {
+    subtaskInput.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Enter') {
         addSubtask();
         evt.preventDefault();
       }
@@ -239,13 +216,11 @@ function renderDesktopTemplate() {
 }
 
 function renderCurrentUserCircle() {
-  const firstName = localStorage.getItem("firstName") || "";
-  const lastName = localStorage.getItem("lastName") || "";
-
+  const currentUserFirstName = localStorage.getItem("firstName");
+  const currentUserLastName = localStorage.getItem("lastName");
   const userCircle =
-    (firstName.charAt(0) || "?").toUpperCase() +
-    (lastName.charAt(0) || "?").toUpperCase();
-
+    currentUserFirstName[0].toUpperCase() +
+    currentUserLastName[0].toUpperCase();
   return userCircle;
 }
 
@@ -265,7 +240,7 @@ function renderBoardContent() {
 function changeToChosenBoardSection() {
   const summarySection = document.getElementById("summary-section");
   const summaryImg = document.getElementById("summary-img");
-
+  
   if (summarySection && summaryImg) {
     summarySection.classList.remove("chosen-section");
     summaryImg.classList.remove("summary-img-chosen");
@@ -274,7 +249,7 @@ function changeToChosenBoardSection() {
 
   const boardSection = document.getElementById("board-section");
   const boardImg = document.getElementById("board-img");
-
+  
   if (boardSection && boardImg) {
     boardSection.classList.add("chosen-section");
     boardImg.classList.remove("board-img");
@@ -288,21 +263,17 @@ function changeToChosenBoardSection() {
  */
 function filterTasks(event) {
   const searchTerm = event.target.value.toLowerCase().trim();
-
+  
   if (!searchTerm) {
     renderAllColumns();
     return;
   }
 
-  const filteredTasks = Object.values(currentUser.tasks || {}).filter(
-    (task) => {
-      const titleMatch = task.title?.toLowerCase().includes(searchTerm);
-      const descMatch = task.taskDescription
-        ?.toLowerCase()
-        .includes(searchTerm);
-      return titleMatch || descMatch;
-    }
-  );
+  const filteredTasks = Object.values(currentUser.tasks || {}).filter(task => {
+    const titleMatch = task.title?.toLowerCase().includes(searchTerm);
+    const descMatch = task.taskDescription?.toLowerCase().includes(searchTerm);
+    return titleMatch || descMatch;
+  });
 
   clearAllColumns();
   renderFilteredTasks(filteredTasks);
@@ -312,17 +283,16 @@ function filterTasks(event) {
  * Clears all column content
  */
 function clearAllColumns() {
-  ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"].forEach(
-    (id) => {
+  ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"]
+    .forEach(id => {
       const column = document.getElementById(id);
       if (column) column.innerHTML = "";
-    }
-  );
+    });
 }
 
 /**
  * Renders tasks filtered by their status. If no tasks match, shows an empty message.
- *
+ * 
  * @param {Array<Object>} tasks - Array of task objects to render.
  * Each task should have a `currentStatus` property (e.g., "toDo", "inProgress", etc.).
  */
@@ -340,16 +310,16 @@ function renderFilteredTasks(tasks) {
 
 /**
  * Groups tasks by their current status into an object with status keys.
- *
+ * 
  * @param {Array<Object>} tasks - Array of task objects with a `currentStatus` property.
  * @returns {Object} An object with keys for each status and arrays of corresponding tasks.
  */
 function groupTasksByStatus(tasks) {
   return {
-    toDo: tasks.filter((t) => t.currentStatus === "toDo"),
-    inProgress: tasks.filter((t) => t.currentStatus === "inProgress"),
-    awaitFeedback: tasks.filter((t) => t.currentStatus === "awaitFeedback"),
-    done: tasks.filter((t) => t.currentStatus === "done"),
+    toDo: tasks.filter(t => t.currentStatus === "toDo"),
+    inProgress: tasks.filter(t => t.currentStatus === "inProgress"),
+    awaitFeedback: tasks.filter(t => t.currentStatus === "awaitFeedback"),
+    done: tasks.filter(t => t.currentStatus === "done")
   };
 }
 
@@ -358,13 +328,8 @@ function groupTasksByStatus(tasks) {
  * Assumes that HTML elements with IDs for each column ("toDoNotes", etc.) exist.
  */
 function showEmptyMessages() {
-  const ids = [
-    "toDoNotes",
-    "inProgressNotes",
-    "awaitFeedbackNotes",
-    "doneNotes",
-  ];
-  ids.forEach((id) => {
+  const ids = ["toDoNotes", "inProgressNotes", "awaitFeedbackNotes", "doneNotes"];
+  ids.forEach(id => {
     const column = document.getElementById(id);
     if (column) {
       column.innerHTML = `<div class="empty-notification"><span>No tasks found</span></div>`;
@@ -374,17 +339,13 @@ function showEmptyMessages() {
 
 /**
  * Renders all columns with their corresponding filtered tasks.
- *
+ * 
  * @param {Object} byStatus - Object containing arrays of tasks keyed by their status.
  */
 function renderAllFilteredColumns(byStatus) {
   renderFilteredColumn(byStatus.toDo, "toDo", "toDoNotes");
   renderFilteredColumn(byStatus.inProgress, "inProgress", "inProgressNotes");
-  renderFilteredColumn(
-    byStatus.awaitFeedback,
-    "awaitFeedback",
-    "awaitFeedbackNotes"
-  );
+  renderFilteredColumn(byStatus.awaitFeedback, "awaitFeedback", "awaitFeedbackNotes");
   renderFilteredColumn(byStatus.done, "done", "doneNotes");
 }
 
@@ -402,15 +363,15 @@ function renderAllColumns() {
  * Attaches mobile menu handlers
  */
 function attachMobileMenuEventListeners() {
-  const menuOptions = document.querySelectorAll(".menu-mobile .menu-option");
-  menuOptions.forEach((option) => {
-    option.addEventListener("click", (evt) => {
+  const menuOptions = document.querySelectorAll('.menu-mobile .menu-option');
+  menuOptions.forEach(option => {
+    option.addEventListener('click', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
-
-      const taskId = option.getAttribute("data-task-id");
-      const newCol = option.getAttribute("data-column");
-
+      
+      const taskId = option.getAttribute('data-task-id');
+      const newCol = option.getAttribute('data-column');
+      
       if (taskId && newCol) {
         moveTaskToNewColumn(taskId, newCol);
       }
@@ -420,7 +381,7 @@ function attachMobileMenuEventListeners() {
 
 /**
  * Moves a task to a new column and updates data and UI accordingly.
- *
+ * 
  * @param {string} taskId - The ID of the task to move.
  * @param {string} newColumn - The target column status.
  */
@@ -440,7 +401,7 @@ async function moveTaskToNewColumn(taskId, newColumn) {
 
 /**
  * Gets the mobile menu element for the given task ID.
- *
+ * 
  * @param {string} taskId - The ID of the task.
  * @returns {HTMLElement|null} The menu element or null if not found.
  */
@@ -450,19 +411,19 @@ function getMobileMenu(taskId) {
 
 /**
  * Finds the task key in the current user's tasks based on the task ID.
- *
+ * 
  * @param {string} taskId - The ID of the task to find.
  * @returns {string|undefined} The key of the task or undefined if not found.
  */
 function findTaskKey(taskId) {
   return Object.keys(currentUser.tasks).find(
-    (key) => currentUser.tasks[key].id === taskId
+    key => currentUser.tasks[key].id === taskId
   );
 }
 
 /**
  * Handles the logic for updating task status, UI, and persistence.
- *
+ * 
  * @param {string} taskKey - The key of the task.
  * @param {string} taskId - The ID of the task.
  * @param {string} newColumn - The new column/status.
@@ -480,12 +441,12 @@ async function processTaskMove(taskKey, taskId, newColumn, menu) {
   await updateTaskColumnInDatabase(currentUser.id, taskKey, newColumn);
   renderAllColumns();
   menu.classList.add("d-none");
-  showSuccessToast("Task moved successfully");
+  showSuccessToast('Task moved successfully');
 }
 
 /**
  * Handles errors during the task move process.
- *
+ * 
  * @param {Error} error - The caught error.
  */
 async function handleTaskMoveError(error) {
@@ -511,5 +472,6 @@ function handleAddTaskButtonClick() {
  */
 function handleInitError() {
   console.error("Could not initialize board");
-  // window.location.href = "index.html";
+  window.location.href = "index.html";
 }
+

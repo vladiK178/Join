@@ -19,7 +19,7 @@ async function initContactsPage() {
     return;
   }
 
-  renderSpacerAndContactSection(); // deine bestehende Logik
+  renderSpacerAndContactSection(); // ← oder wie deine Startfunktion dort heißt
 }
 
 /**
