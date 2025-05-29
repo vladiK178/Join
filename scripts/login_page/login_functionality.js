@@ -3,7 +3,7 @@
  * @constant {string}
  */
 const DATABASEURL =
-  "https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/";
+  "https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/";
 
 /**
  * Handles the user login process by validating credentials,

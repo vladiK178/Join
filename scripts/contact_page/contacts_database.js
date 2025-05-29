@@ -1,7 +1,7 @@
 const CONTACTS_BASE_URL = "https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app";
 
 /**
- * Adds a new contact to Firebase under the given user
+ * Adds a new contact to Firebase under the given userf
  * @param {string} userId - the ID of the current user
  * @param {Object} newContact - the contact data to add
  * @returns {Promise<string>} - the generated Firebase key for the new contact

@@ -288,7 +288,7 @@ function renderPrioIconImg(priority) {
  * @returns {Promise<void>}
  */
 async function updateSpecificSubtask(userId, taskKey, subtaskKey, subtask) {
-  let url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks/${taskKey}/subtasks/${subtaskKey}.json`;
+  let url = `https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks/${taskKey}/subtasks/${subtaskKey}.json`;
 
   let response = await fetch(url, {
     method: "PUT",
@@ -302,7 +302,7 @@ async function updateSpecificSubtask(userId, taskKey, subtaskKey, subtask) {
 }
 
 async function updateTaskInFirebase(userId, taskKey, currentUserTask) {
-  let url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks/${taskKey}.json`;
+  let url = `https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks/${taskKey}.json`;
 
   let response = await fetch(url, {
     method: "PUT",
@@ -344,7 +344,7 @@ async function deleteTask(taskId) {
  * @returns {Promise<void>}
  */
 async function fetchDeleteTaskFromFirebase(taskKey) {
-  let url = `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${currentUser.id}/tasks/${taskKey}.json`;
+  let url = `https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/${currentUser.id}/tasks/${taskKey}.json`;
 
   let response = await fetch(url, { method: "DELETE" });
 

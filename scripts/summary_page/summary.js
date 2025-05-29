@@ -56,7 +56,7 @@ function renderSummaryContent() {
  */
 async function getTasksFromFirebase(userId) {
   const response = await fetch(
-    `https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks.json`
+    `https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/${userId}/tasks.json`
   );
   const data = await response.json();
   return Object.values(data || {});
