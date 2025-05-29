@@ -1,20 +1,14 @@
+
+(function syncUserIdFromUrl() {
+  const fromUrl = getQueryParam("user");
+  if (fromUrl) {
+    localStorage.setItem("currentUserId", fromUrl);
+  }
+})();
+
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
-}
-
-let userId = localStorage.getItem("currentUserId");
-
-if (!userId) {
-  const fromUrl = getQueryParam("user");
-  if (fromUrl) {
-    userId = fromUrl;
-    localStorage.setItem("currentUserId", userId); // <-- das ist entscheidend!
-  }
-}
-
-if (!userId) {
-  window.location.href = "index.html";
 }
 
 /** 
