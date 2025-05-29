@@ -92,10 +92,9 @@ async function guestLogin() {
       return;
     }
 
-    const userId = 'user_' + guestData.email.replaceAll('.', '_').replaceAll('@', '_');
     localStorage.setItem("firstName", guestData.firstName);
     localStorage.setItem("lastName", guestData.lastName);
-    localStorage.setItem("currentUserId", userId);    
+    localStorage.setItem("currentUserId", "guest_user");   
 
     window.location.href = "summary.html";
   } catch (error) {
