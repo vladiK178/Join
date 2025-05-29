@@ -1,6 +1,6 @@
 /** The base URL of the Firebase Realtime Database. */
 const DATABASEURL =
-  "https://join-7dba7-default-rtdb.europe-west1.firebasedatabase.app/";
+  "https://join-portfolio-9245f-default-rtdb.europe-west1.firebasedatabase.app/"
 
 /** Flag to track whether the policy checkbox is selected. */
 let isPolicyChecked = false;
