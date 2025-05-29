@@ -1,3 +1,20 @@
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+let userId = localStorage.getItem("currentUserId");
+if (!userId) {
+  const fromUrl = getQueryParam("user");
+  if (fromUrl) {
+    userId = fromUrl;
+    localStorage.setItem("currentUserId", userId);
+  }
+}
+if (!userId) {
+  window.location.href = "index.html";
+}
+
 let currentUser;
 const contactColors = {};
 let currentlyOpenMenu = null; 
