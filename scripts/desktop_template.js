@@ -76,6 +76,19 @@ function openMenu() {
   menuSection.classList.toggle("d-none");
 }
 
+function updateSidebarLinksWithUserId() {
+  const userId = localStorage.getItem("currentUserId");
+  if (!userId) return; // Sicherheitscheck
+
+  const boardLink = document.getElementById("board-section");
+  const contactsLink = document.getElementById("contacts-section");
+  const addTaskLink = document.getElementById("addTask-section");
+
+  if (boardLink) boardLink.href = `board.html?user=${userId}`;
+  if (contactsLink) contactsLink.href = `contacts.html?user=${userId}`;
+  if (addTaskLink) addTaskLink.href = `add_task.html?user=${userId}`;
+}
+
 function logout() {
   localStorage.clear();
   window.location.href = "index.html";
